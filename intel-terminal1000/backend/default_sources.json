@@ -1,0 +1,358 @@
+[
+    {
+        "name": "GDELT - Global Events",
+        "source_type": "gdelt",
+        "category": "geopolitical",
+        "config": {
+            "query": "conflict OR security OR military",
+            "max_records": 50
+        }
+    },
+    {
+        "name": "GDELT - Cyber",
+        "source_type": "gdelt",
+        "category": "cyber",
+        "config": {
+            "query": "cybersecurity OR hack OR ransomware OR breach",
+            "max_records": 30
+        }
+    },
+    {
+        "name": "GDELT - Terror & Extremism",
+        "source_type": "gdelt",
+        "category": "terrorism",
+        "config": {
+            "query": "terrorism OR extremism OR terrorist attack",
+            "max_records": 30
+        }
+    },
+    {
+        "name": "GDELT - Economic",
+        "source_type": "gdelt",
+        "category": "economic",
+        "config": {
+            "query": "sanctions OR trade war OR economic crisis",
+            "max_records": 30
+        }
+    },
+    {
+        "name": "Reddit - World News",
+        "source_type": "reddit",
+        "category": "geopolitical",
+        "config": {
+            "subreddit": "worldnews"
+        }
+    },
+    {
+        "name": "Reddit - Geopolitics",
+        "source_type": "reddit",
+        "category": "geopolitical",
+        "config": {
+            "subreddit": "geopolitics"
+        }
+    },
+    {
+        "name": "Reddit - NetSec",
+        "source_type": "reddit",
+        "category": "cyber",
+        "config": {
+            "subreddit": "netsec"
+        }
+    },
+    {
+        "name": "Reddit - Cybersecurity",
+        "source_type": "reddit",
+        "category": "cyber",
+        "config": {
+            "subreddit": "cybersecurity"
+        }
+    },
+    {
+        "name": "Reddit - CredibleDefense",
+        "source_type": "reddit",
+        "category": "military",
+        "config": {
+            "subreddit": "CredibleDefense"
+        }
+    },
+    {
+        "name": "Reddit - Intelligence",
+        "source_type": "reddit",
+        "category": "osint",
+        "config": {
+            "subreddit": "Intelligence"
+        }
+    },
+    {
+        "name": "Reddit - OSINT",
+        "source_type": "reddit",
+        "category": "osint",
+        "config": {
+            "subreddit": "OSINT"
+        }
+    },
+    {
+        "name": "Krebs on Security",
+        "source_type": "rss",
+        "url": "https://krebsonsecurity.com/feed/",
+        "category": "cyber"
+    },
+    {
+        "name": "BleepingComputer",
+        "source_type": "rss",
+        "url": "https://www.bleepingcomputer.com/feed/",
+        "category": "cyber"
+    },
+    {
+        "name": "The Hacker News",
+        "source_type": "rss",
+        "url": "https://feeds.feedburner.com/TheHackersNews",
+        "category": "cyber"
+    },
+    {
+        "name": "Dark Reading",
+        "source_type": "rss",
+        "url": "https://www.darkreading.com/rss.xml",
+        "category": "cyber"
+    },
+    {
+        "name": "SecurityWeek",
+        "source_type": "rss",
+        "url": "https://www.securityweek.com/feed",
+        "category": "cyber"
+    },
+    {
+        "name": "Threatpost",
+        "source_type": "rss",
+        "url": "https://threatpost.com/feed/",
+        "category": "cyber"
+    },
+    {
+        "name": "CISA Alerts",
+        "source_type": "rss",
+        "url": "https://www.cisa.gov/uscert/ncas/alerts.xml",
+        "category": "cyber"
+    },
+    {
+        "name": "US-CERT Current Activity",
+        "source_type": "rss",
+        "url": "https://www.cisa.gov/uscert/ncas/current-activity.xml",
+        "category": "cyber"
+    },
+    {
+        "name": "Recorded Future",
+        "source_type": "rss",
+        "url": "https://www.recordedfuture.com/feed",
+        "category": "cyber"
+    },
+    {
+        "name": "Reuters - World",
+        "source_type": "rss",
+        "url": "https://www.reutersagency.com/feed/?best-topics=world",
+        "category": "geopolitical"
+    },
+    {
+        "name": "BBC World",
+        "source_type": "rss",
+        "url": "http://feeds.bbci.co.uk/news/world/rss.xml",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Al Jazeera",
+        "source_type": "rss",
+        "url": "https://www.aljazeera.com/xml/rss/all.xml",
+        "category": "geopolitical"
+    },
+    {
+        "name": "AP News - World",
+        "source_type": "rss",
+        "url": "https://rsshub.app/apnews/topics/world-news",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Defense News",
+        "source_type": "rss",
+        "url": "https://www.defensenews.com/arc/outboundfeeds/rss/?outputType=xml",
+        "category": "military"
+    },
+    {
+        "name": "War on the Rocks",
+        "source_type": "rss",
+        "url": "https://warontherocks.com/feed/",
+        "category": "military"
+    },
+    {
+        "name": "The War Zone",
+        "source_type": "rss",
+        "url": "https://www.thedrive.com/the-war-zone/feed",
+        "category": "military"
+    },
+    {
+        "name": "Bellingcat",
+        "source_type": "rss",
+        "url": "https://www.bellingcat.com/feed/",
+        "category": "osint"
+    },
+    {
+        "name": "Foreign Policy",
+        "source_type": "rss",
+        "url": "https://foreignpolicy.com/feed/",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Stratfor Worldview",
+        "source_type": "rss",
+        "url": "https://worldview.stratfor.com/rss.xml",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Council on Foreign Relations",
+        "source_type": "rss",
+        "url": "https://www.cfr.org/rss.xml",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Carnegie Endowment",
+        "source_type": "rss",
+        "url": "https://carnegieendowment.org/rss/solr/?fa=rss",
+        "category": "geopolitical"
+    },
+    {
+        "name": "RAND Corporation",
+        "source_type": "rss",
+        "url": "https://www.rand.org/news.xml",
+        "category": "research"
+    },
+    {
+        "name": "Economist - Intl",
+        "source_type": "rss",
+        "url": "https://www.economist.com/international/rss.xml",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Ars Technica - Security",
+        "source_type": "rss",
+        "url": "https://feeds.arstechnica.com/arstechnica/security",
+        "category": "cyber"
+    },
+    {
+        "name": "Wired - Security",
+        "source_type": "rss",
+        "url": "https://www.wired.com/feed/category/security/latest/rss",
+        "category": "cyber"
+    },
+    {
+        "name": "ZDNet Security",
+        "source_type": "rss",
+        "url": "https://www.zdnet.com/topic/security/rss.xml",
+        "category": "cyber"
+    },
+    {
+        "name": "Malwarebytes Labs",
+        "source_type": "rss",
+        "url": "https://blog.malwarebytes.com/feed/",
+        "category": "cyber"
+    },
+    {
+        "name": "Sophos News",
+        "source_type": "rss",
+        "url": "https://news.sophos.com/en-us/feed/",
+        "category": "cyber"
+    },
+    {
+        "name": "Trend Micro",
+        "source_type": "rss",
+        "url": "https://www.trendmicro.com/en_us/rss/newsroom.html",
+        "category": "cyber"
+    },
+    {
+        "name": "ISC SANS",
+        "source_type": "rss",
+        "url": "https://isc.sans.edu/rssfeed.xml",
+        "category": "cyber"
+    },
+    {
+        "name": "ADS-B USA/CONUS",
+        "source_type": "adsb",
+        "category": "aviation",
+        "region": "North America",
+        "config": {
+            "bounds": {"lat_min": 24, "lat_max": 50, "lon_min": -125, "lon_max": -66}
+        }
+    },
+    {
+        "name": "ADS-B Europe",
+        "source_type": "adsb",
+        "category": "aviation",
+        "region": "Europe",
+        "config": {
+            "bounds": {"lat_min": 35, "lat_max": 72, "lon_min": -10, "lon_max": 40}
+        }
+    },
+    {
+        "name": "ADS-B Middle East",
+        "source_type": "adsb",
+        "category": "aviation",
+        "region": "Middle East",
+        "config": {
+            "bounds": {"lat_min": 12, "lat_max": 42, "lon_min": 30, "lon_max": 65}
+        }
+    },
+    {
+        "name": "ADS-B Asia Pacific",
+        "source_type": "adsb",
+        "category": "aviation",
+        "region": "Asia",
+        "config": {
+            "bounds": {"lat_min": -10, "lat_max": 55, "lon_min": 90, "lon_max": 160}
+        }
+    },
+    {
+        "name": "Aviation Week",
+        "source_type": "rss",
+        "url": "https://aviationweek.com/rss.xml",
+        "category": "aviation"
+    },
+    {
+        "name": "The Drive - War Zone",
+        "source_type": "rss",
+        "url": "https://www.thedrive.com/the-war-zone/feed",
+        "category": "military"
+    },
+    {
+        "name": "FlightGlobal",
+        "source_type": "rss",
+        "url": "https://www.flightglobal.com/rss",
+        "category": "aviation"
+    },
+    {
+        "name": "Simple Flying",
+        "source_type": "rss",
+        "url": "https://simpleflying.com/feed/",
+        "category": "aviation"
+    },
+    {
+        "name": "AeroTime News",
+        "source_type": "rss",
+        "url": "https://www.aerotime.aero/feed",
+        "category": "aviation"
+    },
+    {
+        "name": "Aviationist",
+        "source_type": "rss",
+        "url": "https://theaviationist.com/feed/",
+        "category": "military"
+    },
+    {
+        "name": "Alert5 Military Aviation",
+        "source_type": "rss",
+        "url": "https://alert5.com/feed/",
+        "category": "military"
+    },
+    {
+        "name": "Aviation Safety Network",
+        "source_type": "rss",
+        "url": "https://news.aviation-safety.net/feed/",
+        "category": "aviation"
+    }
+]

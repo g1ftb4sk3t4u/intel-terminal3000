@@ -1,0 +1,48 @@
+# Combined Dockerfile for Railway/Render single-container deployment
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies including nginx
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    nginx \
+    supervisor \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy and install Python requirements
+COPY backend/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy backend
+COPY backend/ ./backend/
+
+# Copy frontend to nginx directory
+COPY frontend/ /usr/share/nginx/html/
+
+# Copy nginx config
+COPY frontend/nginx.conf /etc/nginx/sites-available/default
+
+# Create supervisor config
+RUN echo '[supervisord]\n\
+nodaemon=true\n\
+\n\
+[program:nginx]\n\
+command=/usr/sbin/nginx -g "daemon off;"\n\
+autostart=true\n\
+autorestart=true\n\
+\n\
+[program:uvicorn]\n\
+command=uvicorn backend.app.main:app --host 0.0.0.0 --port 8000\n\
+autostart=true\n\
+autorestart=true\n\
+directory=/app\n\
+' > /etc/supervisor/conf.d/supervisord.conf
+
+# Update nginx config for single container
+RUN sed -i 's/backend:8000/127.0.0.1:8000/g' /etc/nginx/sites-available/default
+
+EXPOSE 80 8000
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

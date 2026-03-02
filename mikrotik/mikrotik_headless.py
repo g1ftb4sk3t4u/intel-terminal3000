@@ -387,6 +387,14 @@ Examples:
         log_file=log_file
     )
     
+
+    # Apply night-mode settings
+    if args.night_mode:
+        args.workers = 2
+        args.delay = 2.0
+        controller.logger.log("[NIGHT MODE] Workers: 2, Delay: 2s between downloads", 'INFO')
+    elif args.delay > 0:
+        controller.logger.log(f"Download delay: {args.delay}s between files", 'INFO')
     # Handle daemon commands
     if args.daemon:
         if args.daemon == 'start':
@@ -424,6 +432,9 @@ Examples:
 
 if __name__ == '__main__':
     main()
+
+
+
 
 
 
