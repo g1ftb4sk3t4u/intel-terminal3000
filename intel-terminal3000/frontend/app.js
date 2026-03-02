@@ -110,9 +110,9 @@ window.updateDashboardSelector = updateDashboardSelector;
  * Multi-dashboard intelligence platform
  */
 
-// Configuration
-const API_BASE = 'http://localhost:8080';
-const WS_URL = API_BASE.replace('http', 'ws') + '/ws';
+// Configuration - Use relative URLs for Docker/Nginx proxy compatibility
+const API_BASE = '';  // Empty string uses relative URLs through nginx proxy
+const WS_URL = (window.location.protocol === 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host + '/ws';
 
 // State
 let state = {

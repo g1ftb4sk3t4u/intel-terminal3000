@@ -22,6 +22,7 @@ from .geolocation import GeoService
 from .triage import TriageService, seed_default_keywords
 from .trending import TrendingDetector
 from .config import get_settings
+from .seed import seed_sources, seed_default_dashboard
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -185,9 +186,12 @@ async def lifespan(app: FastAPI):
     await init_db()
     logger.info("Database initialized")
     
-    # Seed default keywords
+    # Seed default data
     async with AsyncSessionLocal() as session:
         await seed_default_keywords(session)
+    await seed_sources()
+    await seed_default_dashboard()
+    logger.info("Default data seeded")
     
     # Start background scheduler
     scheduler.add_job(
