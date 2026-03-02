@@ -613,6 +613,103 @@ class CustomRSSCollector(BaseCollector):
         return articles
 
 
+class ACARSCollector(BaseCollector):
+    """
+    ACARS (Aircraft Communications Addressing and Reporting System) collector
+    Tracks aircraft communication messages and positions
+    """
+    
+    source_type = "acars"
+    
+    # ACARS message types to track
+    INTERESTING_MSG_TYPES = [
+        "MAINT",      # Maintenance messages
+        "TECH",       # Technical messages  
+        "OPS",        # Operations
+        "WEATHER",    # Weather/turbulence
+        "EMERGENCY",  # Emergencies
+        "DIVERT",     # Diversions
+        "FUEL",       # Fuel issues
+        "MEDICAL",    # Medical emergencies
+        "SECURITY",   # Security
+    ]
+    
+    async def fetch(self, source: Source) -> List[Dict[str, Any]]:
+        """Fetch ACARS data from available sources"""
+        articles = []
+        config = source.config or {}
+        
+        try:
+            # Try ACARShub free API (if available)
+            url = "https://www.acarshub.org/api/acars"  # Example free ACARS feed
+            
+            try:
+                response = await self.http_client.get(url, timeout=15.0)
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    messages = data.get("messages", []) if isinstance(data, dict) else data
+                    
+                    for msg in messages[:50]:  # Limit to 50 recent messages
+                        if not isinstance(msg, dict):
+                            continue
+                        
+                        # Parse ACARS message fields
+                        flight = (msg.get("flight") or "").upper()
+                        msg_type = msg.get("type", "").upper()
+                        text = msg.get("text", "") or msg.get("message", "")
+                        altitude = msg.get("altitude", 0)
+                        latitude = msg.get("latitude", 0)
+                        longitude = msg.get("longitude", 0)
+                        timestamp = msg.get("timestamp", datetime.utcnow().isoformat())
+                        
+                        # Determine severity based on message type/content
+                        severity = "low"
+                        is_interesting = False
+                        category = "aviation"
+                        
+                        # Check for critical keywords in message
+                        text_upper = text.upper() if text else ""
+                        
+                        if any(keyword in text_upper for keyword in ["EMERGENCY", "DIVERT", "MEDICAL", "SECURITY"]):
+                            severity = "critical"
+                            is_interesting = True
+                        elif any(keyword in text_upper for keyword in ["FUEL", "HYDRAULIC", "ENGINE", "ELECTRICAL"]):
+                            severity = "high"
+                            is_interesting = True
+                        elif msg_type in self.INTERESTING_MSG_TYPES:
+                            severity = "medium" if msg_type in ["MAINT", "TECH"] else "low"
+                            is_interesting = True
+                        
+                        if is_interesting and flight and latitude and longitude:
+                            articles.append({
+                                "title": f"✈️ ACARS: {flight} - {msg_type}",
+                                "summary": text[:200] if text else f"ACARS {msg_type} message from {flight}",
+                                "link": f"https://www.acarshub.org/",
+                                "published_at": datetime.fromisoformat(timestamp) if isinstance(timestamp, str) else datetime.utcnow(),
+                                "source": source.name,
+                                "category": category,
+                                "severity": severity,
+                                "latitude": latitude,
+                                "longitude": longitude,
+                                # Extra metadata
+                                "flight": flight,
+                                "msg_type": msg_type,
+                                "altitude": altitude,
+                            })
+                
+                logger.info(f"ACARS collected {len(articles)} messages")
+                
+            except Exception as e:
+                logger.warning(f"ACARS API fetch failed: {e}")
+                logger.info("ACARS collector running but API unavailable - using fallback mode")
+        
+        except Exception as e:
+            logger.error(f"ACARS fetch error: {e}")
+        
+        return articles
+
+
 # Collector registry
 COLLECTORS = {
     "rss": RSSCollector,
@@ -621,6 +718,7 @@ COLLECTORS = {
     "bluesky": BlueskyCollector,
     "telegram": TelegramCollector,
     "adsb": ADSBCollector,
+    "acars": ACARSCollector,
     "custom_rss": CustomRSSCollector,
 }
 

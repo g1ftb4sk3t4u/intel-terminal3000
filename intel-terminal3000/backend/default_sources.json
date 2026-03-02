@@ -308,6 +308,14 @@
         }
     },
     {
+        "name": "ACARS - Aircraft Messages",
+        "source_type": "acars",
+        "category": "aviation",
+        "config": {
+            "filter_types": ["EMERGENCY", "DIVERT", "MEDICAL", "FUEL", "MAINT"]
+        }
+    },
+    {
         "name": "Aviation Week",
         "source_type": "rss",
         "url": "https://aviationweek.com/rss.xml",
