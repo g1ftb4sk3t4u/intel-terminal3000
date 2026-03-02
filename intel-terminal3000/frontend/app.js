@@ -480,8 +480,8 @@ function createDefaultDashboard() {
         layout: '2x2',
         panels: [
             { id: 'panel-1', module: 'feed', title: 'Intelligence Feed', filters: {}, feedView: 'tiled' },
-            { id: 'panel-2', module: 'map', title: 'Global Heat Map', filters: {} },
-            { id: 'panel-3', module: 'clock', title: 'World Clocks', filters: {} },
+            { id: 'panel-2', module: 'map', title: 'Global Heat Map', mapType: 'heatmap', filters: {} },
+            { id: 'panel-3', module: 'map', title: 'Aircraft Tracking (ADS-B)', mapType: 'aircraft', filters: {} },
             { id: 'panel-4', module: 'stats', title: 'Statistics', filters: {} },
         ],
     };
@@ -921,43 +921,17 @@ async function initializePanel(config) {
 // Aircraft-only map panel
 async function initAircraftMapPanel(config) {
     const content = document.getElementById(`${config.id}-content`);
-    content.innerHTML = `<div id="${config.id}-map" class="map-container"></div>`;
-    const mapElement = document.getElementById(`${config.id}-map`);
-    const map = L.map(mapElement, {
-        center: [20, 0],
-        zoom: 2,
-        minZoom: 1,
-        maxZoom: 10,
-    });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '©OpenStreetMap, ©CartoDB',
-        subdomains: 'abcd',
-        maxZoom: 19,
-    }).addTo(map);
-    state.map = map;
-    // Only show aircraft markers
-    try {
-        const aircraft = await api(`/aircraft/interesting?region=${currentAircraftRegion}`);
-        if (state.aircraftLayer) map.removeLayer(state.aircraftLayer);
-        state.aircraftLayer = L.layerGroup();
-        (aircraft || []).forEach(a => {
-            if (!a.latitude || !a.longitude) return;
-            const icon = L.divIcon({
-                className: 'aircraft-marker',
-                html: `<div class="aircraft-icon" style="transform: rotate(${a.heading || 0}deg);">✈</div>`,
-                iconSize: [24, 24],
-                iconAnchor: [12, 12],
-            });
-            const marker = L.marker([a.latitude, a.longitude], { icon });
-            marker.bindPopup(`<div class="map-popup aircraft-popup"><div class="map-popup-title">${a.callsign || 'Unknown'}</div></div>`);
-            marker.addTo(state.aircraftLayer);
-        });
-        state.aircraftLayer.addTo(map);
-    } catch (e) {
-        // Show error
-        content.innerHTML += '<div style="color:red;">Failed to load aircraft data</div>';
-    }
-    setTimeout(() => map.invalidateSize(), 100);
+    // Embed ADSBexchange website directly
+    content.innerHTML = `
+        <div class="aircraft-map-container" style="width:100%; height:100%; border: none;">
+            <iframe 
+                src="https://www.adsbexchange.com/" 
+                style="width:100%; height:100%; border:none; border-radius: 4px;"
+                allow="geolocation"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
+            ></iframe>
+        </div>
+    `;
 }
 
 // Marine-only map panel - displays maritime traffic data
