@@ -982,6 +982,7 @@ async function initMarineMapPanel(config) {
         console.error("Error loading marine data:", e);
     }
     setTimeout(() => map.invalidateSize(), 100);
+}
 
 // Expose filter setter
 window.setMarineMapFilter = function(panelId, value) {
@@ -990,8 +991,6 @@ window.setMarineMapFilter = function(panelId, value) {
     panel.marineFilter = value;
     initializePanel(panel);
 };
-}
-}
 
 // ============ FEED PANEL ============
 
