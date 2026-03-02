@@ -687,11 +687,16 @@ function renderPanel(config) {
     let mapFilterDropdown = '';
     // Only show filter dropdown for heatmap type
     if (isMapModule && (!config.mapType || config.mapType === 'heatmap')) {
+        // Get current filter selection to show in dropdown
+        const currentSeverity = config.filters?.severity || '';
+        const currentCategory = config.filters?.category || '';
+        const currentFilter = currentSeverity === 'critical' ? 'critical' : currentCategory || '';
+        
         mapFilterDropdown = `
             <select class="map-filter-select" onchange="updateMapPanelFilter('${config.id}', this.value)">
-                <option value="">All Categories</option>
-                <option value="critical">Critical Only</option>
-                ${CATEGORIES.map(c => `<option value="${c.value}">${c.label}</option>`).join('')}
+                <option value="" ${currentFilter === '' ? 'selected' : ''}>All Categories</option>
+                <option value="critical" ${currentFilter === 'critical' ? 'selected' : ''}>Critical Only</option>
+                ${CATEGORIES.map(c => `<option value="${c.value}" ${currentFilter === c.value ? 'selected' : ''}>${c.label}</option>`).join('')}
             </select>
         `;
     }
@@ -817,12 +822,14 @@ window.updateMapPanelFilter = function(panelId, value) {
     if (!panel) return;
     if (!panel.filters) panel.filters = {};
     
+    console.log(`Updating map filter for panel ${panelId} to:`, value);
+    
     // Update filter based on dropdown selection
     if (value === 'critical') {
         panel.filters.severity = 'critical';
-        panel.filters.category = '';
+        delete panel.filters.category;
     } else if (value === '') {
-        // All categories
+        // All categories - clear all filters
         delete panel.filters.severity;
         delete panel.filters.category;
     } else {
@@ -832,11 +839,17 @@ window.updateMapPanelFilter = function(panelId, value) {
     }
     
     console.log('Map filter updated:', panel.filters);
+    
     // Re-render just the map content
     const content = document.getElementById(`${panelId}-content`);
-    content.innerHTML = `<div id="${panelId}-map" class="map-container"></div>`;
-    // Re-initialize the map with new filters
-    setTimeout(() => initializePanel(panel), 100);
+    if (content) {
+        content.innerHTML = `<div id="${panelId}-map" class="map-container"></div>`;
+        // Re-initialize the map with new filters
+        setTimeout(() => {
+            console.log('Reinitializing map with filters:', panel.filters);
+            initializePanel(panel);
+        }, 100);
+    }
 };
 
 function renderFilterControls(config) {
