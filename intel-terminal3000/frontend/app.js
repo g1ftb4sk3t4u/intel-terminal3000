@@ -693,7 +693,7 @@ function renderPanel(config) {
         const currentFilter = currentSeverity === 'critical' ? 'critical' : currentCategory || '';
         
         mapFilterDropdown = `
-            <select class="map-filter-select" onchange="updateMapPanelFilter('${config.id}', this.value)">
+            <select class="map-filter-select" onchange="window.updateMapPanelFilter('${config.id}', this.value)">
                 <option value="" ${currentFilter === '' ? 'selected' : ''}>All Categories</option>
                 <option value="critical" ${currentFilter === 'critical' ? 'selected' : ''}>Critical Only</option>
                 ${CATEGORIES.map(c => `<option value="${c.value}" ${currentFilter === c.value ? 'selected' : ''}>${c.label}</option>`).join('')}
@@ -1263,15 +1263,16 @@ async function initMapPanel(config) {
     // Store map reference
     state.map = map;
     
-    // Use panel filters if present
-    lastMapFilters = config.filters || {};
+    // Use panel filters if present, default to empty object
+    const panelFilters = config.filters && typeof config.filters === 'object' ? config.filters : {};
+    lastMapFilters = { ...panelFilters };
+    
+    console.log('initMapPanel: Using filters:', panelFilters);
 
-    // If severity filter is set to 'critical', ensure only critical events are shown
-    let filters = { ...lastMapFilters };
-    if (filters.severity === 'critical') {
-        filters.category = undefined;
-        filters.severity = 'critical';
-    }
+    // Prepare filters for API call (don't pass undefined values)
+    let filters = {};
+    if (panelFilters.severity) filters.severity = panelFilters.severity;
+    if (panelFilters.category) filters.category = panelFilters.category;
 
     // Load heatmap data with filters (only show articles matching filters)
     const data = await loadHeatmapData(filters);
