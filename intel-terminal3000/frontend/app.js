@@ -695,14 +695,26 @@ function renderPanel(config) {
             </select>
         `;
     }
-    // Feed view toggle
+    // Feed view toggle and per-feed severity filter
     let feedViewToggle = '';
+    let feedSeverityFilter = '';
     if (config.module === 'feed') {
         const view = config.feedView || 'tiled';
+        const severity = config.filters?.severity || '';
         feedViewToggle = `
             <select class="feed-view-toggle" onchange="window.setFeedView('${config.id}', this.value)" style="margin-left:8px;">
                 <option value="tiled" ${view === 'tiled' ? 'selected' : ''}>Tiled</option>
                 <option value="irc" ${view === 'irc' ? 'selected' : ''}>IRC</option>
+            </select>
+        `;
+        // Add per-feed severity filter
+        feedSeverityFilter = `
+            <select class="feed-filter-severity" onchange="window.setFeedSeverity('${config.id}', this.value)" style="margin-left:8px;">
+                <option value="" ${severity === '' || !severity ? 'selected' : ''}>All Severities</option>
+                <option value="critical" ${severity === 'critical' ? 'selected' : ''}>🔴 Critical</option>
+                <option value="high" ${severity === 'high' ? 'selected' : ''}>🟠 High</option>
+                <option value="medium" ${severity === 'medium' ? 'selected' : ''}>🟡 Medium</option>
+                <option value="low" ${severity === 'low' ? 'selected' : ''}>🟢 Low</option>
             </select>
         `;
     }
@@ -724,6 +736,7 @@ function renderPanel(config) {
                     ${module.hasFilters ? renderFilterControls(config) : ''}
                     ${mapFilterDropdown}
                     ${feedViewToggle}
+                    ${feedSeverityFilter}
                     <button class="expand-btn" onclick="togglePanelExpand('${config.id}')" title="Expand">
                         ⛶
                     </button>
@@ -781,21 +794,49 @@ window.setFeedView = function(panelId, value) {
     // Force re-render feed panel for layout change
     initializePanel(panel);
 };
+
+// Per-feed severity filter handler
+window.setFeedSeverity = function(panelId, severity) {
+    const panel = state.currentDashboard.panels.find(p => p.id === panelId);
+    if (!panel) return;
+    if (!panel.filters) panel.filters = {};
+    
+    if (severity === '') {
+        delete panel.filters.severity;
+    } else {
+        panel.filters.severity = severity;
+    }
+    
+    console.log(`Feed ${panelId} severity filter set to:`, severity);
+    // Re-render feed panel with new filter
+    initializePanel(panel);
+};
 // Map panel filter handler
 window.updateMapPanelFilter = function(panelId, value) {
     const panel = state.currentDashboard.panels.find(p => p.id === panelId);
     if (!panel) return;
     if (!panel.filters) panel.filters = {};
-    // If "critical" is selected, treat as severity filter
+    
+    // Update filter based on dropdown selection
     if (value === 'critical') {
-        delete panel.filters.category;
         panel.filters.severity = 'critical';
-    } else {
+        panel.filters.category = '';
+    } else if (value === '') {
+        // All categories
         delete panel.filters.severity;
+        delete panel.filters.category;
+    } else {
+        // Category-based filter
         panel.filters.category = value;
+        delete panel.filters.severity;
     }
-    // Re-initialize the map panel with new filter
-    initializePanel(panel);
+    
+    console.log('Map filter updated:', panel.filters);
+    // Re-render just the map content
+    const content = document.getElementById(`${panelId}-content`);
+    content.innerHTML = `<div id="${panelId}-map" class="map-container"></div>`;
+    // Re-initialize the map with new filters
+    setTimeout(() => initializePanel(panel), 100);
 };
 
 function renderFilterControls(config) {
