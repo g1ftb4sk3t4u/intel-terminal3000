@@ -1732,7 +1732,6 @@ function setAircraftFilter(filter) {
 function renderAircraftContent(panelId, aircraft) {
     const content = document.getElementById(`${panelId}-content`);
     const footer = document.getElementById(`${panelId}-footer`);
-    content.classList.add('aircraft-content');
     
     const regionSelector = `
         <div class="aircraft-controls">

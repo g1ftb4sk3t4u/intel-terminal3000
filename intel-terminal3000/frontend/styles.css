@@ -1915,12 +1915,6 @@ body {
     align-items: center;
 }
 
-.panel-content.aircraft-content {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
 .aircraft-controls .form-select {
     flex: 0 0 auto;
     padding: 6px 10px;
@@ -1961,12 +1955,11 @@ body {
 }
 
 .aircraft-list {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0;
+    display: grid;
     gap: 8px;
     padding: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    auto-rows: max-content;
     overflow-y: auto;
 }
 
