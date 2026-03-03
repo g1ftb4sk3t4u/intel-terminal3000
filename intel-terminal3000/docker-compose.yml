@@ -13,10 +13,9 @@ services:
       - BLUESKY_ENABLED=true
       - TRIAGE_METHOD=keyword
       - GEOCODE_ENABLED=true
-      - DATABASE_URL=sqlite:///./intel_terminal.db
+      - DATABASE_URL=sqlite:///./data/intel_terminal.db
     volumes:
       - ./data:/app/data
-      - intel_db:/app
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/api/articles?limit=1"]
@@ -35,6 +34,3 @@ services:
     restart: unless-stopped
     environment:
       - API_BASE_URL=http://backend:8080
-
-volumes:
-  intel_db:
