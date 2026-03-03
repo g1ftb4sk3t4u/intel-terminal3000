@@ -81,6 +81,13 @@ class Settings(BaseSettings):
         if v == '':
             return None
         return v
+
+    @field_validator('database_url', mode='before')
+    @classmethod
+    def ensure_async_sqlite_driver(cls, v):
+        if isinstance(v, str) and v.startswith('sqlite:///'):
+            return v.replace('sqlite:///', 'sqlite+aiosqlite:///', 1)
+        return v
     
     class Config:
         env_file = ".env"

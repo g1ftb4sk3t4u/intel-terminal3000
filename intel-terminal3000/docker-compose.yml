@@ -13,7 +13,7 @@ services:
       - BLUESKY_ENABLED=true
       - TRIAGE_METHOD=keyword
       - GEOCODE_ENABLED=true
-      - DATABASE_URL=sqlite:///./data/intel_terminal.db
+      - DATABASE_URL=sqlite+aiosqlite:///./data/intel_terminal.db
     volumes:
       - ./data:/app/data
     restart: unless-stopped
