@@ -15,81 +15,417 @@
     z-index: 2001;
     box-shadow: 0 -2px 12px rgba(0,0,0,0.18);
     border-top: 2px solid #fff3;
-/* LCARS Theme (Star Trek) */
+/* LCARS Theme (Star Trek: TNG Computer Interface) */
 .theme-lcars {
-    --bg-primary: #201c3a;
-    --bg-secondary: #2d2b55;
-    --bg-tertiary: #3a3a5a;
-    --bg-panel: #f7b32b;
-    --bg-hover: #f72b50;
-    --accent-primary: #f7b32b;
-    --accent-secondary: #f72b50;
-    --accent-glow: rgba(247, 179, 43, 0.3);
-    --severity-critical: #f72b50;
-    --severity-high: #f7b32b;
-    --severity-medium: #2d2b55;
-    --severity-low: #3a3a5a;
-    --text-primary: #fffbe7;
-    --text-secondary: #f7b32b;
-    --text-muted: #f72b50;
-    --border-color: #f7b32b;
-    --border-glow: rgba(247, 179, 43, 0.5);
-    font-family: 'Orbitron', 'Arial', sans-serif;
+    --bg-primary: #0d1929;
+    --bg-secondary: #1a2f52;
+    --bg-tertiary: #2a4a7a;
+    --bg-panel: #0d1929;
+    --bg-hover: #f4a71a;
+    --accent-primary: #f4a71a;
+    --accent-secondary: #ff6b35;
+    --accent-glow: none;
+    --severity-critical: #ff6b35;
+    --severity-high: #f4a71a;
+    --severity-medium: #1adeab;
+    --severity-low: #666666;
+    --text-primary: #f4a71a;
+    --text-secondary: #1adeab;
+    --text-muted: #888888;
+    --border-color: #f4a71a;
+    --border-glow: none;
+    font-family: 'Arial Black', 'Arial', sans-serif;
 }
-.theme-lcars .panel-header, .theme-lcars .panel-footer {
-    background: #2d2b55;
-    color: #f7b32b;
-    border-bottom: 2px solid #f7b32b;
+
+/* LCARS Panel - Sleek and angular */
+.theme-lcars .panel {
+    background: #0d1929;
+    border: 2px solid #f4a71a;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 3px rgba(244, 167, 26, 0.2), 0 4px 8px rgba(0, 0, 0, 0.6);
+    position: relative;
 }
-.theme-lcars .panel-title {
-    color: #f7b32b;
-    font-family: 'Orbitron', 'Arial', sans-serif;
-    letter-spacing: 2px;
+
+.theme-lcars .panel::before {
+    content: '';
+    display: none;
 }
-.theme-lcars .article-title-link {
-    background: #f7b32b;
-    color: #2d2b55;
-    border-radius: 6px;
-    font-weight: bold;
+
+.theme-lcars .panel::after {
+    content: '';
+    display: none;
 }
-}
-/* Half-Life Theme (System/Black Mesa) */
-.theme-half-life {
-    --bg-primary: #1a1a1a;
-    --bg-secondary: #232323;
-    --bg-tertiary: #2c2c2c;
-    --bg-panel: #ff6600;
-    --bg-hover: #ff9900;
-    --accent-primary: #ff6600;
-    --accent-secondary: #ff9900;
-    --accent-glow: rgba(255, 102, 0, 0.3);
-    --severity-critical: #ff3300;
-    --severity-high: #ff9900;
-    --severity-medium: #ffcc00;
-    --severity-low: #cccccc;
-    --text-primary: #ffcc00;
-    --text-secondary: #cccccc;
-    --text-muted: #ff6600;
-    --border-color: #ff6600;
-    --border-glow: rgba(255, 102, 0, 0.5);
-    font-family: 'Share Tech Mono', 'Consolas', monospace;
-}
-.theme-half-life .panel-header, .theme-half-life .panel-footer {
-    background: #232323;
-    color: #ffcc00;
-    border-bottom: 2px solid #ff6600;
-}
-.theme-half-life .panel-title {
-    color: #ff6600;
-    font-family: 'Share Tech Mono', 'Consolas', monospace;
+
+/* LCARS Panel Headers - Flat and professional */
+.theme-lcars .panel-header {
+    background: linear-gradient(180deg, #1a2f52 0%, #0d1929 100%);
+    border-bottom: 3px solid #f4a71a;
+    color: #f4a71a;
+    padding: 10px 16px;
+    box-shadow: inset 0 1px 2px rgba(244, 167, 26, 0.1);
+    font-weight: 600;
     letter-spacing: 1px;
 }
-.theme-half-life .article-title-link {
-    background: #ff6600;
-    color: #232323;
-    border-radius: 6px;
+
+.theme-lcars .panel-footer {
+    background: linear-gradient(0deg, #1a2f52 0%, #0d1929 100%);
+    border-top: 3px solid #f4a71a;
+    color: #1adeab;
+    padding: 10px 16px;
+    box-shadow: inset 0 -1px 2px rgba(244, 167, 26, 0.1);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.theme-lcars .panel-title {
+    color: #f4a71a;
+    font-family: 'Arial Black', 'Arial', sans-serif;
+    letter-spacing: 1px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* LCARS Article Items - Clean and readable */
+.theme-lcars .article-item {
+    background: #1a2f52;
+    border-left: 4px solid #1adeab;
+    border-right: 1px solid #0d1929;
+    border-top: 1px solid #2a4a7a;
+    border-bottom: 1px solid #000;
+    margin: 4px 0;
+    padding: 10px 12px;
+    box-shadow: none;
+    transition: all 0.2s;
+}
+
+.theme-lcars .article-item:hover {
+    border-left-color: #f4a71a;
+    background: #2a4a7a;
+    box-shadow: inset 1px 0 0 rgba(244, 167, 26, 0.2);
+}
+
+.theme-lcars .article-item.severity-critical {
+    border-left-color: #ff6b35;
+}
+
+.theme-lcars .article-item.severity-high {
+    border-left-color: #f4a71a;
+}
+
+.theme-lcars .article-title-link {
+    color: #f4a71a;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.theme-lcars .article-title-link:hover {
+    color: #1adeab;
+}
+
+/* LCARS Controls - Simple and functional */
+.theme-lcars .filter-select,
+.theme-lcars .filter-input,
+.theme-lcars .feed-view-toggle,
+.theme-lcars .feed-filter-severity {
+    background: #1a2f52;
+    color: #f4a71a;
+    border: 1px solid #f4a71a;
+    border-left: 2px solid #f4a71a;
+    padding: 6px 10px;
+    font-family: 'Arial', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.theme-lcars .filter-select:hover,
+.theme-lcars .filter-input:focus,
+.theme-lcars .feed-view-toggle:hover,
+.theme-lcars .feed-filter-severity:hover {
+    background: #2a4a7a;
+    border-color: #1adeab;
+    color: #1adeab;
+}
+
+.theme-lcars .filter-select option {
+    background: #0d1929;
+    color: #f4a71a;
+}
+
+/* LCARS Buttons - Functional and clear */
+.theme-lcars .btn {
+    background: #1a2f52;
+    color: #f4a71a;
+    border: 2px solid #f4a71a;
+    border-left: 3px solid #1adeab;
+    padding: 8px 16px;
+    font-weight: 600;
+    font-family: 'Arial', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: inset 0 1px 2px rgba(244, 167, 26, 0.1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
+}
+
+.theme-lcars .btn:hover {
+    background: #2a4a7a;
+    border-color: #1adeab;
+    color: #1adeab;
+}
+
+.theme-lcars .btn-primary {
+    background: #f4a71a;
+    color: #0d1929;
+    border-color: #ff6b35;
+}
+
+.theme-lcars .btn-primary:hover {
+    background: #1adeab;
+    color: #0d1929;
+}
+
+.theme-lcars .btn-danger {
+    background: #ff6b35;
+    color: #f4a71a;
+    border-color: #ff6b35;
+}
+
+.theme-lcars .btn-danger:hover {
+    background: #f4a71a;
+    color: #ff6b35;
+}
+
+/* Half-Life Theme (Black Mesa Industrial Facility) */
+.theme-half-life {
+    --bg-primary: #0f0f0f;
+    --bg-secondary: #1a1a1a;
+    --bg-tertiary: #2a2a2a;
+    --bg-panel: #0f0f0f;
+    --bg-hover: #ff6600;
+    --accent-primary: #ff6600;
+    --accent-secondary: #ffaa00;
+    --accent-glow: rgba(255, 102, 0, 0.5);
+    --severity-critical: #ff3300;
+    --severity-high: #ff6600;
+    --severity-medium: #ffaa00;
+    --severity-low: #888888;
+    --text-primary: #ffcc00;
+    --text-secondary: #ff6600;
+    --text-muted: #666666;
+    --border-color: #ff6600;
+    --border-glow: rgba(255, 102, 0, 0.7);
+    font-family: 'Courier New', 'Courier', monospace;
+}
+
+/* Half-Life Panel - Industrial hazard stripe pattern */
+.theme-half-life .panel {
+    background: repeating-linear-gradient(
+        45deg,
+        #0f0f0f,
+        #0f0f0f 10px,
+        #1a1a1a 10px,
+        #1a1a1a 20px
+    );
+    border: 4px solid #ff6600;
+    border-left: 6px solid #ff6600;
+    border-right: 6px solid #ff6600;
+    position: relative;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 102, 0, 0.4);
+}
+
+/* Hazard stripe top accent */
+.theme-half-life .panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: repeating-linear-gradient(
+        90deg,
+        #ffaa00,
+        #ffaa00 10px,
+        #000 10px,
+        #000 20px
+    );
+}
+
+/* Hazard stripe bottom accent */
+.theme-half-life .panel::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: repeating-linear-gradient(
+        90deg,
+        #ffaa00,
+        #ffaa00 10px,
+        #000 10px,
+        #000 20px
+    );
+}
+
+/* Half-Life Panel Headers */
+.theme-half-life .panel-header {
+    background: #1a1a1a;
+    border-bottom: 3px solid #ff6600;
+    border-top: 3px solid #ffaa00;
+    color: #ffcc00;
+    padding: 8px 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8), inset 0 2px 4px rgba(255, 102, 0, 0.2);
+    position: relative;
+    letter-spacing: 1px;
+}
+
+.theme-half-life .panel-footer {
+    background: #1a1a1a;
+    border-top: 3px solid #ff6600;
+    border-bottom: 3px solid #ffaa00;
+    color: #ff6600;
+    padding: 8px 16px;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.8), inset 0 -2px 4px rgba(255, 102, 0, 0.2);
+    font-size: 0.9rem;
     font-weight: bold;
 }
+
+.theme-half-life .panel-title {
+    color: #ffcc00;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 2px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Half-Life Article Items - Industrial/warning style */
+.theme-half-life .article-item {
+    background: #1a1a1a;
+    border-left: 4px solid #ff6600;
+    border-right: 2px solid #333;
+    border-top: 1px solid #333;
+    border-bottom: 2px solid #000;
+    margin: 6px 0;
+    padding: 10px 12px;
+    box-shadow: inset 1px 1px 0 rgba(255, 102, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.6);
+    transition: all 0.2s;
+    position: relative;
+}
+
+.theme-half-life .article-item:hover {
+    border-left-color: #ffaa00;
+    background: #252525;
+    box-shadow: inset 1px 1px 0 rgba(255, 102, 0, 0.3), 0 4px 8px rgba(255, 102, 0, 0.3);
+}
+
+.theme-half-life .article-item.severity-critical {
+    border-left: 6px solid #ff3300;
+    background: #2a1515;
+}
+
+.theme-half-life .article-item.severity-high {
+    border-left: 5px solid #ff6600;
+}
+
+.theme-half-life .article-title-link {
+    color: #ffcc00;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    text-decoration: none;
+    transition: all 0.2s;
+    text-shadow: 0 0 5px rgba(255, 204, 0, 0.3);
+}
+
+.theme-half-life .article-title-link:hover {
+    color: #ffaa00;
+    text-shadow: 0 0 10px rgba(255, 170, 0, 0.6);
+}
+
+/* Half-Life Controls */
+.theme-half-life .filter-select,
+.theme-half-life .filter-input,
+.theme-half-life .feed-view-toggle,
+.theme-half-life .feed-filter-severity {
+    background: #1a1a1a;
+    color: #ffcc00;
+    border: 2px solid #ff6600;
+    border-left: 4px solid #ff6600;
+    padding: 6px 10px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5), 0 0 8px rgba(255, 102, 0, 0.4);
+}
+
+.theme-half-life .filter-select:hover,
+.theme-half-life .filter-input:focus,
+.theme-half-life .feed-view-toggle:hover,
+.theme-half-life .feed-filter-severity:hover {
+    background: #2a2a2a;
+    border-color: #ffaa00;
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.5), 0 0 12px rgba(255, 170, 0, 0.6);
+    color: #ffaa00;
+}
+
+.theme-half-life .filter-select option {
+    background: #1a1a1a;
+    color: #ffcc00;
+}
+
+/* Half-Life Buttons - mechanical/industrial */
+.theme-half-life .btn {
+    background: #1a1a1a;
+    color: #ffcc00;
+    border: 2px solid #ff6600;
+    border-left: 4px solid #ffaa00;
+    border-bottom: 3px solid #000;
+    padding: 8px 16px;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: inset 0 1px 0 rgba(255, 102, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.theme-half-life .btn:hover {
+    background: #2a2a2a;
+    border-color: #ffaa00;
+    box-shadow: inset 0 1px 0 rgba(255, 170, 0, 0.5), 0 4px 12px rgba(255, 102, 0, 0.4);
+    color: #ffaa00;
+}
+
+.theme-half-life .btn-primary {
+    background: #ff6600;
+    color: #1a1a1a;
+    border-color: #ffaa00;
+}
+
+.theme-half-life .btn-primary:hover {
+    background: #ffaa00;
+    color: #000;
+}
+
+.theme-half-life .btn-danger {
+    background: #ff3300;
+    color: #ffcc00;
+    border-color: #ff6600;
+}
+
+.theme-half-life .btn-danger:hover {
+    background: #ff6600;
+    color: #000;
+}
+
 .critical-ticker .ticker-content {
 /* HAL Theme (2001: A Space Odyssey) */
 .theme-hal {
