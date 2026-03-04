@@ -449,8 +449,14 @@ async function loadSources() {
 async function loadStats() {
     try {
         state.stats = await api('/stats');
-        document.getElementById('statTotal').textContent = state.stats.total_articles || 0;
-        document.getElementById('stat24h').textContent = state.stats.last_24h || 0;
+        const statTotal = document.getElementById('statTotal');
+        const stat24h = document.getElementById('stat24h');
+        if (statTotal) {
+            statTotal.textContent = state.stats.total_articles || 0;
+        }
+        if (stat24h) {
+            stat24h.textContent = state.stats.last_24h || 0;
+        }
     } catch (error) {
         console.error('Failed to load stats:', error);
     }
@@ -2342,6 +2348,9 @@ function toggleSettings() {
 
 function renderSourcesList() {
     const list = document.getElementById('sourcesList');
+    if (!list) {
+        return;
+    }
     
     if (state.sources.length === 0) {
         list.innerHTML = '<p style="color: var(--text-muted); font-size: 0.875rem;">No sources configured</p>';

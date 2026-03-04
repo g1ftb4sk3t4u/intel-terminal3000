@@ -108,6 +108,25 @@ class Dashboard(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
+class UserSettings(Base):
+    """User settings persisted across sessions"""
+    __tablename__ = "user_settings"
+
+    id = Column(Integer, primary_key=True, index=True)
+    alert_sound_enabled = Column(Boolean, default=False)
+    alert_volume = Column(Integer, default=80)
+    enabled_sources = Column(JSON, default=dict)
+    enabled_categories = Column(JSON, default=dict)
+    default_sort = Column(String(20), default="newest")
+    hide_read_articles = Column(Boolean, default=False)
+    show_map_heatmap = Column(Boolean, default=True)
+    show_trending_alerts = Column(Boolean, default=True)
+    show_ai_summaries = Column(Boolean, default=True)
+    timezone = Column(String(64), default="UTC")
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
 class GeoCache(Base):
     """Cache for geocoding results"""
     __tablename__ = "geo_cache"
