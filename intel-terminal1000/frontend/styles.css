@@ -58,34 +58,34 @@
     --bg-primary: #1a1a1a;
     --bg-secondary: #232323;
     --bg-tertiary: #2c2c2c;
-    --bg-panel: #ff6600;
-    --bg-hover: #ff9900;
-    --accent-primary: #ff6600;
-    --accent-secondary: #ff9900;
-    --accent-glow: rgba(255, 102, 0, 0.3);
+    --bg-panel: #00bfff;
+    --bg-hover: #00e5ff;
+    --accent-primary: #00bfff;
+    --accent-secondary: #00e5ff;
+    --accent-glow: rgba(0, 191, 255, 0.18);
     --severity-critical: #ff3300;
-    --severity-high: #ff9900;
-    --severity-medium: #ffcc00;
+    --severity-high: #00e5ff;
+    --severity-medium: #33ccff;
     --severity-low: #cccccc;
-    --text-primary: #ffcc00;
+    --text-primary: #33ccff;
     --text-secondary: #cccccc;
-    --text-muted: #ff6600;
-    --border-color: #ff6600;
-    --border-glow: rgba(255, 102, 0, 0.5);
+    --text-muted: #00bfff;
+    --border-color: #00bfff;
+    --border-glow: rgba(0, 191, 255, 0.3);
     font-family: 'Share Tech Mono', 'Consolas', monospace;
 }
 .theme-half-life .panel-header, .theme-half-life .panel-footer {
     background: #232323;
-    color: #ffcc00;
-    border-bottom: 2px solid #ff6600;
+    color: #33ccff;
+    border-bottom: 2px solid #00bfff;
 }
 .theme-half-life .panel-title {
-    color: #ff6600;
+    color: #00bfff;
     font-family: 'Share Tech Mono', 'Consolas', monospace;
     letter-spacing: 1px;
 }
 .theme-half-life .article-title-link {
-    background: #ff6600;
+    background: #00bfff;
     color: #232323;
     border-radius: 6px;
     font-weight: bold;
