@@ -17,7 +17,7 @@
     border-top: 2px solid #fff3;
 }
 
-/* LCARS Theme (Star Trek: TNG Computer Interface) */
+/* LCARS Theme (Modern Professional) */
 .theme-lcars {
     --bg-primary: #0d1929;
     --bg-secondary: #1a2f52;
@@ -36,7 +36,7 @@
     --text-muted: #888888;
     --border-color: #f4a71a;
     --border-glow: none;
-    font-family: 'Arial Black', 'Arial', sans-serif;
+    font-family: 'Arial', sans-serif;
 }
 
 /* LCARS Panel - Sleek and angular */
@@ -61,42 +61,43 @@
 /* LCARS Panel Headers - Flat and professional */
 .theme-lcars .panel-header {
     background: linear-gradient(180deg, #1a2f52 0%, #0d1929 100%);
-    border-bottom: 3px solid #f4a71a;
+    border-bottom: 2px solid #f4a71a;
     color: #f4a71a;
-    padding: 10px 16px;
+    padding: 8px 12px;
     box-shadow: inset 0 1px 2px rgba(244, 167, 26, 0.1);
-    font-weight: 600;
-    letter-spacing: 1px;
+    font-weight: 500;
+    letter-spacing: 0px;
+    font-size: 0.9rem;
 }
 
 .theme-lcars .panel-footer {
     background: linear-gradient(0deg, #1a2f52 0%, #0d1929 100%);
-    border-top: 3px solid #f4a71a;
+    border-top: 2px solid #f4a71a;
     color: #1adeab;
-    padding: 10px 16px;
+    padding: 6px 12px;
     box-shadow: inset 0 -1px 2px rgba(244, 167, 26, 0.1);
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.75rem;
+    font-weight: 400;
 }
 
 .theme-lcars .panel-title {
     color: #f4a71a;
-    font-family: 'Arial Black', 'Arial', sans-serif;
-    letter-spacing: 1px;
-    font-size: 1rem;
-    font-weight: bold;
-    text-transform: uppercase;
+    font-family: 'Arial', sans-serif;
+    letter-spacing: 0px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: none;
 }
 
 /* LCARS Article Items - Clean and readable */
 .theme-lcars .article-item {
     background: #1a2f52;
-    border-left: 4px solid #1adeab;
-    border-right: 1px solid #0d1929;
-    border-top: 1px solid #2a4a7a;
-    border-bottom: 1px solid #000;
-    margin: 4px 0;
-    padding: 10px 12px;
+    border-left: 3px solid #1adeab;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+    margin: 2px 0;
+    padding: 8px 10px;
     box-shadow: none;
     transition: all 0.2s;
 }
@@ -117,8 +118,8 @@
 
 .theme-lcars .article-title-link {
     color: #f4a71a;
-    font-weight: 600;
-    font-size: 0.95rem;
+    font-weight: 500;
+    font-size: 0.9rem;
     text-decoration: none;
     transition: color 0.2s;
 }
@@ -135,14 +136,14 @@
     background: #1a2f52;
     color: #f4a71a;
     border: 1px solid #f4a71a;
-    border-left: 2px solid #f4a71a;
-    padding: 6px 10px;
+    padding: 5px 10px;
     font-family: 'Arial', sans-serif;
-    font-weight: 600;
+    font-weight: 400;
+    font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.2s;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
-}
+}}
 
 .theme-lcars .filter-select:hover,
 .theme-lcars .filter-input:focus,
@@ -162,17 +163,16 @@
 .theme-lcars .btn {
     background: #1a2f52;
     color: #f4a71a;
-    border: 2px solid #f4a71a;
-    border-left: 3px solid #1adeab;
-    padding: 8px 16px;
-    font-weight: 600;
+    border: 1px solid #f4a71a;
+    padding: 6px 12px;
+    font-weight: 500;
     font-family: 'Arial', sans-serif;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: inset 0 1px 2px rgba(244, 167, 26, 0.1);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-size: 0.85rem;
+    box-shadow: none;
+    text-transform: none;
+    letter-spacing: 0px;
+    font-size: 0.8rem;
 }
 
 .theme-lcars .btn:hover {
