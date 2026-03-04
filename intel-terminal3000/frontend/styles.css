@@ -203,42 +203,36 @@
     color: #ff6b35;
 }
 
-/* Half-Life Theme (Black Mesa Industrial Facility) */
+/* Half-Life Theme (Combine Interface) */
 .theme-half-life {
-    --bg-primary: #0f0f0f;
-    --bg-secondary: #1a1a1a;
-    --bg-tertiary: #2a2a2a;
-    --bg-panel: #0f0f0f;
-    --bg-hover: #ff6600;
-    --accent-primary: #ff6600;
-    --accent-secondary: #ffaa00;
-    --accent-glow: rgba(255, 102, 0, 0.5);
-    --severity-critical: #ff3300;
-    --severity-high: #ff6600;
-    --severity-medium: #ffaa00;
-    --severity-low: #888888;
-    --text-primary: #ffcc00;
-    --text-secondary: #ff6600;
-    --text-muted: #666666;
-    --border-color: #ff6600;
-    --border-glow: rgba(255, 102, 0, 0.7);
-    font-family: 'Courier New', 'Courier', monospace;
+    --bg-primary: #001a2e;
+    --bg-secondary: #0a1f2e;
+    --bg-tertiary: #1a3a50;
+    --bg-panel: #001a2e;
+    --bg-hover: #0099ff;
+    --accent-primary: #00bfff;
+    --accent-secondary: #0099ff;
+    --accent-glow: rgba(0, 191, 255, 0.4);
+    --severity-critical: #ff00ff;
+    --severity-high: #00f0ff;
+    --severity-medium: #00bfff;
+    --severity-low: #0099ff;
+    --text-primary: #00ffff;
+    --text-secondary: #00bfff;
+    --text-muted: #0088ff;
+    --border-color: #00bfff;
+    --border-glow: rgba(0, 191, 255, 0.6);
+    font-family: 'Arial', sans-serif;
 }
 
-/* Half-Life Panel - Industrial hazard stripe pattern */
+/* Half-Life Panel - Combine Interface */
 .theme-half-life .panel {
-    background: repeating-linear-gradient(
-        45deg,
-        #0f0f0f,
-        #0f0f0f 10px,
-        #1a1a1a 10px,
-        #1a1a1a 20px
-    );
-    border: 2px solid #ff6600;
-    border-left: 3px solid #ff6600;
-    border-right: 2px solid #1a1a1a;
+    background: #0a1f2e;
+    border: 2px solid #00bfff;
+    border-left: 3px solid #0099ff;
+    border-right: 2px solid #0a1f2e;
     position: relative;
-    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 191, 255, 0.1);
 }
 
 /* Hazard stripe top accent */
@@ -255,12 +249,12 @@
 
 /* Half-Life Panel Headers */
 .theme-half-life .panel-header {
-    background: #1a1a1a;
-    border-bottom: 2px solid #ff6600;
+    background: #0a1f2e;
+    border-bottom: 2px solid #00bfff;
     border-top: none;
-    color: #ffcc00;
+    color: #00ffff;
     padding: 8px 12px;
-    box-shadow: inset 0 2px 4px rgba(255, 102, 0, 0.15);
+    box-shadow: inset 0 2px 4px rgba(0, 191, 255, 0.15);
     position: relative;
     letter-spacing: 0px;
     font-size: 0.9rem;
@@ -268,29 +262,29 @@
 }
 
 .theme-half-life .panel-footer {
-    background: #1a1a1a;
-    border-top: 2px solid #ff6600;
+    background: #0a1f2e;
+    border-top: 2px solid #00bfff;
     border-bottom: none;
-    color: #ff6600;
+    color: #00bfff;
     padding: 6px 12px;
-    box-shadow: inset 0 -2px 4px rgba(255, 102, 0, 0.15);
+    box-shadow: inset 0 -2px 4px rgba(0, 191, 255, 0.15);
     font-size: 0.75rem;
     font-weight: 400;
 }
 
 .theme-half-life .panel-title {
-    color: #ffcc00;
-    font-family: 'Courier New', monospace;
+    color: #00ffff;
+    font-family: 'Arial', sans-serif;
     letter-spacing: 0px;
     font-size: 0.95rem;
     font-weight: 500;
     text-transform: none;
 }
 
-/* Half-Life Article Items - Industrial/warning style */
+/* Half-Life Article Items - Combine Interface style */
 .theme-half-life .article-item {
-    background: #1a1a1a;
-    border-left: 3px solid #ff6600;
+    background: #0a1f2e;
+    border-left: 3px solid #00bfff;
     border-right: none;
     border-top: none;
     border-bottom: none;
@@ -302,8 +296,8 @@
 }
 
 .theme-half-life .article-item:hover {
-    border-left-color: #ffaa00;
-    background: #252525;
+    border-left-color: #00ffff;
+    background: #1a3a50;
     box-shadow: none;
 }
 
@@ -313,20 +307,20 @@
 }
 
 .theme-half-life .article-item.severity-high {
-    border-left: 5px solid #ff6600;
+    border-left: 3px solid #00f0ff;
 }
 
 .theme-half-life .article-title-link {
-    color: #ffcc00;
+    color: #00ffff;
     font-weight: 500;
-    font-family: 'Courier New', monospace;
+    font-family: 'Arial', sans-serif;
     text-decoration: none;
     transition: all 0.2s;
     font-size: 0.9rem;
 }
 
 .theme-half-life .article-title-link:hover {
-    color: #ffaa00;
+    color: #00f0ff;
 }
 
 /* Half-Life Controls */
@@ -334,41 +328,41 @@
 .theme-half-life .filter-input,
 .theme-half-life .feed-view-toggle,
 .theme-half-life .feed-filter-severity {
-    background: #1a1a1a;
-    color: #ffcc00;
-    border: 1px solid #ff6600;
+    background: #0a1f2e;
+    color: #00ffff;
+    border: 1px solid #00bfff;
     padding: 5px 10px;
-    font-family: 'Courier New', monospace;
+    font-family: 'Arial', sans-serif;
     font-weight: 400;
     font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 8px rgba(0, 191, 255, 0.2);
 }
 
 .theme-half-life .filter-select:hover,
 .theme-half-life .filter-input:focus,
 .theme-half-life .feed-view-toggle:hover,
 .theme-half-life .feed-filter-severity:hover {
-    background: #2a2a2a;
-    border-color: #ffaa00;
-    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
-    color: #ffaa00;
+    background: #1a3a50;
+    border-color: #00f0ff;
+    box-shadow: inset 0 0 8px rgba(0, 191, 255, 0.2);
+    color: #00f0ff;
 }
 
 .theme-half-life .filter-select option {
-    background: #1a1a1a;
-    color: #ffcc00;
+    background: #0a1f2e;
+    color: #00ffff;
 }
 
-/* Half-Life Buttons - mechanical/industrial */
+/* Half-Life Buttons - Combine tech style */
 .theme-half-life .btn {
-    background: #1a1a1a;
-    color: #ffcc00;
-    border: 1px solid #ff6600;
+    background: #0a1f2e;
+    color: #00ffff;
+    border: 1px solid #00bfff;
     padding: 6px 12px;
     font-weight: 500;
-    font-family: 'Courier New', monospace;
+    font-family: 'Arial', sans-serif;
     cursor: pointer;
     transition: all 0.2s;
     box-shadow: none;
@@ -378,32 +372,32 @@
 }
 
 .theme-half-life .btn:hover {
-    background: #2a2a2a;
-    border-color: #ffaa00;
+    background: #1a3a50;
+    border-color: #00f0ff;
     box-shadow: none;
-    color: #ffaa00;
+    color: #00f0ff;
 }
 
 .theme-half-life .btn-primary {
-    background: #ff6600;
-    color: #1a1a1a;
-    border-color: #ffaa00;
+    background: #00bfff;
+    color: #001a2e;
+    border-color: #0099ff;
 }
 
 .theme-half-life .btn-primary:hover {
-    background: #ffaa00;
-    color: #000;
+    background: #00f0ff;
+    color: #001a2e;
 }
 
 .theme-half-life .btn-danger {
-    background: #ff3300;
-    color: #ffcc00;
-    border-color: #ff6600;
+    background: #ff00ff;
+    color: #00ffff;
+    border-color: #ff00ff;
 }
 
 .theme-half-life .btn-danger:hover {
-    background: #ff6600;
-    color: #000;
+    background: #00bfff;
+    color: #001a2e;
 }
 
 .critical-ticker .ticker-content {
