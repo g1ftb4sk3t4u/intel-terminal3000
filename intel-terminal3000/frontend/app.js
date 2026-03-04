@@ -111,9 +111,23 @@ window.updateDashboardSelector = updateDashboardSelector;
  */
 
 // Configuration
-const API_BASE = 'http://localhost:8080';
+const API_BASE = (() => {
+    const host = window.location.hostname;
+    if (host === 'localhost' || host === '127.0.0.1') {
+        return 'http://localhost:8080';
+    }
+    return '';
+})();
+
 window.API_BASE = API_BASE; // Make available to settings.js
-const WS_URL = API_BASE.replace('http', 'ws') + '/ws';
+
+const WS_URL = (() => {
+    if (API_BASE) {
+        return API_BASE.replace('http', 'ws') + '/ws';
+    }
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    return `${wsProtocol}://${window.location.host}/ws`;
+})();
 
 // State
 let state = {
