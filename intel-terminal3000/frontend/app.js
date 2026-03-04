@@ -110,9 +110,10 @@ window.updateDashboardSelector = updateDashboardSelector;
  * Multi-dashboard intelligence platform
  */
 
-// Configuration - Use relative URLs for Docker/Nginx proxy compatibility
-const API_BASE = '';  // Empty string uses relative URLs through nginx proxy
-const WS_URL = (window.location.protocol === 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host + '/ws';
+// Configuration
+const API_BASE = 'http://localhost:8080';
+window.API_BASE = API_BASE; // Make available to settings.js
+const WS_URL = API_BASE.replace('http', 'ws') + '/ws';
 
 // State
 let state = {
@@ -138,7 +139,7 @@ const MODULES = {
         icon: '📰',
         description: 'Live article feed',
         hasFilters: true,
-        filters: ['category', 'severity', 'source_type', 'region'],
+        filters: ['category', 'source_type', 'region'],
     },
     map: {
         name: 'Heat Map',
@@ -296,6 +297,11 @@ async function initializeApp() {
         state.currentDashboard = createDefaultDashboard();
     } else {
         state.currentDashboard = state.dashboards.find(d => d.is_default) || state.dashboards[0];
+    }
+    
+    // Initialize Settings Module
+    if (SettingsModule) {
+        await SettingsModule.init();
     }
     
     // Don't render yet - let switchPage handle it
@@ -858,9 +864,6 @@ function renderFilterControls(config) {
         <select class="filter-select" onchange="filterPanel('${config.id}', 'category', this.value)">
             ${CATEGORIES.map(c => `<option value="${c.value}" ${config.filters?.category === c.value ? 'selected' : ''}>${c.label}</option>`).join('')}
         </select>
-        <select class="filter-select" onchange="filterPanel('${config.id}', 'severity', this.value)">
-            ${SEVERITIES.map(s => `<option value="${s.value}" ${config.filters?.severity === s.value ? 'selected' : ''}>${s.label}</option>`).join('')}
-        </select>
     `;
 }
 
@@ -1098,6 +1101,52 @@ function renderIRCFeedItem(article) {
 }
 }
 
+// Diversify articles to avoid showing many from same source consecutively
+function diversifyArticles(articles) {
+    if (!articles || articles.length <= 1) return articles;
+    
+    // Separate critical/high severity articles (always keep them on top)
+    const highPriority = articles.filter(a => a.severity === 'critical' || a.severity === 'high');
+    const normalPriority = articles.filter(a => a.severity !== 'critical' && a.severity !== 'high');
+    
+    // Function to interleave by source
+    function interleaveBySource(articleList) {
+        if (articleList.length <= 1) return articleList;
+        
+        // Group by source
+        const sourceGroups = {};
+        articleList.forEach(article => {
+            const source = article.source || 'unknown';
+            if (!sourceGroups[source]) {
+                sourceGroups[source] = [];
+            }
+            sourceGroups[source].push(article);
+        });
+        
+        // Round-robin through sources
+        const result = [];
+        const sourceKeys = Object.keys(sourceGroups);
+        let maxLength = Math.max(...Object.values(sourceGroups).map(g => g.length));
+        
+        for (let i = 0; i < maxLength; i++) {
+            for (const source of sourceKeys) {
+                if (sourceGroups[source][i]) {
+                    result.push(sourceGroups[source][i]);
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    // Interleave both priority groups separately
+    const diversifiedHigh = interleaveBySource(highPriority);
+    const diversifiedNormal = interleaveBySource(normalPriority);
+    
+    // Concatenate with high priority first
+    return [...diversifiedHigh, ...diversifiedNormal];
+}
+
 function renderFeedContent(panelId, articles) {
     const content = document.getElementById(`${panelId}-content`);
     const footer = document.getElementById(`${panelId}-footer`);
@@ -1113,13 +1162,16 @@ function renderFeedContent(panelId, articles) {
         return;
     }
     
+    // Diversify articles to mix sources better
+    const diversifiedArticles = diversifyArticles(articles);
+    
     content.innerHTML = `
         <div class="article-list">
-            ${articles.map(article => renderArticleItem(article)).join('')}
+            ${diversifiedArticles.map(article => renderArticleItem(article)).join('')}
         </div>
     `;
     
-    if (footer) footer.textContent = `${articles.length} articles`;
+    if (footer) footer.textContent = `${diversifiedArticles.length} articles`;
 }
 
 function renderArticleItem(article) {
@@ -1138,7 +1190,9 @@ function renderArticleItem(article) {
                 </span>
                 ${article.region ? `<span class="article-region">📍 ${article.region}</span>` : ''}
                 <span>${timeAgo}</span>
-                <span class="severity-badge ${article.severity}">${article.severity}</span>
+                <span class="severity-indicator">
+                    <span class="severity-dot ${article.severity}"></span>
+                </span>
             </div>
         </div>
     `;
@@ -1882,7 +1936,9 @@ async function initVideosPanel(config) {
             <div class="article-meta">
                 <span>${escapeHtml(a.source || 'unknown')}</span>
                 <span>${escapeHtml(a.region || 'Global')}</span>
-                <span class="severity-badge ${a.severity}">${a.severity}</span>
+                <span class="severity-indicator">
+                    <span class="severity-dot ${a.severity}"></span>
+                </span>
             </div>
         </div>
     `).join('')}</div>`;
@@ -2182,7 +2238,9 @@ async function openArticle(articleId) {
                 <span class="source-type-badge ${article.source_type}">${article.source_type}</span>
                 <span>${article.source}</span>
                 <span>${formatTimeAgo(article.published_at || article.created_at)}</span>
-                <span class="severity-badge ${article.severity}">${article.severity}</span>
+                <span class="severity-indicator">
+                    <span class="severity-dot ${article.severity}"></span>
+                </span>
                 ${article.region ? `<span>📍 ${article.region}</span>` : ''}
             </div>
         `;
@@ -2239,11 +2297,28 @@ async function setSeverity(severity) {
 // ============ SETTINGS SIDEBAR ============
 
 function toggleSettings() {
+    const settingsPage = document.getElementById('settings-page');
+    
+    if (settingsPage) {
+        const isVisible = settingsPage.style.display !== 'none';
+        settingsPage.style.display = isVisible ? 'none' : 'block';
+        
+        // Load fresh settings when opening
+        if (!isVisible && SettingsModule) {
+            SettingsModule.loadSettings();
+        }
+    }
+    
+    // Also handle legacy settingsSidebar for backward compatibility
     const sidebar = document.getElementById('settingsSidebar');
     const container = document.getElementById('dashboardContainer');
     
-    sidebar.classList.toggle('open');
-    container.classList.toggle('sidebar-open');
+    if (sidebar) {
+        sidebar.classList.toggle('open');
+    }
+    if (container) {
+        container.classList.toggle('sidebar-open');
+    }
     
     // Invalidate map size if present
     if (state.map) {

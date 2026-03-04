@@ -158,6 +158,7 @@
         </div>
     </div>
 
+    <script src="settings.js"></script>
     <script src="app.js"></script>
     <div id="criticalTicker" class="critical-ticker" style="display:none;bottom:0;top:auto;"></div>
 
@@ -242,6 +243,245 @@
                     <li>Settings and source management are available to logged-in users.</li>
                     <li>For more, see the <a href="FILTERS_GUIDE.md" target="_blank">Filters Guide</a>.</li>
                 </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Page -->
+    <div id="settings-page" class="settings-page" style="display: none;">
+        <div class="settings-container">
+            <!-- Settings Sidebar Navigation -->
+            <div class="settings-sidebar">
+                <h3 style="margin-top: 0; color: var(--text-primary); border-bottom: 2px solid var(--accent); padding-bottom: 12px; margin-bottom: 16px;">⚙️ Settings</h3>
+                <button class="settings-nav-btn active" data-section="alerts">🔔 Alerts</button>
+                <button class="settings-nav-btn" data-section="sources">📡 Sources</button>
+                <button class="settings-nav-btn" data-section="categories">🏷️ Categories</button>
+                <button class="settings-nav-btn" data-section="display">👁️ Display</button>
+                <button class="settings-nav-btn" data-section="general">⚙️ General</button>
+                <div style="border-top: 2px solid var(--accent); margin: 16px 0; padding-top: 16px;">
+                    <h4 style="color: var(--accent-primary); font-size: 0.9rem; margin-bottom: 8px;">🔐 Admin</h4>
+                    <button class="settings-nav-btn" data-section="add-feeds">➕ Add Feeds</button>
+                    <button class="settings-nav-btn" data-section="add-category">🏷️ Add Category</button>
+                </div>
+                <button class="settings-close-btn" onclick="toggleSettings()">✕ Close</button>
+            </div>
+
+            <!-- Settings Content Sections -->
+            <div class="settings-content">
+                <!-- Alerts & Notifications Section -->
+                <div id="alerts-section" class="settings-section active">
+                    <h2>Alerts & Notifications</h2>
+                    
+                    <div class="setting-item">
+                        <label for="alert-sound-toggle">🔊 Enable Alert Sound</label>
+                        <input type="checkbox" id="alert-sound-toggle" class="toggle-switch">
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="alert-volume">Volume Level</label>
+                        <div style="display: flex; gap: 16px; align-items: center;">
+                            <input type="range" id="alert-volume" class="slider" min="0" max="100" value="80">
+                            <span id="volume-display" style="min-width: 40px; text-align: right;">80%</span>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <button class="btn btn-secondary" onclick="testAlertSound()">🔊 Test Alert Sound</button>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="trending-alerts-toggle">⚡ Show Trending Alerts</label>
+                        <input type="checkbox" id="trending-alerts-toggle" class="toggle-switch" checked>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Display trending article notifications in real-time</p>
+                    </div>
+                </div>
+
+                <!-- Data Sources Section -->
+                <div id="sources-section" class="settings-section">
+                    <h2>Enable/Disable Data Sources</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 16px;">Uncheck sources to exclude them from the feed:</p>
+                    
+                    <div id="sources-list" class="sources-list">
+                        <!-- Dynamic source list will be populated here by JavaScript -->
+                        <p style="color: var(--text-secondary); padding: 16px; text-align: center;">Loading sources...</p>
+                    </div>
+                </div>
+
+                <!-- Feed Categories Section -->
+                <div id="categories-section" class="settings-section">
+                    <h2>Feed Categories</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 16px;">Select which categories to display:</p>
+                    
+                    <div style="margin-bottom: 16px; display: flex; gap: 8px;">
+                        <button class="btn btn-small" onclick="selectAllCategories()">✓ Select All</button>
+                        <button class="btn btn-small" onclick="deselectAllCategories()">✗ Deselect All</button>
+                    </div>
+
+                    <div id="categories-list" class="categories-list">
+                        <!-- Dynamic categories will be populated here -->
+                        <div class="category-item">
+                            <input type="checkbox" id="cat-cyber" class="category-toggle" checked>
+                            <label for="cat-cyber">🔓 Cybersecurity</label>
+                        </div>
+                        <div class="category-item">
+                            <input type="checkbox" id="cat-geo" class="category-toggle" checked>
+                            <label for="cat-geo">🗺️ Geopolitical</label>
+                        </div>
+                        <div class="category-item">
+                            <input type="checkbox" id="cat-economic" class="category-toggle" checked>
+                            <label for="cat-economic">💰 Economic</label>
+                        </div>
+                        <div class="category-item">
+                            <input type="checkbox" id="cat-tech" class="category-toggle" checked>
+                            <label for="cat-tech">💻 Technology</label>
+                        </div>
+                        <div class="category-item">
+                            <input type="checkbox" id="cat-health" class="category-toggle" checked>
+                            <label for="cat-health">⚕️ Health</label>
+                        </div>
+                        <div class="category-item">
+                            <input type="checkbox" id="cat-science" class="category-toggle" checked>
+                            <label for="cat-science">🔬 Science</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Display Preferences Section -->
+                <div id="display-section" class="settings-section">
+                    <h2>Display Preferences</h2>
+                    
+                    <div class="setting-item">
+                        <label for="heatmap-toggle">🔥 Show Map Heatmap</label>
+                        <input type="checkbox" id="heatmap-toggle" class="toggle-switch" checked>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Display heat map overlay on geography map</p>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="ai-summary-toggle">🤖 Show AI Summaries</label>
+                        <input type="checkbox" id="ai-summary-toggle" class="toggle-switch" checked>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Display AI-generated article summaries</p>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="sort-order">📊 Default Sort Order</label>
+                        <select id="sort-order" class="input-field" style="padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px;">
+                            <option value="newest">Newest First</option>
+                            <option value="sentiment">Sentiment Score</option>
+                            <option value="trending">Trending</option>
+                            <option value="relevance">Relevance</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="hide-read-toggle">👁️ Hide Read Articles</label>
+                        <input type="checkbox" id="hide-read-toggle" class="toggle-switch">
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Automatically hide articles you've already viewed</p>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="cards-per-row">Cards Per Row</label>
+                        <select id="cards-per-row" class="input-field" style="padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px;">
+                            <option value="2">2 Cards</option>
+                            <option value="3" selected>3 Cards</option>
+                            <option value="4">4 Cards</option>
+                            <option value="6">6 Cards</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- General Settings Section -->
+                <div id="general-section" class="settings-section">
+                    <h2>General</h2>
+                    
+                    <div class="setting-item">
+                        <label for="timezone-select">⏰ Timezone</label>
+                        <select id="timezone-select" class="input-field" style="padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px;">
+                            <option value="UTC">UTC</option>
+                            <option value="EST">Eastern (EST)</option>
+                            <option value="CST">Central (CST)</option>
+                            <option value="MST">Mountain (MST)</option>
+                            <option value="PST">Pacific (PST)</option>
+                            <option value="GMT">GMT</option>
+                            <option value="CET">Central Europe (CET)</option>
+                            <option value="IST">India Standard (IST)</option>
+                            <option value="JST">Japan Standard (JST)</option>
+                            <option value="AEST">Australia Eastern (AEST)</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <h3 style="margin-top: 24px; margin-bottom: 12px;">About Intel Terminal 3000</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+                            <strong>Version:</strong> 3.0.0<br>
+                            <strong>Platform:</strong> Real-time Intelligence Dashboard<br>
+                            <strong>Data Sources:</strong> 8 Integrated Collectors (RSS, GDELT, Reddit, Bluesky, Telegram, ADS-B, ACARS, Custom)<br>
+                            <strong>Technology:</strong> FastAPI + SQLite + JavaScript<br>
+                            <strong>Status:</strong> Production Ready<br>
+                            <a href="https://github.com/g1ftb4sk3t4u/intel-terminal-3000" target="_blank" style="color: var(--accent); text-decoration: none;">View on GitHub →</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Add Feeds Section (Admin) -->
+                <div id="add-feeds-section" class="settings-section">
+                    <h2>➕ Add New Feeds</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px;">Add multiple RSS feeds to a category at once</p>
+                    
+                    <div class="setting-item">
+                        <label for="feed-category-select">📁 Select Category</label>
+                        <select id="feed-category-select" class="input-field" style="padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px; width: 100%; max-width: 400px;">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <h3 style="margin-top: 24px; margin-bottom: 12px;">Feeds to Add</h3>
+                        <div id="feeds-input-container">
+                            <div class="feed-input-row" data-feed-index="0">
+                                <input type="text" class="input-field feed-name-input" placeholder="Feed Name (e.g., Twitter - OSINTdefender)" style="flex: 1;">
+                                <input type="text" class="input-field feed-url-input" placeholder="RSS URL (e.g., https://rsshub.app/twitter/user/OSINTdefender)" style="flex: 2;">
+                                <button class="btn btn-danger remove-feed-btn" onclick="removeFeedRow(0)" style="display: none;">✕</button>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" onclick="addFeedRow()" style="margin-top: 12px;">➕ Add Another Feed</button>
+                    </div>
+
+                    <div class="setting-item" style="margin-top: 32px;">
+                        <button class="btn btn-primary" onclick="bulkAddFeeds()" style="padding: 12px 24px; font-size: 1rem;">💾 Save All Feeds</button>
+                        <button class="btn btn-secondary" onclick="clearFeedForm()" style="margin-left: 12px;">🗑️ Clear Form</button>
+                    </div>
+
+                    <div id="feed-add-status" style="margin-top: 16px; padding: 12px; border-radius: 6px; display: none;"></div>
+                </div>
+
+                <!-- Add Category Section (Admin) -->
+                <div id="add-category-section" class="settings-section">
+                    <h2>🏷️ Add New Category</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px;">Create a new category for organizing feeds</p>
+                    
+                    <div class="setting-item">
+                        <label for="new-category-name">Category Name</label>
+                        <input type="text" id="new-category-name" class="input-field" placeholder="e.g., fintech, logistics, healthcare" style="max-width: 400px;">
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Use lowercase, no spaces (use hyphens or underscores)</p>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="new-category-display">Display Name</label>
+                        <input type="text" id="new-category-display" class="input-field" placeholder="e.g., 💰 FinTech" style="max-width: 400px;">
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Human-readable name with optional emoji</p>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="new-category-emoji">Emoji (Optional)</label>
+                        <input type="text" id="new-category-emoji" class="input-field" placeholder="e.g., 💰" maxlength="2" style="max-width: 100px;">
+                    </div>
+
+                    <div class="setting-item" style="margin-top: 32px;">
+                        <button class="btn btn-primary" onclick="createCategory()" style="padding: 12px 24px; font-size: 1rem;">💾 Create Category</button>
+                    </div>
+
+                    <div id="category-add-status" style="margin-top: 16px; padding: 12px; border-radius: 6px; display: none;"></div>
+                </div>
             </div>
         </div>
     </div>

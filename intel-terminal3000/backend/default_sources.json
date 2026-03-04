@@ -596,5 +596,959 @@
             "message_types": ["all"],
             "enable_dekoder": true
         }
+    },
+    {
+        "name": "Twitter - OSINTdefender",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/OSINTdefender",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - AuroraIntel",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/AuroraIntel",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - IntelCrab",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/IntelCrab",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - GeoConfirmed",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/GeoConfirmed",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - OSINTtechnical",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/OSINTtechnical",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - CalibreObscura",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/CalibreObscura",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - ELINTNews",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/ELINTNews",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - sentdefender",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/sentdefender",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - OSINT_Tactical",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/OSINT_Tactical",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - OSINT_Analyst",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/OSINT_Analyst",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - OSINT_Insider",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/OSINT_Insider",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - OSINTCurious",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/OSINTCurious",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - OSINTtechniques",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/OSINTtechniques",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - cyb_detective",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/cyb_detective",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - Sector035",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/Sector035",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - dutch_osintguy",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/dutch_osintguy",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - OSINTcombine",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/OSINTcombine",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - OSINTDojo",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/OSINTDojo",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - OSINTteamblog",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/OSINTteamblog",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - OSINTGeek",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/OSINTGeek",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - OSINT613",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/OSINT613",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - Bellingcat",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/Bellingcat",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - Liveuamap",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/Liveuamap",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - War_Mapper",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/War_Mapper",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - AndrewPerpetua",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/AndrewPerpetua",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - UAWeapons",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/UAWeapons",
+        "category": "military"
+    },
+    {
+        "name": "Twitter - DefMon3",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/DefMon3",
+        "category": "military"
+    },
+    {
+        "name": "Twitter - Archer83Able",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/Archer83Able",
+        "category": "military"
+    },
+    {
+        "name": "Twitter - NOELreports",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/NOELreports",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - ConflictNews",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/ConflictNews",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - IntelDoge",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/IntelDoge",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - Militarylandnet",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/Militarylandnet",
+        "category": "military"
+    },
+    {
+        "name": "Twitter - GeoIntelWatcher",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/GeoIntelWatcher",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - ELINTSystems",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/ELINTSystems",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - campuscodi",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/campuscodi",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - GossiTheDog",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/GossiTheDog",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - briankrebs",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/briankrebs",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - SwiftOnSecurity",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/SwiftOnSecurity",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - malwaretechblog",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/malwaretechblog",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - taviso",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/taviso",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - patrickwardle",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/patrickwardle",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - cyb3rops",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/cyb3rops",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - hacks4pancakes",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/hacks4pancakes",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - vxunderground",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/vxunderground",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - BushidoToken",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/BushidoToken",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - TheDFIRReport",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/TheDFIRReport",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - sans_isc",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/sans_isc",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - BleepinComputer",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/BleepinComputer",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - DailyDarkWeb",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/DailyDarkWeb",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - maddiestone",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/maddiestone",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - troyhunt",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/troyhunt",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - DanielMiessler",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/DanielMiessler",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - MarcusJCarey",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/MarcusJCarey",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - KatieMoussouris",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/KatieMoussouris",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - EugeneKaspersky",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/EugeneKaspersky",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - LesleyCarhart",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/LesleyCarhart",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - MagdaChelly",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/MagdaChelly",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - alexstamos",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/alexstamos",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - JeffMoss",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/JeffMoss",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - malwareunicorn",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/malwareunicorn",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - 0xAmit",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/0xAmit",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - Cyb3rWard0g",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/Cyb3rWard0g",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - KevinBeaumont",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/KevinBeaumont",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - johnlatwc",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/johnlatwc",
+        "category": "cyber"
+    },
+    {
+        "name": "Twitter - thenewarea51",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/thenewarea51",
+        "category": "aviation"
+    },
+    {
+        "name": "Twitter - Aviation_Intel",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/Aviation_Intel",
+        "category": "aviation"
+    },
+    {
+        "name": "Twitter - AircraftSpots",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/AircraftSpots",
+        "category": "aviation"
+    },
+    {
+        "name": "Twitter - CivMilAir",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/CivMilAir",
+        "category": "aviation"
+    },
+    {
+        "name": "Twitter - CombatAir",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/CombatAir",
+        "category": "aviation"
+    },
+    {
+        "name": "Twitter - TheAviationist",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/TheAviationist",
+        "category": "aviation"
+    },
+    {
+        "name": "Twitter - aviationbrk",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/aviationbrk",
+        "category": "aviation"
+    },
+    {
+        "name": "Twitter - ADS_B_Exchange",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/ADS_B_Exchange",
+        "category": "aviation"
+    },
+    {
+        "name": "Twitter - flightradar24",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/flightradar24",
+        "category": "aviation"
+    },
+    {
+        "name": "Twitter - RadarBox24",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/RadarBox24",
+        "category": "aviation"
+    },
+    {
+        "name": "Twitter - FlightAware",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/FlightAware",
+        "category": "aviation"
+    },
+    {
+        "name": "Twitter - AirlineFlyer",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/AirlineFlyer",
+        "category": "aviation"
+    },
+    {
+        "name": "Twitter - MilitaryAviation",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/MilitaryAviation",
+        "category": "aviation"
+    },
+    {
+        "name": "Twitter - Scramble_NL",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/Scramble_NL",
+        "category": "aviation"
+    },
+    {
+        "name": "Twitter - AirForceTimes",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/AirForceTimes",
+        "category": "aviation"
+    },
+    {
+        "name": "Twitter - MarineTraffic",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/MarineTraffic",
+        "category": "marine"
+    },
+    {
+        "name": "Twitter - VesselFinder",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/VesselFinder",
+        "category": "marine"
+    },
+    {
+        "name": "Twitter - FleetMon",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/FleetMon",
+        "category": "marine"
+    },
+    {
+        "name": "Twitter - NavyLookout",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/NavyLookout",
+        "category": "marine"
+    },
+    {
+        "name": "Twitter - MaritimeOptima",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/MaritimeOptima",
+        "category": "marine"
+    },
+    {
+        "name": "Twitter - gCaptain",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/gCaptain",
+        "category": "marine"
+    },
+    {
+        "name": "Twitter - PortNews",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/PortNews",
+        "category": "marine"
+    },
+    {
+        "name": "Twitter - ShippingWatch",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/ShippingWatch",
+        "category": "marine"
+    },
+    {
+        "name": "Twitter - ShipTracker",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/ShipTracker",
+        "category": "marine"
+    },
+    {
+        "name": "Twitter - LloydsList",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/LloydsList",
+        "category": "marine"
+    },
+    {
+        "name": "Twitter - DryadGlobal",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/DryadGlobal",
+        "category": "marine"
+    },
+    {
+        "name": "Twitter - WindwardAI",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/WindwardAI",
+        "category": "marine"
+    },
+    {
+        "name": "Twitter - MaritimeSecurity",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/MaritimeSecurity",
+        "category": "marine"
+    },
+    {
+        "name": "Twitter - SeaIntel",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/SeaIntel",
+        "category": "marine"
+    },
+    {
+        "name": "Twitter - NavalNews",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/NavalNews",
+        "category": "marine"
+    },
+    {
+        "name": "Twitter - RALee85",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/RALee85",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - RobLee",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/RobLee",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - MichaelKofman",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/MichaelKofman",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - MarkGaleotti",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/MarkGaleotti",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - SamuelRamani2",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/SamuelRamani2",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - IanBremmer",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/IanBremmer",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - DAlperovitch",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/DAlperovitch",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - VelinaTchakarova",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/VelinaTchakarova",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - TomNichols",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/TomNichols",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - anneapplebaum",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/anneapplebaum",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - maxseddon",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/maxseddon",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - christogrozev",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/christogrozev",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - OAlexanderDK",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/OAlexanderDK",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - JackDetsch",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/JackDetsch",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - WarintheFuture",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/WarintheFuture",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - KofmanMichael",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/KofmanMichael",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - CNASdc",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/CNASdc",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - CSIS",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/CSIS",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - AtlanticCouncil",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/AtlanticCouncil",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - WarOnTheRocks",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/WarOnTheRocks",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - ISWInstitute",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/ISWInstitute",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - DefenseAnalyst",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/DefenseAnalyst",
+        "category": "military"
+    },
+    {
+        "name": "Twitter - ModernWarInst",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/ModernWarInst",
+        "category": "military"
+    },
+    {
+        "name": "Twitter - LawfareBlog",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/LawfareBlog",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - ForeignPolicy",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/ForeignPolicy",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Twitter - planetlabs",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/planetlabs",
+        "category": "space"
+    },
+    {
+        "name": "Twitter - Maxar",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/Maxar",
+        "category": "space"
+    },
+    {
+        "name": "Twitter - NASASpaceflight",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/NASASpaceflight",
+        "category": "space"
+    },
+    {
+        "name": "Twitter - sentinel_hub",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/sentinel_hub",
+        "category": "space"
+    },
+    {
+        "name": "Twitter - EO_Space",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/EO_Space",
+        "category": "space"
+    },
+    {
+        "name": "Twitter - satellitedude",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/satellitedude",
+        "category": "space"
+    },
+    {
+        "name": "Twitter - SkyfiApp",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/SkyfiApp",
+        "category": "space"
+    },
+    {
+        "name": "Twitter - BlackSky_Inc",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/BlackSky_Inc",
+        "category": "space"
+    },
+    {
+        "name": "Twitter - ICEYE_global",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/ICEYE_global",
+        "category": "space"
+    },
+    {
+        "name": "Twitter - satellogic",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/satellogic",
+        "category": "space"
+    },
+    {
+        "name": "Twitter - NWS",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/NWS",
+        "category": "weather"
+    },
+    {
+        "name": "Twitter - NHC_Atlantic",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/NHC_Atlantic",
+        "category": "weather"
+    },
+    {
+        "name": "Twitter - TropicalTidbits",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/TropicalTidbits",
+        "category": "weather"
+    },
+    {
+        "name": "Twitter - StormHour",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/StormHour",
+        "category": "weather"
+    },
+    {
+        "name": "Twitter - severewx",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/severewx",
+        "category": "weather"
+    },
+    {
+        "name": "Twitter - USGS",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/USGS",
+        "category": "weather"
+    },
+    {
+        "name": "Twitter - NOAA",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/NOAA",
+        "category": "weather"
+    },
+    {
+        "name": "Twitter - SpaceWeatherLive",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/SpaceWeatherLive",
+        "category": "weather"
+    },
+    {
+        "name": "Twitter - EarthUncutTV",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/EarthUncutTV",
+        "category": "weather"
+    },
+    {
+        "name": "Twitter - WeatherNation",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/WeatherNation",
+        "category": "weather"
+    },
+    {
+        "name": "Twitter - MacroAlf",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/MacroAlf",
+        "category": "economic"
+    },
+    {
+        "name": "Twitter - RaoulGMI",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/RaoulGMI",
+        "category": "economic"
+    },
+    {
+        "name": "Twitter - unusual_whales",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/unusual_whales",
+        "category": "economic"
+    },
+    {
+        "name": "Twitter - tracyalloway",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/tracyalloway",
+        "category": "economic"
+    },
+    {
+        "name": "Twitter - JavierBlas",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/JavierBlas",
+        "category": "economic"
+    },
+    {
+        "name": "Twitter - DavidInglesTV",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/DavidInglesTV",
+        "category": "economic"
+    },
+    {
+        "name": "Twitter - JosephPolitano",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/JosephPolitano",
+        "category": "economic"
+    },
+    {
+        "name": "Twitter - LizAnnSonders",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/LizAnnSonders",
+        "category": "economic"
+    },
+    {
+        "name": "Twitter - EconomyApp",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/EconomyApp",
+        "category": "economic"
+    },
+    {
+        "name": "Twitter - zerohedge",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/zerohedge",
+        "category": "economic"
+    },
+    {
+        "name": "Twitter - LittleMoiz",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/LittleMoiz",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - IntelFrog",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/IntelFrog",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - GeoObserver",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/GeoObserver",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - SatelliteIntel",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/SatelliteIntel",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - WarMonitor3",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/WarMonitor3",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - OpenSourceIntel",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/OpenSourceIntel",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - IntelArchive",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/IntelArchive",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - CrisisIntel",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/CrisisIntel",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - SignalIntel",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/SignalIntel",
+        "category": "osint"
+    },
+    {
+        "name": "Twitter - OpenSourceAlert",
+        "source_type": "rss",
+        "url": "https://rsshub.app/twitter/user/OpenSourceAlert",
+        "category": "osint"
     }
 ]

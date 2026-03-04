@@ -12,7 +12,7 @@ import logging
 from fastapi import FastAPI, Depends, HTTPException, Query, WebSocket, WebSocketDisconnect, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, desc, and_, or_
+from sqlalchemy import select, func, desc, and_, or_, case
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from .database import init_db, get_db, AsyncSessionLocal
@@ -22,7 +22,6 @@ from .geolocation import GeoService
 from .triage import TriageService, seed_default_keywords
 from .trending import TrendingDetector
 from .config import get_settings
-from .seed import seed_sources, seed_default_dashboard
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -186,12 +185,9 @@ async def lifespan(app: FastAPI):
     await init_db()
     logger.info("Database initialized")
     
-    # Seed default data
+    # Seed default keywords
     async with AsyncSessionLocal() as session:
         await seed_default_keywords(session)
-    await seed_sources()
-    await seed_default_dashboard()
-    logger.info("Default data seeded")
     
     # Start background scheduler
     scheduler.add_job(
@@ -252,7 +248,15 @@ async def get_articles(
     starred: Optional[bool] = None,
 ):
     """Get articles with filtering"""
-    query = select(Article).order_by(desc(Article.created_at))
+    # Order by severity (critical/high first) then by date (newest first)
+    severity_order = case(
+        (Article.severity == 'critical', 0),
+        (Article.severity == 'high', 1),
+        (Article.severity == 'medium', 2),
+        (Article.severity == 'low', 3),
+        else_=4
+    )
+    query = select(Article).order_by(severity_order, desc(Article.published_at), desc(Article.created_at))
     
     filters = []
     if category:
@@ -1514,6 +1518,105 @@ async def get_source_types():
             "custom_rss": {"name": "Custom RSS with Keywords", "requires_url": True},
         },
     }
+
+
+# ========== USER SETTINGS ==========
+@app.get("/api/settings")
+async def get_settings_endpoint(db: AsyncSession = Depends(get_db)):
+    """Get current user settings"""
+    from .models import UserSettings
+    result = await db.execute(select(UserSettings).limit(1))
+    settings = result.scalars().first()
+    
+    if not settings:
+        # Create default settings
+        settings = UserSettings()
+        db.add(settings)
+        await db.commit()
+        await db.refresh(settings)
+    
+    return {
+        "alert_sound_enabled": settings.alert_sound_enabled,
+        "alert_volume": settings.alert_volume,
+        "enabled_sources": settings.enabled_sources or {},
+        "enabled_categories": settings.enabled_categories or {},
+        "default_sort": settings.default_sort,
+        "hide_read_articles": settings.hide_read_articles,
+        "show_map_heatmap": settings.show_map_heatmap,
+        "show_trending_alerts": settings.show_trending_alerts,
+        "show_ai_summaries": settings.show_ai_summaries,
+        "timezone": settings.timezone,
+    }
+
+
+@app.post("/api/settings")
+async def update_settings(updates: Dict[str, Any], db: AsyncSession = Depends(get_db)):
+    """Update user settings"""
+    from .models import UserSettings
+    result = await db.execute(select(UserSettings).limit(1))
+    settings = result.scalars().first()
+    
+    if not settings:
+        settings = UserSettings()
+        db.add(settings)
+    
+    # Update fields
+    for key, value in updates.items():
+        if hasattr(settings, key):
+            setattr(settings, key, value)
+    
+    settings.updated_at = datetime.utcnow()
+    await db.commit()
+    await db.refresh(settings)
+    
+    return {"status": "success", "settings": {
+        "alert_sound_enabled": settings.alert_sound_enabled,
+        "alert_volume": settings.alert_volume,
+        "enabled_sources": settings.enabled_sources or {},
+        "enabled_categories": settings.enabled_categories or {},
+    }}
+
+
+@app.post("/api/settings/sources/{source_id}")
+async def toggle_source(source_id: int, enabled: bool = Query(...), db: AsyncSession = Depends(get_db)):
+    """Enable/disable a specific source"""
+    from .models import UserSettings
+    result = await db.execute(select(UserSettings).limit(1))
+    settings = result.scalars().first()
+    
+    if not settings:
+        settings = UserSettings()
+        db.add(settings)
+    
+    if not settings.enabled_sources:
+        settings.enabled_sources = {}
+    
+    settings.enabled_sources[str(source_id)] = enabled
+    settings.updated_at = datetime.utcnow()
+    await db.commit()
+    
+    return {"status": "success", "source_id": source_id, "enabled": enabled}
+
+
+@app.post("/api/settings/categories/{category}")
+async def toggle_category(category: str, enabled: bool = Query(...), db: AsyncSession = Depends(get_db)):
+    """Enable/disable a specific category"""
+    from .models import UserSettings
+    result = await db.execute(select(UserSettings).limit(1))
+    settings = result.scalars().first()
+    
+    if not settings:
+        settings = UserSettings()
+        db.add(settings)
+    
+    if not settings.enabled_categories:
+        settings.enabled_categories = {}
+    
+    settings.enabled_categories[category] = enabled
+    settings.updated_at = datetime.utcnow()
+    await db.commit()
+    
+    return {"status": "success", "category": category, "enabled": enabled}
 
 
 # ========== STATIC FILES (Development) ==========
