@@ -3,6 +3,487 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#070b12">
-    <meta name="description" content="Intel Terminal 3000 — a modular open-source intelligence and situational-awareness dashboard.">
-    <title>Intel
+    <title>Intel Terminal 3000</title>
+    
+    <!-- Leaflet for maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Dashboard Creation Modal -->
+        <div class="modal" id="dashboardModal" style="display:none;">
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <h2>Create New Dashboard</h2>
+                    <button class="btn btn-icon" onclick="closeModal('dashboardModal')">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="dashboardName">Dashboard Name</label>
+                        <input type="text" id="dashboardName" placeholder="Dashboard Name" style="width:100%;margin-bottom:12px;" />
+                    </div>
+                    <div class="form-group">
+                        <label>Layout</label>
+                        <div style="display:flex;gap:8px;margin-bottom:12px;">
+                            <button class="layout-option" data-layout="2x2" onclick="selectLayout('2x2')">2x2</button>
+                            <button class="layout-option" data-layout="1x2" onclick="selectLayout('1x2')">1x2</button>
+                            <button class="layout-option" data-layout="2x1" onclick="selectLayout('2x1')">2x1</button>
+                            <button class="layout-option" data-layout="3x2" onclick="selectLayout('3x2')">3x2</button>
+                        </div>
+                    </div>
+                    <div id="panelConfigurator"></div>
+                </div>
+                <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:12px;">
+                    <button class="btn" onclick="closeModal('dashboardModal')">Cancel</button>
+                    <button class="btn btn-primary" onclick="saveDashboard()">Save Dashboard</button>
+                </div>
+            </div>
+        </div>
+        <!-- Header -->
+        <header class="header">
+            <div class="header-row">
+                <h1 class="logo">
+                    <span class="logo-icon">◈</span>
+                    INTEL TERMINAL 3000
+                </h1>
+                <span class="status-indicator" id="connectionStatus">
+                    <span class="pulse"></span>
+                    LIVE
+                </span>
+                <button class="btn btn-link" onclick="openModal('aboutModal')">About</button>
+                <button class="btn btn-link" onclick="openModal('helpModal')">Help</button>
+                <button class="btn btn-link" id="loginToggle" onclick="toggleLogin()">Admin Login</button>
+                <button class="btn btn-icon" onclick="toggleSettings()" title="Settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                    </svg>
+                </button>
+                <button class="btn btn-icon" onclick="triggerFetch()" title="Fetch Now">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                    </svg>
+                </button>
+                <select id="themeSelector" title="Theme" style="margin-right:10px;">
+                    <option value="">Pro (Dark)</option>
+                    <option value="theme-light">Professional (Light)</option>
+                    <option value="theme-fun">Fun (Pop)</option>
+                    <option value="theme-terminal">Terminal (Retro)</option>
+                    <option value="theme-synthwave">Synthwave</option>
+                    <option value="theme-cyberpunk">Cyberpunk</option>
+                    <option value="theme-solarized">Solarized Dark</option>
+                    <option value="theme-nord">Nord</option>
+                    <option value="theme-dracula">Dracula</option>
+                    <option value="theme-matrix">Matrix</option>
+                    <option value="theme-lcars">Star Trek LCARS</option>
+                    <option value="theme-halflife">Half-Life System</option>
+                </select>
+                <select id="dashboardSelector" onchange="loadDashboard(this.value)">
+                    <option value="default">Default Dashboard</option>
+                </select>
+                <button class="btn btn-icon btn-danger" onclick="deleteDashboard()" title="Delete Dashboard">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                </button>
+                <button class="btn btn-primary" onclick="openDashboardModal()">
+                    + New Dashboard
+                </button>
+            </div>
+        </header>
+        
+        <!-- Page Navigation -->
+        <div class="page-nav" id="pageNav">
+            <button class="page-btn active" data-page="command-center" onclick="switchPage('command-center')">
+                <span class="page-icon">🎯</span>
+                <span class="page-label">Command Center</span>
+            </button>
+            <button class="page-btn" data-page="aviation" onclick="switchPage('aviation')">
+                <span class="page-icon">✈️</span>
+                <span class="page-label">Aviation</span>
+            </button>
+            <button class="page-btn" data-page="marine" onclick="switchPage('marine')">
+                <span class="page-icon">🚢</span>
+                <span class="page-label">Marine</span>
+            </button>
+            <button class="page-btn" data-page="hot-videos" onclick="switchPage('hot-videos')">
+                <span class="page-icon">🎥</span>
+                <span class="page-label">Hot Videos</span>
+            </button>
+            <button class="page-btn" data-page="rss-feeder" onclick="switchPage('rss-feeder')">
+                <span class="page-icon">📡</span>
+                <span class="page-label">RSS Feeder</span>
+            </button>
+            <button class="page-btn" data-page="custom" onclick="switchPage('custom')">
+                <span class="page-icon">⚙️</span>
+                <span class="page-label">Custom</span>
+            </button>
+        </div>
+        
+        <!-- Main dashboard container -->
+        <input type="checkbox" id="toggleCriticalTicker" style="display:none;">
+        <div id="settingsSidebar" style="display:none;"></div>
+        <div id="dashboardContainer" class="dashboard-container"></div>
+
+    <!-- Article Detail Modal -->
+    <div class="modal" id="articleModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <a id="articleTitle" href="#" target="_blank" rel="noopener" class="modal-title-link">Article Title</a>
+                <button class="btn btn-icon" onclick="closeModal('articleModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="article-meta" id="articleMeta"></div>
+                <div class="article-content" id="articleContent"></div>
+            </div>
+            <div class="modal-footer">
+                <div class="severity-buttons" id="severityButtons">
+                    <button class="btn severity-critical" onclick="setSeverity('critical')">Critical</button>
+                    <button class="btn severity-high" onclick="setSeverity('high')">High</button>
+                    <button class="btn severity-medium" onclick="setSeverity('medium')">Medium</button>
+                    <button class="btn severity-low" onclick="setSeverity('low')">Low</button>
+                </div>
+                <a id="articleLink" href="#" target="_blank" class="btn btn-primary">Open Source →</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="settings.js"></script>
+    <script src="app.js"></script>
+    <div id="criticalTicker" class="critical-ticker" style="display:none;bottom:0;top:auto;"></div>
+
+    <!-- About Modal -->
+    <div class="modal" id="aboutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>About Intel Terminal 3000</h2>
+                <button class="btn btn-icon" onclick="closeModal('aboutModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p>This dashboard provides real-time intelligence feeds, map visualizations, and trending analysis from multiple open sources. Built for situational awareness and rapid triage.</p>
+                <p>Version 1.0 &copy; 2026. For more info, contact the project team.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Web Module Settings Modal -->
+    <div class="modal" id="webModuleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Web Module Configuration</h2>
+                <button class="btn btn-icon" onclick="closeModal('webModuleModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 16px; color: var(--text-secondary);">Configure the embedded web module URL:</p>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Quick Presets:</label>
+                    <div class="web-preset-grid">
+                        <button class="btn btn-preset" onclick="selectWebPreset('https://globe.adsbexchange.com/')">
+                            ✈️ ADSBexchange
+                        </button>
+                        <button class="btn btn-preset" onclick="selectWebPreset('https://www.flightradar24.com/')">
+                            🛫 FlightRadar24
+                        </button>
+                        <button class="btn btn-preset" onclick="selectWebPreset('https://www.marinetraffic.com/en/ais/home/')">
+                            🚢 MarineTraffic
+                        </button>
+                        <button class="btn btn-preset" onclick="selectWebPreset('https://www.windy.com/')">
+                            🌪️ Windy Weather
+                        </button>
+                        <button class="btn btn-preset" onclick="selectWebPreset('https://www.vesselfinder.com/')">
+                            ⚓ VesselFinder
+                        </button>
+                        <button class="btn btn-preset" onclick="selectWebPreset('https://liveuamap.com/')">
+                            🗺️ LiveUAMap
+                        </button>
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="webModuleUrlInput" style="display: block; margin-bottom: 8px; font-weight: 600;">Custom URL:</label>
+                    <input 
+                        type="url" 
+                        id="webModuleUrlInput" 
+                        class="input-field" 
+                        placeholder="https://example.com" 
+                        style="width: 100%; padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px;"
+                    />
+                    <p style="margin-top: 8px; font-size: 0.85rem; color: var(--text-secondary);">⚠️ Some sites may block embedding (X-Frame-Options)</p>
+                </div>
+            </div>
+            <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:12px;">
+                <button class="btn" onclick="closeModal('webModuleModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveWebModuleUrl()">Apply URL</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal" id="helpModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Help & Usage</h2>
+                <button class="btn btn-icon" onclick="closeModal('helpModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li>Use the theme selector to change dashboard appearance.</li>
+                    <li>Click panels to view details or edit layout (admin only).</li>
+                    <li>Settings and source management are available to logged-in users.</li>
+                    <li>For more, see the <a href="FILTERS_GUIDE.md" target="_blank">Filters Guide</a>.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Page -->
+    <div id="settings-page" class="settings-page" style="display: none;">
+        <div class="settings-container">
+            <!-- Settings Sidebar Navigation -->
+            <div class="settings-sidebar">
+                <h3 style="margin-top: 0; color: var(--text-primary); border-bottom: 2px solid var(--accent); padding-bottom: 12px; margin-bottom: 16px;">⚙️ Settings</h3>
+                <button class="settings-nav-btn active" data-section="alerts">🔔 Alerts</button>
+                <button class="settings-nav-btn" data-section="sources">📡 Sources</button>
+                <button class="settings-nav-btn" data-section="categories">🏷️ Categories</button>
+                <button class="settings-nav-btn" data-section="display">👁️ Display</button>
+                <button class="settings-nav-btn" data-section="general">⚙️ General</button>
+                <div style="border-top: 2px solid var(--accent); margin: 16px 0; padding-top: 16px;">
+                    <h4 style="color: var(--accent-primary); font-size: 0.9rem; margin-bottom: 8px;">🔐 Admin</h4>
+                    <button class="settings-nav-btn" data-section="add-feeds">➕ Add Feeds</button>
+                    <button class="settings-nav-btn" data-section="add-category">🏷️ Add Category</button>
+                </div>
+                <button class="settings-close-btn" onclick="toggleSettings()">✕ Close</button>
+            </div>
+
+            <!-- Settings Content Sections -->
+            <div class="settings-content">
+                <!-- Alerts & Notifications Section -->
+                <div id="alerts-section" class="settings-section active">
+                    <h2>Alerts & Notifications</h2>
+                    
+                    <div class="setting-item">
+                        <label for="alert-sound-toggle">🔊 Enable Alert Sound</label>
+                        <input type="checkbox" id="alert-sound-toggle" class="toggle-switch">
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="alert-volume">Volume Level</label>
+                        <div style="display: flex; gap: 16px; align-items: center;">
+                            <input type="range" id="alert-volume" class="slider" min="0" max="100" value="80">
+                            <span id="volume-display" style="min-width: 40px; text-align: right;">80%</span>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <button class="btn btn-secondary" onclick="testAlertSound()">🔊 Test Alert Sound</button>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="trending-alerts-toggle">⚡ Show Trending Alerts</label>
+                        <input type="checkbox" id="trending-alerts-toggle" class="toggle-switch" checked>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Display trending article notifications in real-time</p>
+                    </div>
+                </div>
+
+                <!-- Data Sources Section -->
+                <div id="sources-section" class="settings-section">
+                    <h2>Enable/Disable Data Sources</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 16px;">Uncheck sources to exclude them from the feed:</p>
+                    
+                    <div id="sources-list" class="sources-list">
+                        <!-- Dynamic source list will be populated here by JavaScript -->
+                        <p style="color: var(--text-secondary); padding: 16px; text-align: center;">Loading sources...</p>
+                    </div>
+                </div>
+
+                <!-- Feed Categories Section -->
+                <div id="categories-section" class="settings-section">
+                    <h2>Feed Categories</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 16px;">Select which categories to display:</p>
+                    
+                    <div style="margin-bottom: 16px; display: flex; gap: 8px;">
+                        <button class="btn btn-small" onclick="selectAllCategories()">✓ Select All</button>
+                        <button class="btn btn-small" onclick="deselectAllCategories()">✗ Deselect All</button>
+                    </div>
+
+                    <div id="categories-list" class="categories-list">
+                        <!-- Dynamic categories will be populated here -->
+                        <div class="category-item">
+                            <input type="checkbox" id="cat-cyber" class="category-toggle" checked>
+                            <label for="cat-cyber">🔓 Cybersecurity</label>
+                        </div>
+                        <div class="category-item">
+                            <input type="checkbox" id="cat-geo" class="category-toggle" checked>
+                            <label for="cat-geo">🗺️ Geopolitical</label>
+                        </div>
+                        <div class="category-item">
+                            <input type="checkbox" id="cat-economic" class="category-toggle" checked>
+                            <label for="cat-economic">💰 Economic</label>
+                        </div>
+                        <div class="category-item">
+                            <input type="checkbox" id="cat-tech" class="category-toggle" checked>
+                            <label for="cat-tech">💻 Technology</label>
+                        </div>
+                        <div class="category-item">
+                            <input type="checkbox" id="cat-health" class="category-toggle" checked>
+                            <label for="cat-health">⚕️ Health</label>
+                        </div>
+                        <div class="category-item">
+                            <input type="checkbox" id="cat-science" class="category-toggle" checked>
+                            <label for="cat-science">🔬 Science</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Display Preferences Section -->
+                <div id="display-section" class="settings-section">
+                    <h2>Display Preferences</h2>
+                    
+                    <div class="setting-item">
+                        <label for="heatmap-toggle">🔥 Show Map Heatmap</label>
+                        <input type="checkbox" id="heatmap-toggle" class="toggle-switch" checked>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Display heat map overlay on geography map</p>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="ai-summary-toggle">🤖 Show AI Summaries</label>
+                        <input type="checkbox" id="ai-summary-toggle" class="toggle-switch" checked>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Display AI-generated article summaries</p>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="sort-order">📊 Default Sort Order</label>
+                        <select id="sort-order" class="input-field" style="padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px;">
+                            <option value="newest">Newest First</option>
+                            <option value="sentiment">Sentiment Score</option>
+                            <option value="trending">Trending</option>
+                            <option value="relevance">Relevance</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="hide-read-toggle">👁️ Hide Read Articles</label>
+                        <input type="checkbox" id="hide-read-toggle" class="toggle-switch">
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Automatically hide articles you've already viewed</p>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="cards-per-row">Cards Per Row</label>
+                        <select id="cards-per-row" class="input-field" style="padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px;">
+                            <option value="2">2 Cards</option>
+                            <option value="3" selected>3 Cards</option>
+                            <option value="4">4 Cards</option>
+                            <option value="6">6 Cards</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- General Settings Section -->
+                <div id="general-section" class="settings-section">
+                    <h2>General</h2>
+                    
+                    <div class="setting-item">
+                        <label for="timezone-select">⏰ Timezone</label>
+                        <select id="timezone-select" class="input-field" style="padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px;">
+                            <option value="UTC">UTC</option>
+                            <option value="EST">Eastern (EST)</option>
+                            <option value="CST">Central (CST)</option>
+                            <option value="MST">Mountain (MST)</option>
+                            <option value="PST">Pacific (PST)</option>
+                            <option value="GMT">GMT</option>
+                            <option value="CET">Central Europe (CET)</option>
+                            <option value="IST">India Standard (IST)</option>
+                            <option value="JST">Japan Standard (JST)</option>
+                            <option value="AEST">Australia Eastern (AEST)</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <h3 style="margin-top: 24px; margin-bottom: 12px;">About Intel Terminal 3000</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+                            <strong>Version:</strong> 3.0.0<br>
+                            <strong>Platform:</strong> Real-time Intelligence Dashboard<br>
+                            <strong>Data Sources:</strong> 8 Integrated Collectors (RSS, GDELT, Reddit, Bluesky, Telegram, ADS-B, ACARS, Custom)<br>
+                            <strong>Technology:</strong> FastAPI + SQLite + JavaScript<br>
+                            <strong>Status:</strong> Production Ready<br>
+                            <a href="https://github.com/g1ftb4sk3t4u/intel-terminal-3000" target="_blank" style="color: var(--accent); text-decoration: none;">View on GitHub →</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Add Feeds Section (Admin) -->
+                <div id="add-feeds-section" class="settings-section">
+                    <h2>➕ Add New Feeds</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px;">Add multiple RSS feeds to a category at once</p>
+                    
+                    <div class="setting-item">
+                        <label for="feed-category-select">📁 Select Category</label>
+                        <select id="feed-category-select" class="input-field" style="padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px; width: 100%; max-width: 400px;">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <h3 style="margin-top: 24px; margin-bottom: 12px;">Feeds to Add</h3>
+                        <div id="feeds-input-container">
+                            <div class="feed-input-row" data-feed-index="0">
+                                <input type="text" class="input-field feed-name-input" placeholder="Feed Name (e.g., Twitter - OSINTdefender)" style="flex: 1;">
+                                <input type="text" class="input-field feed-url-input" placeholder="RSS URL (e.g., https://rsshub.app/twitter/user/OSINTdefender)" style="flex: 2;">
+                                <button class="btn btn-danger remove-feed-btn" onclick="removeFeedRow(0)" style="display: none;">✕</button>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" onclick="addFeedRow()" style="margin-top: 12px;">➕ Add Another Feed</button>
+                    </div>
+
+                    <div class="setting-item" style="margin-top: 32px;">
+                        <button class="btn btn-primary" onclick="bulkAddFeeds()" style="padding: 12px 24px; font-size: 1rem;">💾 Save All Feeds</button>
+                        <button class="btn btn-secondary" onclick="clearFeedForm()" style="margin-left: 12px;">🗑️ Clear Form</button>
+                    </div>
+
+                    <div id="feed-add-status" style="margin-top: 16px; padding: 12px; border-radius: 6px; display: none;"></div>
+                </div>
+
+                <!-- Add Category Section (Admin) -->
+                <div id="add-category-section" class="settings-section">
+                    <h2>🏷️ Add New Category</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px;">Create a new category for organizing feeds</p>
+                    
+                    <div class="setting-item">
+                        <label for="new-category-name">Category Name</label>
+                        <input type="text" id="new-category-name" class="input-field" placeholder="e.g., fintech, logistics, healthcare" style="max-width: 400px;">
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Use lowercase, no spaces (use hyphens or underscores)</p>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="new-category-display">Display Name</label>
+                        <input type="text" id="new-category-display" class="input-field" placeholder="e.g., 💰 FinTech" style="max-width: 400px;">
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Human-readable name with optional emoji</p>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="new-category-emoji">Emoji (Optional)</label>
+                        <input type="text" id="new-category-emoji" class="input-field" placeholder="e.g., 💰" maxlength="2" style="max-width: 100px;">
+                    </div>
+
+                    <div class="setting-item" style="margin-top: 32px;">
+                        <button class="btn btn-primary" onclick="createCategory()" style="padding: 12px 24px; font-size: 1rem;">💾 Create Category</button>
+                    </div>
+
+                    <div id="category-add-status" style="margin-top: 16px; padding: 12px; border-radius: 6px; display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
