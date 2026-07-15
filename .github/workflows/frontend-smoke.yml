@@ -55,13 +55,63 @@ jobs:
               if not (root / target).is_file():
                   errors.append(f"Missing JavaScript asset: {target}")
 
+          def css_brace_error(text: str):
+              depth = 0
+              quote = None
+              escaped = False
+              in_comment = False
+              index = 0
+
+              while index < len(text):
+                  char = text[index]
+                  next_char = text[index + 1] if index + 1 < len(text) else ""
+
+                  if in_comment:
+                      if char == "*" and next_char == "/":
+                          in_comment = False
+                          index += 2
+                          continue
+                      index += 1
+                      continue
+
+                  if quote:
+                      if escaped:
+                          escaped = False
+                      elif char == "\\":
+                          escaped = True
+                      elif char == quote:
+                          quote = None
+                      index += 1
+                      continue
+
+                  if char == "/" and next_char == "*":
+                      in_comment = True
+                      index += 2
+                      continue
+
+                  if char in {'"', "'"}:
+                      quote = char
+                  elif char == "{":
+                      depth += 1
+                  elif char == "}":
+                      depth -= 1
+                      if depth < 0:
+                          return "closing brace appears before a matching opening brace"
+
+                  index += 1
+
+              if in_comment:
+                  return "unterminated comment"
+              if quote:
+                  return "unterminated quoted string"
+              if depth:
+                  return f"{depth} unmatched opening brace(s)"
+              return None
+
           for path in sorted(root.glob("*.css")):
-              text = path.read_text(encoding="utf-8")
-              if text.count("{") != text.count("}"):
-                  errors.append(
-                      f"Unbalanced CSS braces in {path.name}: "
-                      f"{text.count('{')} open / {text.count('}')} close"
-                  )
+              problem = css_brace_error(path.read_text(encoding="utf-8"))
+              if problem:
+                  errors.append(f"CSS structure error in {path.name}: {problem}")
 
           if errors:
               raise SystemExit("\n".join(errors))
