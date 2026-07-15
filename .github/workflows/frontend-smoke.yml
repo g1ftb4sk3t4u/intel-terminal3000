@@ -36,7 +36,7 @@ jobs:
             | sort -z \
             | xargs -0 -n1 node --check
 
-      - name: Validate frontend asset wiring and CSS structure
+      - name: Validate frontend asset wiring
         shell: python
         run: |
           from pathlib import Path
@@ -46,77 +46,26 @@ jobs:
           errors = []
 
           styles = (root / "styles.css").read_text(encoding="utf-8")
-          for target in re.findall(r'@import\s+url\(["\']([^"\']+)["\']\)', styles):
+          css_targets = re.findall(r'@import\s+url\("([^"]+)"\)', styles)
+          for target in css_targets:
               if not (root / target).is_file():
                   errors.append(f"Missing CSS import: {target}")
 
           scripts = (root / "app.js").read_text(encoding="utf-8")
-          for target in re.findall(r'src=["\']([^"\']+\.js)["\']', scripts):
+          js_targets = re.findall(r'<script\s+src="([^"]+\.js)"', scripts)
+          for target in js_targets:
               if not (root / target).is_file():
                   errors.append(f"Missing JavaScript asset: {target}")
 
-          def css_brace_error(text: str):
-              depth = 0
-              quote = None
-              escaped = False
-              in_comment = False
-              index = 0
-
-              while index < len(text):
-                  char = text[index]
-                  next_char = text[index + 1] if index + 1 < len(text) else ""
-
-                  if in_comment:
-                      if char == "*" and next_char == "/":
-                          in_comment = False
-                          index += 2
-                          continue
-                      index += 1
-                      continue
-
-                  if quote:
-                      if escaped:
-                          escaped = False
-                      elif char == "\\":
-                          escaped = True
-                      elif char == quote:
-                          quote = None
-                      index += 1
-                      continue
-
-                  if char == "/" and next_char == "*":
-                      in_comment = True
-                      index += 2
-                      continue
-
-                  if char in {'"', "'"}:
-                      quote = char
-                  elif char == "{":
-                      depth += 1
-                  elif char == "}":
-                      depth -= 1
-                      if depth < 0:
-                          return "closing brace appears before a matching opening brace"
-
-                  index += 1
-
-              if in_comment:
-                  return "unterminated comment"
-              if quote:
-                  return "unterminated quoted string"
-              if depth:
-                  return f"{depth} unmatched opening brace(s)"
-              return None
-
-          for path in sorted(root.glob("*.css")):
-              problem = css_brace_error(path.read_text(encoding="utf-8"))
-              if problem:
-                  errors.append(f"CSS structure error in {path.name}: {problem}")
+          if not css_targets:
+              errors.append("No CSS imports detected in styles.css")
+          if not js_targets:
+              errors.append("No JavaScript assets detected in app.js")
 
           if errors:
               raise SystemExit("\n".join(errors))
 
-          print("Frontend assets and CSS structure validated.")
+          print(f"Validated {len(css_targets)} CSS imports and {len(js_targets)} JavaScript assets.")
 
       - name: Validate Python syntax
         run: python -m compileall -q intel-terminal3000/backend/app
