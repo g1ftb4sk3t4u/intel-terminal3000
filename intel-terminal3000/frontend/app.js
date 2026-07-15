@@ -1,1 +1,1 @@
-document.write('<script src="app-base.js"><\/script><script src="shell-upgrade.js"><\/script><script src="modern.js"><\/script><script src="command-center.js"><\/script><script src="command-center-extras.js"><\/script>');
+document.write('<script src="app-base.js"><\/script><script src="shell-upgrade.js"><\/script><script src="modern.js"><\/script><script src="command-center.js"><\/script><script src="command-center-extras.js"><\/script><script src="polish-v3.js"><\/script>');
