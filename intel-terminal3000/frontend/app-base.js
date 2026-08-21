@@ -7,18 +7,30 @@ window.closeModal = function(id) {
 }
 
 // ============ LOGIN TOGGLE & SETTINGS VISIBILITY ============
-let isAdmin = false;
-window.toggleLogin = function() {
-    isAdmin = !isAdmin;
-    document.getElementById('loginToggle').textContent = isAdmin ? 'Log Out' : 'Admin Login';
-    document.getElementById('settingsSidebar').style.display = isAdmin ? '' : 'none';
-    // Optionally, show/hide dashboard edit buttons, etc.
+// Real admin check: an X-Admin-Key header verified server-side (see
+// admin-key.js), not a client-side flag anyone could flip in devtools.
+// Settings gate real shared state here (UserSettings is one global row,
+// not per-visitor), so the whole panel is admin-only, matching what this
+// button always intended - it just never actually checked anything before.
+function syncLoginButton() {
+    const btn = document.getElementById('loginToggle');
+    if (!btn) return;
+    const unlocked = window.AdminKey && window.AdminKey.hasAdminKey();
+    btn.textContent = unlocked ? 'Log Out' : 'Admin Login';
+    const sidebar = document.getElementById('settingsSidebar');
+    if (sidebar) sidebar.style.display = unlocked ? '' : 'none';
 }
 
-// On load, hide settings sidebar unless admin
-window.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('settingsSidebar').style.display = isAdmin ? '' : 'none';
-});
+window.toggleLogin = async function() {
+    if (window.AdminKey && window.AdminKey.hasAdminKey()) {
+        window.AdminKey.clearAdminKey();
+    } else if (window.AdminKey) {
+        await window.AdminKey.promptUnlock();
+    }
+    syncLoginButton();
+}
+
+window.addEventListener('DOMContentLoaded', syncLoginButton);
 // ============ CRITICAL ALERTS TICKER (ALWAYS ON) ============
 let tickerInterval = null;
 let tickerSpeed = 120;
@@ -411,18 +423,27 @@ function updateConnectionStatus(connected) {
 
 async function api(endpoint, options = {}) {
     const url = `${API_BASE}/api${endpoint}`;
+    const method = (options.method || 'GET').toUpperCase();
+    const isWrite = method !== 'GET' && method !== 'HEAD';
+    let headers = {
+        'Content-Type': 'application/json',
+        ...options.headers,
+    };
+    if (isWrite && window.AdminKey) {
+        headers = window.AdminKey.withAdminHeader(headers);
+    }
     const response = await fetch(url, {
-        headers: {
-            'Content-Type': 'application/json',
-            ...options.headers,
-        },
         ...options,
+        headers,
     });
-    
+
     if (!response.ok) {
+        if (isWrite && response.status === 403) {
+            throw new Error('Admin key required - unlock admin mode to make changes');
+        }
         throw new Error(`API error: ${response.status}`);
     }
-    
+
     return response.json();
 }
 

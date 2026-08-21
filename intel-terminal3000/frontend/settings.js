@@ -8,6 +8,13 @@ const SettingsModule = (() => {
     let sources = [];
     let categories = ['cyber', 'geo', 'economic', 'tech', 'health', 'science'];
 
+    // Write requests need the admin key header; reads don't. Centralizing
+    // this here instead of touching every fetch() call individually.
+    function adminHeaders(extra) {
+        const headers = Object.assign({ 'Content-Type': 'application/json' }, extra || {});
+        return window.AdminKey ? window.AdminKey.withAdminHeader(headers) : headers;
+    }
+
     // Initialize settings module
     async function init() {
         console.log('Initializing Settings Module...');
@@ -388,9 +395,7 @@ const SettingsModule = (() => {
         try {
             const response = await fetch(`${window.API_BASE}/api/settings/sources/${sourceId}?enabled=${enabled}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                headers: adminHeaders(),
             });
 
             if (!response.ok) throw new Error(`Failed to toggle source: ${response.status}`);
@@ -410,9 +415,7 @@ const SettingsModule = (() => {
         try {
             const response = await fetch(`/api/settings/categories/${category}?enabled=${enabled}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                headers: adminHeaders(),
             });
 
             if (!response.ok) throw new Error(`Failed to toggle category: ${response.status}`);
@@ -432,9 +435,7 @@ const SettingsModule = (() => {
         try {
             const response = await fetch(`${window.API_BASE}/api/settings`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: adminHeaders(),
                 body: JSON.stringify({ [fieldName]: value })
             });
 
@@ -645,7 +646,7 @@ const SettingsModule = (() => {
             try {
                 const response = await fetch(`${window.API_BASE}/api/sources`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: adminHeaders(),
                     body: JSON.stringify({
                         name: feed.name,
                         source_type: 'rss',
@@ -716,7 +717,7 @@ const SettingsModule = (() => {
         try {
             const response = await fetch(`${window.API_BASE}/api/categories`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: adminHeaders(),
                 body: JSON.stringify({
                     name: name,
                     display_name: display || name,

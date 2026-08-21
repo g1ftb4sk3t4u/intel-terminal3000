@@ -291,8 +291,8 @@
             </header>
             <nav class="intel-source-tabs" aria-label="Source library views">
                 <button type="button" data-source-tab="configured" class="active">Configured</button>
-                <button type="button" data-source-tab="packs">Intelligence packs</button>
-                <button type="button" data-source-tab="custom">Add custom</button>
+                <button type="button" data-source-tab="packs" class="admin-only">Intelligence packs</button>
+                <button type="button" data-source-tab="custom" class="admin-only">Add custom</button>
             </nav>
             <section class="intel-source-pane active" data-source-pane="configured">
                 <div class="intel-source-toolbar">
@@ -304,14 +304,14 @@
                 <div class="intel-source-summary" id="intelSourceSummary"></div>
                 <div class="intel-source-list" id="intelSourceList"><div class="intel-source-loading">Loading configured sources…</div></div>
             </section>
-            <section class="intel-source-pane" data-source-pane="packs">
+            <section class="intel-source-pane admin-only" data-source-pane="packs">
                 <div class="intel-source-intro">
                     <div><small>FAST DEPLOYMENT</small><h3>Intelligence collection packs</h3></div>
                     <p>Add focused GDELT collectors without searching for individual feeds. Existing names are detected and will not be duplicated.</p>
                 </div>
                 <div class="intel-pack-grid" id="intelPackGrid"></div>
             </section>
-            <section class="intel-source-pane" data-source-pane="custom">
+            <section class="intel-source-pane admin-only" data-source-pane="custom">
                 <div class="intel-source-intro">
                     <div><small>CUSTOM COLLECTOR</small><h3>Add a source</h3></div>
                     <p>Add RSS or Atom feeds, Reddit communities, GDELT searches, or a YouTube channel feed.</p>
@@ -462,7 +462,7 @@
                         <p title="${escapeAttribute(detail)}">${escapeHTML(detail)}</p>
                         <small>Last fetch: ${escapeHTML(fetched)}</small>
                     </div>
-                    <div class="intel-source-actions">
+                    <div class="intel-source-actions admin-only">
                         <button type="button" data-source-command="fetch">Fetch now</button>
                         <button type="button" data-source-command="delete" class="danger">Remove</button>
                     </div>
@@ -483,7 +483,7 @@
             button.disabled = true;
             button.textContent = 'Fetching…';
             try {
-                const response = await fetch(`/api/sources/${sourceId}/fetch`, { method: 'POST' });
+                const response = await fetch(`/api/sources/${sourceId}/fetch`, { method: 'POST', headers: window.AdminKey ? window.AdminKey.withAdminHeader() : {} });
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const result = await response.json();
                 notify(`${source.name}: ${result.saved ?? 0} new items saved`, 'success');
@@ -500,7 +500,7 @@
             if (!window.confirm(`Remove "${source.name}" from Intel Terminal? Existing articles will remain.`)) return;
             button.disabled = true;
             try {
-                const response = await fetch(`/api/sources/${sourceId}`, { method: 'DELETE' });
+                const response = await fetch(`/api/sources/${sourceId}`, { method: 'DELETE', headers: window.AdminKey ? window.AdminKey.withAdminHeader() : {} });
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 notify(`${source.name} removed`, 'success');
                 await loadSources(true);
@@ -628,7 +628,9 @@
         if (duplicate) throw new Error('A source with this name or URL already exists');
         const response = await fetch('/api/sources', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            headers: window.AdminKey
+                ? window.AdminKey.withAdminHeader({ 'Content-Type': 'application/json', Accept: 'application/json' })
+                : { 'Content-Type': 'application/json', Accept: 'application/json' },
             body: JSON.stringify(payload),
         });
         if (!response.ok) {

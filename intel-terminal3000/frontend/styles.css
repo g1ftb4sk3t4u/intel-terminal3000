@@ -6,3 +6,12 @@
 @import url("command-center-drawer.css");
 @import url("command-center-extras.css");
 @import url("polish-v3.css");
+
+/* Admin-only controls (add/remove sources, dashboards, settings, etc) stay
+   hidden until an X-Admin-Key has been unlocked in this browser via the
+   "Admin Login" button - see admin-key.js. This is a UX courtesy so
+   visitors don't see buttons that would just 403; the backend enforces the
+   real check regardless of this class. */
+body:not(.admin-unlocked) .admin-only {
+    display: none !important;
+}
