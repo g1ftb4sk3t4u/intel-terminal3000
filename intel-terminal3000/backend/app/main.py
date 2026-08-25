@@ -1534,6 +1534,10 @@ async def get_source_types():
             "telegram": {"name": "Telegram Channel", "requires_url": False},
             "adsb": {"name": "ADS-B Aircraft", "requires_url": False},
             "custom_rss": {"name": "Custom RSS with Keywords", "requires_url": True},
+            "cisa_kev": {"name": "CISA Known Exploited Vulnerabilities", "requires_url": False},
+            "abuse_ch": {"name": "abuse.ch (URLhaus/ThreatFox)", "requires_url": False},
+            "pubmed": {"name": "PubMed", "requires_url": False},
+            "clinicaltrials": {"name": "ClinicalTrials.gov", "requires_url": False},
         },
     }
 

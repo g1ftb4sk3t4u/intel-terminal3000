@@ -712,6 +712,275 @@ class CustomRSSCollector(BaseCollector):
 # poll X/Twitter without a paid API tier, so it isn't implemented - use real
 # RSS feeds from the outlet/account's own site instead where possible.
 
+class CISAKEVCollector(BaseCollector):
+    """
+    CISA Known Exploited Vulnerabilities catalog - confirmed exploited-in-
+    the-wild CVEs, published as a single JSON file that's re-published
+    whole each time (not "new items only"), so this always fetches the
+    full catalog and relies on save_articles()'s link-dedup to only ever
+    insert entries that are actually new to the catalog.
+    """
+
+    source_type = "cisa_kev"
+    KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
+
+    async def fetch(self, source: Source) -> List[Dict[str, Any]]:
+        config = source.config or {}
+        max_records = config.get("max_records", 50)
+
+        response = await self.http_client.get(self.KEV_URL)
+        if response.status_code != 200:
+            raise RuntimeError(f"CISA KEV returned HTTP {response.status_code}")
+
+        data = response.json()
+        vulns = sorted(data.get("vulnerabilities", []), key=lambda v: v.get("dateAdded", ""), reverse=True)
+
+        articles = []
+        for v in vulns[:max_records]:
+            cve_id = v.get("cveID", "unknown")
+            ransomware_flag = " [KNOWN RANSOMWARE USE]" if v.get("knownRansomwareCampaignUse") == "Known" else ""
+            articles.append({
+                "title": f"CISA KEV: {v.get('vulnerabilityName', cve_id)}{ransomware_flag}",
+                "link": f"https://nvd.nist.gov/vuln/detail/{cve_id}",
+                "summary": (
+                    f"{v.get('shortDescription', '')} | Required action: "
+                    f"{v.get('requiredAction', '')} (due {v.get('dueDate', '')})"
+                )[:2000],
+                "published_at": self._parse_date(v.get("dateAdded")),
+            })
+        return articles
+
+    def _parse_date(self, date_str: Optional[str]) -> Optional[datetime]:
+        if not date_str:
+            return None
+        try:
+            return datetime.strptime(date_str, "%Y-%m-%d")
+        except ValueError:
+            return None
+
+
+class AbuseChCollector(BaseCollector):
+    """
+    abuse.ch threat-intel feeds. Both are fully public, no API key needed.
+    config = {"feed": "urlhaus" | "threatfox"}
+    """
+
+    source_type = "abuse_ch"
+    URLHAUS_CSV = "https://urlhaus.abuse.ch/downloads/csv_recent/"
+    THREATFOX_JSON = "https://threatfox.abuse.ch/export/json/recent/"
+
+    async def fetch(self, source: Source) -> List[Dict[str, Any]]:
+        config = source.config or {}
+        feed = config.get("feed", "urlhaus")
+        max_records = config.get("max_records", 100)
+
+        if feed == "threatfox":
+            return await self._fetch_threatfox(max_records)
+        return await self._fetch_urlhaus(max_records)
+
+    async def _fetch_urlhaus(self, config_max: int) -> List[Dict[str, Any]]:
+        import csv
+        import io
+
+        response = await self.http_client.get(self.URLHAUS_CSV)
+        if response.status_code != 200:
+            raise RuntimeError(f"URLhaus returned HTTP {response.status_code}")
+
+        lines = [line for line in response.text.splitlines() if line and not line.startswith("#")]
+        reader = csv.reader(io.StringIO("\n".join(lines)))
+
+        # "recent" from abuse.ch means the last several days, not just the
+        # newest handful - rows come pre-sorted newest-first, so take the
+        # head rather than flooding save_articles() with 15k+ dedup checks
+        # every fetch cycle.
+        articles = []
+        for row in reader:
+            if len(articles) >= config_max:
+                break
+            if len(row) < 9:
+                continue
+            _id, dateadded, url, url_status, _last_online, threat, tags, urlhaus_link, reporter = row[:9]
+            articles.append({
+                "title": f"URLhaus: {threat} - {url[:120]}",
+                "link": urlhaus_link,
+                "summary": f"Status: {url_status} | Tags: {tags} | Reporter: {reporter}",
+                "published_at": self._parse_date(dateadded, "%Y-%m-%d %H:%M:%S"),
+            })
+        return articles
+
+    async def _fetch_threatfox(self, config_max: int) -> List[Dict[str, Any]]:
+        response = await self.http_client.get(self.THREATFOX_JSON)
+        if response.status_code != 200:
+            raise RuntimeError(f"ThreatFox returned HTTP {response.status_code}")
+
+        data = response.json()
+        if not isinstance(data, dict):
+            raise RuntimeError("ThreatFox returned unexpected response shape")
+
+        # Same "recent" = last several days situation as URLhaus above.
+        # Sort newest-first by first_seen_utc before capping since dict
+        # iteration order isn't guaranteed to be chronological.
+        entries_by_id = sorted(
+            data.items(),
+            key=lambda kv: (kv[1][0].get("first_seen_utc") or "") if kv[1] else "",
+            reverse=True,
+        )
+
+        articles = []
+        for ioc_id, entries in entries_by_id[:config_max]:
+            if not entries:
+                continue
+            ioc = entries[0]
+            link = ioc.get("reference") or f"https://threatfox.abuse.ch/browse/ioc/{ioc_id}/"
+            articles.append({
+                "title": f"ThreatFox: {ioc.get('malware_printable', 'Unknown malware')} ({ioc.get('ioc_type', 'ioc')})",
+                "link": link,
+                "summary": (
+                    f"IOC: {ioc.get('ioc_value', '')} | Threat: {ioc.get('threat_type', '')} | "
+                    f"Confidence: {ioc.get('confidence_level', '')}%"
+                ),
+                "published_at": self._parse_date(ioc.get("first_seen_utc"), "%Y-%m-%d %H:%M:%S"),
+            })
+        return articles
+
+    def _parse_date(self, date_str: Optional[str], fmt: str) -> Optional[datetime]:
+        if not date_str:
+            return None
+        try:
+            return datetime.strptime(date_str, fmt)
+        except ValueError:
+            return None
+
+
+class PubMedCollector(BaseCollector):
+    """
+    PubMed via NCBI E-utilities (esearch + esummary). Fully public, no API
+    key required at this request volume (NCBI's documented limit without a
+    key is 3 req/sec; a shared throttle keeps every PubMed/ClinicalTrials
+    source in a fetch batch under that regardless of how many are
+    configured).
+    """
+
+    source_type = "pubmed"
+    ESEARCH_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
+    ESUMMARY_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
+
+    _throttle_lock = asyncio.Lock()
+    _last_request_at: Optional[datetime] = None
+    _min_interval = timedelta(milliseconds=400)
+
+    async def _wait_for_rate_limit(self):
+        async with PubMedCollector._throttle_lock:
+            now = datetime.utcnow()
+            if PubMedCollector._last_request_at is not None:
+                elapsed = now - PubMedCollector._last_request_at
+                remaining = (self._min_interval - elapsed).total_seconds()
+                if remaining > 0:
+                    await asyncio.sleep(remaining)
+            PubMedCollector._last_request_at = datetime.utcnow()
+
+    async def fetch(self, source: Source) -> List[Dict[str, Any]]:
+        config = source.config or {}
+        query = config.get("query", "biomedicine")
+        max_records = config.get("max_records", 20)
+
+        await self._wait_for_rate_limit()
+        search_resp = await self.http_client.get(self.ESEARCH_URL, params={
+            "db": "pubmed",
+            "term": query,
+            "retmax": max_records,
+            "sort": "pub+date",
+            "retmode": "json",
+            "tool": "intel-terminal-3000",
+        })
+        if search_resp.status_code != 200:
+            raise RuntimeError(f"PubMed esearch returned HTTP {search_resp.status_code}")
+
+        idlist = search_resp.json().get("esearchresult", {}).get("idlist", [])
+        if not idlist:
+            return []
+
+        await self._wait_for_rate_limit()
+        summary_resp = await self.http_client.get(self.ESUMMARY_URL, params={
+            "db": "pubmed",
+            "id": ",".join(idlist),
+            "retmode": "json",
+            "tool": "intel-terminal-3000",
+        })
+        if summary_resp.status_code != 200:
+            raise RuntimeError(f"PubMed esummary returned HTTP {summary_resp.status_code}")
+
+        result = summary_resp.json().get("result", {})
+        articles = []
+        for uid in result.get("uids", []):
+            item = result.get(uid, {})
+            articles.append({
+                "title": item.get("title", "Untitled"),
+                "link": f"https://pubmed.ncbi.nlm.nih.gov/{uid}/",
+                "summary": f"{item.get('fulljournalname', '')} | {item.get('pubdate', '')}",
+                "published_at": self._parse_pubdate(item.get("pubdate")),
+            })
+        return articles
+
+    def _parse_pubdate(self, pubdate: Optional[str]) -> Optional[datetime]:
+        if not pubdate:
+            return None
+        for fmt in ("%Y %b %d", "%Y %b", "%Y"):
+            try:
+                return datetime.strptime(pubdate, fmt)
+            except ValueError:
+                continue
+        return None
+
+
+class ClinicalTrialsCollector(BaseCollector):
+    """ClinicalTrials.gov API v2 - fully public, no key required."""
+
+    source_type = "clinicaltrials"
+    API_URL = "https://clinicaltrials.gov/api/v2/studies"
+
+    async def fetch(self, source: Source) -> List[Dict[str, Any]]:
+        config = source.config or {}
+        query = config.get("query", "")
+        max_records = config.get("max_records", 20)
+
+        response = await self.http_client.get(self.API_URL, params={
+            "query.term": query,
+            "pageSize": max_records,
+            "sort": "LastUpdatePostDate:desc",
+        })
+        if response.status_code != 200:
+            raise RuntimeError(f"ClinicalTrials.gov returned HTTP {response.status_code}")
+
+        data = response.json()
+        articles = []
+        for study in data.get("studies", []):
+            protocol = study.get("protocolSection", {})
+            ident = protocol.get("identificationModule", {})
+            status = protocol.get("statusModule", {})
+            desc = protocol.get("descriptionModule", {})
+
+            nct_id = ident.get("nctId")
+            if not nct_id:
+                continue
+
+            articles.append({
+                "title": f"{ident.get('briefTitle', 'Untitled trial')} [{status.get('overallStatus', '')}]",
+                "link": f"https://clinicaltrials.gov/study/{nct_id}",
+                "summary": (desc.get("briefSummary") or "")[:2000],
+                "published_at": self._parse_date(status.get("lastUpdatePostDateStruct", {}).get("date")),
+            })
+        return articles
+
+    def _parse_date(self, date_str: Optional[str]) -> Optional[datetime]:
+        if not date_str:
+            return None
+        try:
+            return datetime.strptime(date_str, "%Y-%m-%d")
+        except ValueError:
+            return None
+
+
 # Collector registry
 COLLECTORS = {
     "rss": RSSCollector,
@@ -721,6 +990,10 @@ COLLECTORS = {
     "telegram": TelegramCollector,
     "adsb": ADSBCollector,
     "custom_rss": CustomRSSCollector,
+    "cisa_kev": CISAKEVCollector,
+    "abuse_ch": AbuseChCollector,
+    "pubmed": PubMedCollector,
+    "clinicaltrials": ClinicalTrialsCollector,
 }
 
 

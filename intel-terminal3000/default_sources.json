@@ -534,5 +534,71 @@
         "source_type": "rss",
         "url": "https://www.greynoise.io/blog/rss.xml",
         "category": "cyber"
+    },
+    {
+        "name": "CISA KEV - Known Exploited Vulnerabilities",
+        "source_type": "cisa_kev",
+        "category": "cyber",
+        "config": {"max_records": 50}
+    },
+    {
+        "name": "abuse.ch - URLhaus",
+        "source_type": "abuse_ch",
+        "category": "cyber",
+        "config": {"feed": "urlhaus"}
+    },
+    {
+        "name": "abuse.ch - ThreatFox",
+        "source_type": "abuse_ch",
+        "category": "cyber",
+        "config": {"feed": "threatfox"}
+    },
+    {
+        "name": "PubMed - CRISPR",
+        "source_type": "pubmed",
+        "category": "biotech",
+        "config": {"query": "CRISPR", "max_records": 20}
+    },
+    {
+        "name": "PubMed - Gene Therapy",
+        "source_type": "pubmed",
+        "category": "biotech",
+        "config": {"query": "gene therapy", "max_records": 20}
+    },
+    {
+        "name": "PubMed - Longevity and Aging",
+        "source_type": "pubmed",
+        "category": "biotech",
+        "config": {"query": "longevity OR aging biomarkers OR cellular senescence", "max_records": 20}
+    },
+    {
+        "name": "PubMed - Cancer Vaccines",
+        "source_type": "pubmed",
+        "category": "biotech",
+        "config": {"query": "personalized cancer vaccine OR neoantigen vaccine", "max_records": 20}
+    },
+    {
+        "name": "PubMed - AI Drug Discovery",
+        "source_type": "pubmed",
+        "category": "biotech",
+        "config": {"query": "artificial intelligence drug discovery OR virtual cell model", "max_records": 20}
+    },
+    {
+        "name": "ClinicalTrials.gov - CRISPR Therapies",
+        "source_type": "clinicaltrials",
+        "category": "biotech",
+        "config": {"query": "CRISPR", "max_records": 20}
+    },
+    {
+        "name": "ClinicalTrials.gov - Gene Therapy",
+        "source_type": "clinicaltrials",
+        "category": "biotech",
+        "config": {"query": "gene therapy", "max_records": 20}
+    },
+    {
+        "name": "ClinicalTrials.gov - Cancer Vaccines",
+        "source_type": "clinicaltrials",
+        "category": "biotech",
+        "config": {"query": "personalized cancer vaccine", "max_records": 20}
     }
 ]
