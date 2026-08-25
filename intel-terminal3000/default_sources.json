@@ -318,5 +318,221 @@
         "source_type": "rss",
         "url": "https://www.eff.org/rss/updates.xml",
         "category": "technology"
+    },
+    {
+        "name": "Science News (AAAS)",
+        "source_type": "rss",
+        "url": "https://www.sciencenews.org/feed",
+        "category": "science"
+    },
+    {
+        "name": "IEEE Spectrum",
+        "source_type": "rss",
+        "url": "https://spectrum.ieee.org/feeds/feed.rss",
+        "category": "science"
+    },
+    {
+        "name": "Quanta Magazine",
+        "source_type": "rss",
+        "url": "https://www.quantamagazine.org/feed/",
+        "category": "science"
+    },
+    {
+        "name": "OpenAI News",
+        "source_type": "rss",
+        "url": "https://openai.com/news/rss.xml",
+        "category": "ai_research"
+    },
+    {
+        "name": "Google DeepMind Blog",
+        "source_type": "rss",
+        "url": "https://deepmind.google/blog/rss.xml",
+        "category": "ai_research"
+    },
+    {
+        "name": "Google Research Blog",
+        "source_type": "rss",
+        "url": "https://research.google/blog/rss/",
+        "category": "ai_research"
+    },
+    {
+        "name": "NVIDIA Blog",
+        "source_type": "rss",
+        "url": "https://blogs.nvidia.com/feed/",
+        "category": "ai_research"
+    },
+    {
+        "name": "Hugging Face Blog",
+        "source_type": "rss",
+        "url": "https://huggingface.co/blog/feed.xml",
+        "category": "ai_research"
+    },
+    {
+        "name": "arXiv - AI",
+        "source_type": "rss",
+        "url": "http://export.arxiv.org/rss/cs.AI",
+        "category": "ai_research"
+    },
+    {
+        "name": "IEEE Spectrum - Robotics",
+        "source_type": "rss",
+        "url": "https://spectrum.ieee.org/feeds/topic/robotics.rss",
+        "category": "robotics"
+    },
+    {
+        "name": "The Robot Report",
+        "source_type": "rss",
+        "url": "https://www.therobotreport.com/feed/",
+        "category": "robotics"
+    },
+    {
+        "name": "arXiv - Robotics",
+        "source_type": "rss",
+        "url": "http://export.arxiv.org/rss/cs.RO",
+        "category": "robotics"
+    },
+    {
+        "name": "ROS Discourse",
+        "source_type": "rss",
+        "url": "https://discourse.ros.org/latest.rss",
+        "category": "robotics"
+    },
+    {
+        "name": "FDA Press Announcements",
+        "source_type": "rss",
+        "url": "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/press-releases/rss.xml",
+        "category": "biotech"
+    },
+    {
+        "name": "Nature Medicine",
+        "source_type": "rss",
+        "url": "https://www.nature.com/nm.rss",
+        "category": "biotech"
+    },
+    {
+        "name": "NEJM",
+        "source_type": "rss",
+        "url": "https://www.nejm.org/action/showFeed?type=etoc&feed=rss&jc=nejm",
+        "category": "biotech"
+    },
+    {
+        "name": "The Lancet",
+        "source_type": "rss",
+        "url": "https://www.thelancet.com/rssfeed/lancet_current.xml",
+        "category": "biotech"
+    },
+    {
+        "name": "STAT News",
+        "source_type": "rss",
+        "url": "https://www.statnews.com/feed/",
+        "category": "biotech"
+    },
+    {
+        "name": "Endpoints News",
+        "source_type": "rss",
+        "url": "https://endpts.com/feed/",
+        "category": "biotech"
+    },
+    {
+        "name": "bioRxiv",
+        "source_type": "rss",
+        "url": "https://connect.biorxiv.org/biorxiv_xml.php?subject=all",
+        "category": "biotech"
+    },
+    {
+        "name": "medRxiv",
+        "source_type": "rss",
+        "url": "https://connect.medrxiv.org/medrxiv_xml.php?subject=all",
+        "category": "biotech"
+    },
+    {
+        "name": "arXiv - Quantum Physics",
+        "source_type": "rss",
+        "url": "http://export.arxiv.org/rss/quant-ph",
+        "category": "quantum"
+    },
+    {
+        "name": "Nature Physics",
+        "source_type": "rss",
+        "url": "https://www.nature.com/nphys.rss",
+        "category": "quantum"
+    },
+    {
+        "name": "Physics World",
+        "source_type": "rss",
+        "url": "https://physicsworld.com/feed/",
+        "category": "quantum"
+    },
+    {
+        "name": "Fermilab News",
+        "source_type": "rss",
+        "url": "https://news.fnal.gov/feed/",
+        "category": "quantum"
+    },
+    {
+        "name": "The Quantum Insider",
+        "source_type": "rss",
+        "url": "https://thequantuminsider.com/feed/",
+        "category": "quantum"
+    },
+    {
+        "name": "Quantum Computing Report",
+        "source_type": "rss",
+        "url": "https://quantumcomputingreport.com/feed/",
+        "category": "quantum"
+    },
+    {
+        "name": "NASA News",
+        "source_type": "rss",
+        "url": "https://www.nasa.gov/news-release/feed/",
+        "category": "space"
+    },
+    {
+        "name": "ESA News",
+        "source_type": "rss",
+        "url": "https://www.esa.int/rssfeed/Our_Activities/Space_News",
+        "category": "space"
+    },
+    {
+        "name": "Spaceflight Now",
+        "source_type": "rss",
+        "url": "https://spaceflightnow.com/feed/",
+        "category": "space"
+    },
+    {
+        "name": "The Planetary Society",
+        "source_type": "rss",
+        "url": "https://www.planetary.org/rss/articles",
+        "category": "space"
+    },
+    {
+        "name": "International Crisis Group",
+        "source_type": "rss",
+        "url": "https://www.crisisgroup.org/rss",
+        "category": "geopolitical"
+    },
+    {
+        "name": "Microsoft Security Blog",
+        "source_type": "rss",
+        "url": "https://www.microsoft.com/en-us/security/blog/feed/",
+        "category": "cyber"
+    },
+    {
+        "name": "Unit 42 (Palo Alto)",
+        "source_type": "rss",
+        "url": "https://unit42.paloaltonetworks.com/feed/",
+        "category": "cyber"
+    },
+    {
+        "name": "Cisco Talos",
+        "source_type": "rss",
+        "url": "https://blog.talosintelligence.com/rss/",
+        "category": "cyber"
+    },
+    {
+        "name": "GreyNoise Blog",
+        "source_type": "rss",
+        "url": "https://www.greynoise.io/blog/rss.xml",
+        "category": "cyber"
     }
 ]
