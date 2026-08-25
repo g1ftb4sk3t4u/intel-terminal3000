@@ -146,9 +146,9 @@
         "category": "cyber"
     },
     {
-        "name": "Reuters - World",
+        "name": "The Guardian - World",
         "source_type": "rss",
-        "url": "https://www.reutersagency.com/feed/?best-topics=world",
+        "url": "https://www.theguardian.com/world/rss",
         "category": "geopolitical"
     },
     {
@@ -164,9 +164,9 @@
         "category": "geopolitical"
     },
     {
-        "name": "AP News - World",
+        "name": "NYT - World",
         "source_type": "rss",
-        "url": "https://rsshub.app/apnews/topics/world-news",
+        "url": "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
         "category": "geopolitical"
     },
     {
@@ -200,21 +200,9 @@
         "category": "geopolitical"
     },
     {
-        "name": "Stratfor Worldview",
+        "name": "CEPA",
         "source_type": "rss",
-        "url": "https://worldview.stratfor.com/rss.xml",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Council on Foreign Relations",
-        "source_type": "rss",
-        "url": "https://www.cfr.org/rss.xml",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Carnegie Endowment",
-        "source_type": "rss",
-        "url": "https://carnegieendowment.org/rss/solr/?fa=rss",
+        "url": "https://cepa.org/feed",
         "category": "geopolitical"
     },
     {
@@ -230,9 +218,9 @@
         "category": "geopolitical"
     },
     {
-        "name": "Ars Technica - Security",
+        "name": "The Record",
         "source_type": "rss",
-        "url": "https://feeds.arstechnica.com/arstechnica/security",
+        "url": "https://therecord.media/feed/",
         "category": "cyber"
     },
     {
@@ -254,15 +242,15 @@
         "category": "cyber"
     },
     {
-        "name": "Sophos News",
+        "name": "ESET WeLiveSecurity",
         "source_type": "rss",
-        "url": "https://news.sophos.com/en-us/feed/",
+        "url": "https://feeds.feedburner.com/eset/blog",
         "category": "cyber"
     },
     {
-        "name": "Trend Micro",
+        "name": "CIS Blog",
         "source_type": "rss",
-        "url": "https://www.trendmicro.com/en_us/rss/newsroom.html",
+        "url": "https://www.cisecurity.org/feed",
         "category": "cyber"
     },
     {
@@ -270,5 +258,65 @@
         "source_type": "rss",
         "url": "https://isc.sans.edu/rssfeed.xml",
         "category": "cyber"
+    },
+    {
+        "name": "SpaceNews",
+        "source_type": "rss",
+        "url": "https://spacenews.com/feed/",
+        "category": "space"
+    },
+    {
+        "name": "NASASpaceflight.com",
+        "source_type": "rss",
+        "url": "https://www.nasaspaceflight.com/feed/",
+        "category": "space"
+    },
+    {
+        "name": "gCaptain",
+        "source_type": "rss",
+        "url": "https://gcaptain.com/feed/",
+        "category": "marine"
+    },
+    {
+        "name": "Offshore Energy",
+        "source_type": "rss",
+        "url": "https://www.offshore-energy.biz/feed/",
+        "category": "marine"
+    },
+    {
+        "name": "Federal Reserve - Press Releases",
+        "source_type": "rss",
+        "url": "https://www.federalreserve.gov/feeds/press_all.xml",
+        "category": "economic"
+    },
+    {
+        "name": "GDACS - Disaster Alerts",
+        "source_type": "rss",
+        "url": "https://www.gdacs.org/xml/rss.xml",
+        "category": "disaster"
+    },
+    {
+        "name": "NOAA/PTWC - Tsunami Bulletins",
+        "source_type": "rss",
+        "url": "https://tsunami.gov/events/xml/PAAQAtom.xml",
+        "category": "weather"
+    },
+    {
+        "name": "WHO - Disease Outbreak News",
+        "source_type": "rss",
+        "url": "https://www.who.int/rss-feeds/news-english.xml",
+        "category": "health"
+    },
+    {
+        "name": "MIT Technology Review",
+        "source_type": "rss",
+        "url": "https://www.technologyreview.com/feed/",
+        "category": "technology"
+    },
+    {
+        "name": "EFF Updates",
+        "source_type": "rss",
+        "url": "https://www.eff.org/rss/updates.xml",
+        "category": "technology"
     }
 ]

@@ -33,7 +33,7 @@ class Settings(BaseSettings):
     # Reddit Settings
     reddit_client_id: Optional[str] = None
     reddit_client_secret: Optional[str] = None
-    reddit_user_agent: str = "IntelTerminal1000/1.0"
+    reddit_user_agent: str = "web:intel-terminal-3000:v3.0 (by /u/change_me)"
     reddit_subreddits: List[str] = ["worldnews", "geopolitics", "cybersecurity", "netsec"]
     
     # Bluesky Settings

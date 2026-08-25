@@ -90,35 +90,41 @@ class RSSCollector(BaseCollector):
     
     async def fetch(self, source: Source) -> List[Dict[str, Any]]:
         articles = []
-        
-        try:
-            logger.info(f"Fetching RSS: {source.url}")
-            response = await self.http_client.get(source.url)
-            logger.info(f"RSS response status: {response.status_code}, length: {len(response.text)}")
-            
-            feed = feedparser.parse(response.text)
-            logger.info(f"Feed parsed, entries: {len(feed.entries)}, bozo: {feed.bozo}")
-            
-            for entry in feed.entries[:50]:  # Limit per fetch
-                published = None
-                if hasattr(entry, 'published_parsed') and entry.published_parsed:
-                    published = datetime(*entry.published_parsed[:6])
-                elif hasattr(entry, 'updated_parsed') and entry.updated_parsed:
-                    published = datetime(*entry.updated_parsed[:6])
-                
-                articles.append({
-                    "title": entry.get("title", "Untitled"),
-                    "link": entry.get("link", ""),
-                    "summary": entry.get("summary", "")[:2000] if entry.get("summary") else None,
-                    "content": entry.get("content", [{}])[0].get("value", "") if entry.get("content") else None,
-                    "published_at": published,
-                })
-            
-            logger.info(f"RSS collected {len(articles)} articles from {source.name}")
-                
-        except Exception as e:
-            logger.error(f"RSS fetch error for {source.name}: {e}")
-        
+
+        logger.info(f"Fetching RSS: {source.url}")
+        response = await self.http_client.get(source.url)
+        logger.info(f"RSS response status: {response.status_code}, length: {len(response.text)}")
+
+        if response.status_code != 200:
+            raise RuntimeError(f"{source.name}: HTTP {response.status_code} from {source.url}")
+
+        feed = feedparser.parse(response.text)
+        logger.info(f"Feed parsed, entries: {len(feed.entries)}, bozo: {feed.bozo}")
+
+        # A "bozo" feed with zero entries means feedparser couldn't make sense
+        # of the response at all (e.g. an HTML error page served with a 200,
+        # or a redirect landing on the site's homepage) - surface that as a
+        # real failure instead of silently reporting 0 articles collected.
+        if feed.bozo and not feed.entries:
+            raise RuntimeError(f"{source.name}: response wasn't a parseable feed ({feed.get('bozo_exception')})")
+
+        for entry in feed.entries[:50]:  # Limit per fetch
+            published = None
+            if hasattr(entry, 'published_parsed') and entry.published_parsed:
+                published = datetime(*entry.published_parsed[:6])
+            elif hasattr(entry, 'updated_parsed') and entry.updated_parsed:
+                published = datetime(*entry.updated_parsed[:6])
+
+            articles.append({
+                "title": entry.get("title", "Untitled"),
+                "link": entry.get("link", ""),
+                "summary": entry.get("summary", "")[:2000] if entry.get("summary") else None,
+                "content": entry.get("content", [{}])[0].get("value", "") if entry.get("content") else None,
+                "published_at": published,
+            })
+
+        logger.info(f"RSS collected {len(articles)} articles from {source.name}")
+
         return articles
 
 
@@ -129,14 +135,34 @@ class GDELTCollector(BaseCollector):
     - Already has geolocation data
     - Free and comprehensive
     """
-    
+
     source_type = "gdelt"
     GDELT_API = "https://api.gdeltproject.org/api/v2/doc/doc"
-    
+
+    # GDELT hard-blocks with HTTP 429 ("please limit requests to one every
+    # 5 seconds") if consecutive queries land closer together than that,
+    # which happens by default here since every GDELT source in the DB gets
+    # fetched back-to-back in the same scheduler pass. This lock/timestamp
+    # is shared across every GDELTCollector instance so the whole batch gets
+    # spaced out, not just calls within a single instance.
+    _throttle_lock = asyncio.Lock()
+    _last_request_at: Optional[datetime] = None
+    _min_interval = timedelta(seconds=6)
+
+    async def _wait_for_rate_limit(self):
+        async with GDELTCollector._throttle_lock:
+            now = datetime.utcnow()
+            if GDELTCollector._last_request_at is not None:
+                elapsed = now - GDELTCollector._last_request_at
+                remaining = (self._min_interval - elapsed).total_seconds()
+                if remaining > 0:
+                    await asyncio.sleep(remaining)
+            GDELTCollector._last_request_at = datetime.utcnow()
+
     async def fetch(self, source: Source) -> List[Dict[str, Any]]:
         articles = []
         config = source.config or {}
-        
+
         # Build query parameters
         params = {
             "query": config.get("query", "security OR conflict OR crisis"),
@@ -146,27 +172,34 @@ class GDELTCollector(BaseCollector):
             "timespan": config.get("timespan", "15min"),  # Last 15 minutes
             "sort": "DateDesc",
         }
-        
+
+        await self._wait_for_rate_limit()
+
+        response = await self.http_client.get(self.GDELT_API, params=params)
+
+        if response.status_code == 429:
+            raise RuntimeError(f"GDELT rate limit hit (429): {response.text[:200]}")
+        if response.status_code != 200:
+            raise RuntimeError(f"GDELT returned HTTP {response.status_code}: {response.text[:200]}")
+
         try:
-            response = await self.http_client.get(self.GDELT_API, params=params)
             data = response.json()
-            
-            for item in data.get("articles", []):
-                # GDELT provides location data
-                articles.append({
-                    "title": item.get("title", "Untitled"),
-                    "link": item.get("url", ""),
-                    "summary": item.get("title"),  # GDELT doesn't provide summaries
-                    "published_at": self._parse_gdelt_date(item.get("seendate")),
-                    "source_domain": item.get("domain"),
-                    # Geolocation from GDELT
-                    "country": item.get("sourcecountry"),
-                    "locations": [item.get("sourcecountry")] if item.get("sourcecountry") else None,
-                })
-                
         except Exception as e:
-            logger.error(f"GDELT fetch error: {e}")
-        
+            raise RuntimeError(f"GDELT returned non-JSON response: {response.text[:200]}") from e
+
+        for item in data.get("articles", []):
+            # GDELT provides location data
+            articles.append({
+                "title": item.get("title", "Untitled"),
+                "link": item.get("url", ""),
+                "summary": item.get("title"),  # GDELT doesn't provide summaries
+                "published_at": self._parse_gdelt_date(item.get("seendate")),
+                "source_domain": item.get("domain"),
+                # Geolocation from GDELT
+                "country": item.get("sourcecountry"),
+                "locations": [item.get("sourcecountry")] if item.get("sourcecountry") else None,
+            })
+
         return articles
     
     def _parse_gdelt_date(self, date_str: str) -> Optional[datetime]:
@@ -180,41 +213,90 @@ class GDELTCollector(BaseCollector):
 
 
 class RedditCollector(BaseCollector):
-    """Reddit collector using PRAW (async wrapper)"""
-    
+    """
+    Reddit collector using OAuth2 app-only (client_credentials) auth.
+
+    Reddit's unauthenticated JSON endpoints (www.reddit.com/r/*/hot.json)
+    now return HTTP 403 unconditionally regardless of User-Agent - this was
+    tightened after the 2023 API changes and anonymous scraping no longer
+    works at all. A free "script" app at https://www.reddit.com/prefs/apps
+    gives a client_id + client_secret, which is enough for read-only
+    app-only auth (no user login/password needed).
+    """
+
     source_type = "reddit"
-    
+    TOKEN_URL = "https://www.reddit.com/api/v1/access_token"
+    API_BASE = "https://oauth.reddit.com"
+
+    # Shared across instances so every subreddit fetch in a batch reuses one
+    # token instead of re-authenticating each time.
+    _token: Optional[str] = None
+    _token_expires_at: Optional[datetime] = None
+    _token_lock = asyncio.Lock()
+
+    async def _get_token(self) -> str:
+        async with RedditCollector._token_lock:
+            if (
+                RedditCollector._token
+                and RedditCollector._token_expires_at
+                and datetime.utcnow() < RedditCollector._token_expires_at
+            ):
+                return RedditCollector._token
+
+            if not settings.reddit_client_id or not settings.reddit_client_secret:
+                raise RuntimeError(
+                    "Reddit collector needs REDDIT_CLIENT_ID/REDDIT_CLIENT_SECRET "
+                    "(free 'script' app at https://www.reddit.com/prefs/apps) - "
+                    "anonymous Reddit JSON scraping returns 403 unconditionally now."
+                )
+
+            response = await self.http_client.post(
+                self.TOKEN_URL,
+                data={"grant_type": "client_credentials"},
+                auth=(settings.reddit_client_id, settings.reddit_client_secret),
+                headers={"User-Agent": settings.reddit_user_agent},
+            )
+            if response.status_code != 200:
+                raise RuntimeError(f"Reddit OAuth token request failed ({response.status_code}): {response.text[:200]}")
+
+            data = response.json()
+            RedditCollector._token = data["access_token"]
+            RedditCollector._token_expires_at = datetime.utcnow() + timedelta(seconds=data.get("expires_in", 3600) - 60)
+            return RedditCollector._token
+
     async def fetch(self, source: Source) -> List[Dict[str, Any]]:
         articles = []
         config = source.config or {}
         subreddit = config.get("subreddit", "worldnews")
-        
-        # Use Reddit JSON API (no auth needed for public posts)
-        url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=25"
-        
-        try:
-            headers = {"User-Agent": settings.reddit_user_agent}
-            response = await self.http_client.get(url, headers=headers)
-            data = response.json()
-            
-            for post in data.get("data", {}).get("children", []):
-                post_data = post.get("data", {})
-                
-                # Skip stickied posts
-                if post_data.get("stickied"):
-                    continue
-                
-                articles.append({
-                    "title": post_data.get("title", "Untitled"),
-                    "link": f"https://reddit.com{post_data.get('permalink', '')}",
-                    "summary": post_data.get("selftext", "")[:2000] or post_data.get("url"),
-                    "published_at": datetime.fromtimestamp(post_data.get("created_utc", 0)),
-                    "content": post_data.get("selftext"),
-                })
-                
-        except Exception as e:
-            logger.error(f"Reddit fetch error for r/{subreddit}: {e}")
-        
+
+        token = await self._get_token()
+        url = f"{self.API_BASE}/r/{subreddit}/hot?limit=25"
+        headers = {
+            "User-Agent": settings.reddit_user_agent,
+            "Authorization": f"Bearer {token}",
+        }
+
+        response = await self.http_client.get(url, headers=headers)
+        if response.status_code != 200:
+            raise RuntimeError(f"Reddit fetch for r/{subreddit} failed ({response.status_code}): {response.text[:200]}")
+
+        data = response.json()
+
+        for post in data.get("data", {}).get("children", []):
+            post_data = post.get("data", {})
+
+            # Skip stickied posts
+            if post_data.get("stickied"):
+                continue
+
+            articles.append({
+                "title": post_data.get("title", "Untitled"),
+                "link": f"https://reddit.com{post_data.get('permalink', '')}",
+                "summary": post_data.get("selftext", "")[:2000] or post_data.get("url"),
+                "published_at": datetime.fromtimestamp(post_data.get("created_utc", 0)),
+                "content": post_data.get("selftext"),
+            })
+
         return articles
 
 
@@ -574,141 +656,61 @@ class CustomRSSCollector(BaseCollector):
         
         keywords = config.get("keywords", [])  # Filter to only these keywords
         exclude_keywords = config.get("exclude_keywords", [])
-        
-        try:
-            logger.info(f"Custom RSS fetching: {source.url}")
-            response = await self.http_client.get(source.url)
-            feed = feedparser.parse(response.text)
-            
-            for entry in feed.entries[:50]:
-                title = entry.get("title", "")
-                summary = entry.get("summary", "")
-                text = f"{title} {summary}".lower()
-                
-                # Apply keyword filters
-                if keywords:
-                    if not any(kw.lower() in text for kw in keywords):
-                        continue
-                
-                if exclude_keywords:
-                    if any(kw.lower() in text for kw in exclude_keywords):
-                        continue
-                
-                published = None
-                if hasattr(entry, 'published_parsed') and entry.published_parsed:
-                    published = datetime(*entry.published_parsed[:6])
-                
-                articles.append({
-                    "title": title,
-                    "link": entry.get("link", ""),
-                    "summary": summary[:2000] if summary else None,
-                    "published_at": published,
-                })
-            
-            logger.info(f"Custom RSS collected {len(articles)} articles from {source.name}")
-            
-        except Exception as e:
-            logger.error(f"Custom RSS fetch error for {source.name}: {e}")
-        
+
+        logger.info(f"Custom RSS fetching: {source.url}")
+        response = await self.http_client.get(source.url)
+        if response.status_code != 200:
+            raise RuntimeError(f"{source.name}: HTTP {response.status_code} from {source.url}")
+
+        feed = feedparser.parse(response.text)
+        if feed.bozo and not feed.entries:
+            raise RuntimeError(f"{source.name}: response wasn't a parseable feed ({feed.get('bozo_exception')})")
+
+        for entry in feed.entries[:50]:
+            title = entry.get("title", "")
+            summary = entry.get("summary", "")
+            text = f"{title} {summary}".lower()
+
+            # Apply keyword filters
+            if keywords:
+                if not any(kw.lower() in text for kw in keywords):
+                    continue
+
+            if exclude_keywords:
+                if any(kw.lower() in text for kw in exclude_keywords):
+                    continue
+
+            published = None
+            if hasattr(entry, 'published_parsed') and entry.published_parsed:
+                published = datetime(*entry.published_parsed[:6])
+
+            articles.append({
+                "title": title,
+                "link": entry.get("link", ""),
+                "summary": summary[:2000] if summary else None,
+                "published_at": published,
+            })
+
+        logger.info(f"Custom RSS collected {len(articles)} articles from {source.name}")
+
         return articles
 
 
-class ACARSCollector(BaseCollector):
-    """
-    ACARS (Aircraft Communications Addressing and Reporting System) collector
-    Tracks aircraft communication messages and positions
-    """
-    
-    source_type = "acars"
-    
-    # ACARS message types to track
-    INTERESTING_MSG_TYPES = [
-        "MAINT",      # Maintenance messages
-        "TECH",       # Technical messages  
-        "OPS",        # Operations
-        "WEATHER",    # Weather/turbulence
-        "EMERGENCY",  # Emergencies
-        "DIVERT",     # Diversions
-        "FUEL",       # Fuel issues
-        "MEDICAL",    # Medical emergencies
-        "SECURITY",   # Security
-    ]
-    
-    async def fetch(self, source: Source) -> List[Dict[str, Any]]:
-        """Fetch ACARS data from available sources"""
-        articles = []
-        config = source.config or {}
-        
-        try:
-            # Try ACARShub free API (if available)
-            url = "https://www.acarshub.org/api/acars"  # Example free ACARS feed
-            
-            try:
-                response = await self.http_client.get(url, timeout=15.0)
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    messages = data.get("messages", []) if isinstance(data, dict) else data
-                    
-                    for msg in messages[:50]:  # Limit to 50 recent messages
-                        if not isinstance(msg, dict):
-                            continue
-                        
-                        # Parse ACARS message fields
-                        flight = (msg.get("flight") or "").upper()
-                        msg_type = msg.get("type", "").upper()
-                        text = msg.get("text", "") or msg.get("message", "")
-                        altitude = msg.get("altitude", 0)
-                        latitude = msg.get("latitude", 0)
-                        longitude = msg.get("longitude", 0)
-                        timestamp = msg.get("timestamp", datetime.utcnow().isoformat())
-                        
-                        # Determine severity based on message type/content
-                        severity = "low"
-                        is_interesting = False
-                        category = "aviation"
-                        
-                        # Check for critical keywords in message
-                        text_upper = text.upper() if text else ""
-                        
-                        if any(keyword in text_upper for keyword in ["EMERGENCY", "DIVERT", "MEDICAL", "SECURITY"]):
-                            severity = "critical"
-                            is_interesting = True
-                        elif any(keyword in text_upper for keyword in ["FUEL", "HYDRAULIC", "ENGINE", "ELECTRICAL"]):
-                            severity = "high"
-                            is_interesting = True
-                        elif msg_type in self.INTERESTING_MSG_TYPES:
-                            severity = "medium" if msg_type in ["MAINT", "TECH"] else "low"
-                            is_interesting = True
-                        
-                        if is_interesting and flight and latitude and longitude:
-                            articles.append({
-                                "title": f"✈️ ACARS: {flight} - {msg_type}",
-                                "summary": text[:200] if text else f"ACARS {msg_type} message from {flight}",
-                                "link": f"https://www.acarshub.org/",
-                                "published_at": datetime.fromisoformat(timestamp) if isinstance(timestamp, str) else datetime.utcnow(),
-                                "source": source.name,
-                                "category": category,
-                                "severity": severity,
-                                "latitude": latitude,
-                                "longitude": longitude,
-                                # Extra metadata
-                                "flight": flight,
-                                "msg_type": msg_type,
-                                "altitude": altitude,
-                            })
-                
-                logger.info(f"ACARS collected {len(articles)} messages")
-                
-            except Exception as e:
-                logger.warning(f"ACARS API fetch failed: {e}")
-                logger.info("ACARS collector running but API unavailable - using fallback mode")
-        
-        except Exception as e:
-            logger.error(f"ACARS fetch error: {e}")
-        
-        return articles
-
+# NOTE: There is no ACARSCollector and no "twitter" collector.
+#
+# ACARS was previously "implemented" against https://www.acarshub.org/api/acars,
+# but that domain does not exist (NXDOMAIN) - it was a placeholder that always
+# failed silently and never returned data. Real ACARS message content requires
+# a physical SDR feeding a hub like acarshub/dumpvdl2; there is no free public
+# real-time API for it. ADSBCollector above already covers the same
+# "interesting aircraft" need for free via emergency squawk detection
+# (7500/7600/7700) and military callsign/type matching.
+#
+# "twitter" was never registered here at all, so get_collector() silently
+# fell back to RSSCollector, which then tried to GET a None url and failed
+# silently for every native-twitter source. There's no free, reliable way to
+# poll X/Twitter without a paid API tier, so it isn't implemented - use real
+# RSS feeds from the outlet/account's own site instead where possible.
 
 # Collector registry
 COLLECTORS = {
@@ -718,12 +720,16 @@ COLLECTORS = {
     "bluesky": BlueskyCollector,
     "telegram": TelegramCollector,
     "adsb": ADSBCollector,
-    "acars": ACARSCollector,
     "custom_rss": CustomRSSCollector,
 }
 
 
 def get_collector(source_type: str, session: AsyncSession) -> BaseCollector:
     """Factory function to get appropriate collector"""
-    collector_class = COLLECTORS.get(source_type, RSSCollector)
+    collector_class = COLLECTORS.get(source_type)
+    if collector_class is None:
+        raise ValueError(
+            f"No collector registered for source_type={source_type!r} - "
+            f"known types: {sorted(COLLECTORS.keys())}"
+        )
     return collector_class(session)
