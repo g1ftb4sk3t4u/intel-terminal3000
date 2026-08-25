@@ -1,0 +1,660 @@
+/* Intel Terminal 3000 — Intelligence Command Center v2 core */
+
+html,
+body.intel-v2 {
+    min-width: 320px;
+    min-height: 100%;
+    background: var(--intel-shell);
+}
+
+body.intel-v2 {
+    margin: 0;
+    padding: 0 0 38px;
+    color: var(--intel-text);
+    font-family: var(--intel-font-ui);
+    background:
+        radial-gradient(circle at 58% -20%, color-mix(in srgb, var(--intel-accent) 11%, transparent), transparent 34rem),
+        var(--intel-shell);
+}
+
+body.intel-v2::before {
+    opacity: .24;
+    z-index: 0;
+    background-image:
+        linear-gradient(color-mix(in srgb, var(--intel-line) 38%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--intel-line) 38%, transparent) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,.78) 55%, transparent 100%);
+}
+
+body.intel-v2.intel-grid-off::before {
+    display: none;
+}
+
+body.intel-v2.intel-glow-off * {
+    --accent-glow: transparent !important;
+    text-shadow: none !important;
+}
+
+body.intel-v2.intel-motion-off *,
+body.intel-v2.intel-motion-off *::before,
+body.intel-v2.intel-motion-off *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .001ms !important;
+}
+
+#app {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+}
+
+.intel-shell-v2 {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: var(--intel-sidebar) minmax(0, 1fr);
+}
+
+.intel-sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 1450;
+    height: 100vh;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-right: 1px solid var(--intel-line);
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--intel-surface) 96%, black), color-mix(in srgb, var(--intel-shell) 96%, black));
+    box-shadow: 15px 0 40px rgba(0, 0, 0, .12);
+}
+
+.intel-side-brand {
+    min-height: 86px;
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) 28px;
+    align-items: center;
+    gap: 11px;
+    padding: 14px 13px 14px 16px;
+    border-bottom: 1px solid var(--intel-line-soft);
+}
+
+.intel-side-brand strong,
+.intel-side-brand small {
+    display: block;
+    white-space: nowrap;
+}
+
+.intel-side-brand strong {
+    color: var(--intel-text);
+    font-family: var(--intel-font-data);
+    font-size: .78rem;
+    letter-spacing: .09em;
+}
+
+.intel-side-brand small {
+    margin-top: 5px;
+    color: var(--intel-accent);
+    font-family: var(--intel-font-data);
+    font-size: .62rem;
+    font-weight: 700;
+    letter-spacing: .17em;
+}
+
+.intel-side-mark {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border: 1px solid color-mix(in srgb, var(--intel-accent) 60%, var(--intel-line));
+    border-radius: 9px;
+    background: linear-gradient(145deg, color-mix(in srgb, var(--intel-accent) 16%, var(--intel-surface-2)), var(--intel-surface));
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .03), 0 0 20px var(--accent-glow);
+}
+
+.intel-side-mark::before,
+.intel-side-mark::after,
+.intel-side-mark span {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid var(--intel-accent);
+}
+
+.intel-side-mark::before {
+    width: 19px;
+    height: 19px;
+    transform: translate(-50%, -50%) rotate(45deg);
+    opacity: .86;
+}
+
+.intel-side-mark::after {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--intel-accent);
+    box-shadow: 0 0 13px var(--intel-accent);
+}
+
+.intel-icon-button {
+    min-width: 34px;
+    min-height: 34px;
+    display: inline-grid;
+    place-items: center;
+    padding: 0;
+    border: 1px solid var(--intel-line);
+    border-radius: 7px;
+    color: var(--text-secondary);
+    background: color-mix(in srgb, var(--intel-surface-2) 84%, transparent);
+    box-shadow: inset 0 1px rgba(255,255,255,.035);
+    cursor: pointer;
+}
+
+.intel-icon-button:hover,
+.intel-icon-button.active {
+    color: var(--intel-accent);
+    border-color: color-mix(in srgb, var(--intel-accent) 60%, var(--intel-line));
+    background: color-mix(in srgb, var(--intel-accent) 10%, var(--intel-surface-2));
+}
+
+.intel-side-label {
+    padding: 17px 17px 8px;
+    color: var(--intel-muted);
+    font-family: var(--intel-font-data);
+    font-size: .58rem;
+    font-weight: 800;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+}
+
+.intel-side-nav.page-nav {
+    position: static;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 0 10px;
+    border: 0;
+    background: transparent;
+    backdrop-filter: none;
+    overflow: visible;
+}
+
+.intel-side-nav .page-btn {
+    width: 100%;
+    min-height: 46px;
+    display: grid;
+    grid-template-columns: 31px minmax(0, 1fr) 16px;
+    align-items: center;
+    gap: 7px;
+    padding: 0 10px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    color: var(--text-secondary);
+    background: transparent;
+    font-family: var(--intel-font-ui);
+    text-align: left;
+    transform: none;
+}
+
+.intel-side-nav .page-btn::after {
+    content: "›";
+    color: var(--intel-muted);
+    font-family: var(--intel-font-data);
+    text-align: center;
+}
+
+.intel-side-nav .page-btn:hover {
+    color: var(--intel-text);
+    border-color: var(--intel-line-soft);
+    background: color-mix(in srgb, var(--intel-surface-3) 66%, transparent);
+}
+
+.intel-side-nav .page-btn.active {
+    color: var(--intel-text);
+    border-color: color-mix(in srgb, var(--intel-accent) 38%, var(--intel-line));
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--intel-accent) 15%, var(--intel-surface-2)), color-mix(in srgb, var(--intel-surface-2) 82%, transparent));
+    box-shadow: inset 3px 0 var(--intel-accent), 0 8px 22px rgba(0,0,0,.12);
+}
+
+.intel-side-nav .page-btn.active::after {
+    color: var(--intel-accent);
+}
+
+.intel-side-nav .page-icon {
+    width: 27px;
+    height: 27px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--intel-line-soft);
+    border-radius: 6px;
+    font-size: .83rem;
+    filter: saturate(.7);
+}
+
+.intel-side-nav .page-btn.active .page-icon {
+    color: var(--intel-accent);
+    border-color: color-mix(in srgb, var(--intel-accent) 40%, var(--intel-line));
+    background: color-mix(in srgb, var(--intel-accent) 10%, transparent);
+    filter: none;
+}
+
+.intel-side-nav .page-label {
+    font-size: .78rem;
+    font-weight: 680;
+    letter-spacing: .01em;
+}
+
+.intel-side-tools {
+    margin-top: 8px;
+    padding: 0 10px;
+}
+
+.intel-side-tools .intel-side-label {
+    margin-inline: -10px;
+}
+
+.intel-side-tools > button {
+    width: 100%;
+    min-height: 41px;
+    display: grid;
+    grid-template-columns: 27px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    padding: 0 10px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    color: var(--text-secondary);
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+}
+
+.intel-side-tools > button:hover,
+.intel-side-tools > button.active {
+    color: var(--intel-text);
+    border-color: var(--intel-line-soft);
+    background: color-mix(in srgb, var(--intel-surface-3) 62%, transparent);
+}
+
+.intel-side-tools > button span {
+    color: var(--intel-accent);
+    font-family: var(--intel-font-data);
+    text-align: center;
+}
+
+.intel-side-tools > button strong {
+    font-size: .74rem;
+    font-weight: 620;
+}
+
+.intel-side-footer {
+    margin-top: auto;
+    padding: 13px 16px 17px;
+    border-top: 1px solid var(--intel-line-soft);
+}
+
+.intel-side-signal {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--severity-low);
+    font-family: var(--intel-font-data);
+    font-size: .59rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+}
+
+.intel-side-signal i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--severity-low);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--severity-low) 60%, transparent);
+}
+
+.intel-side-footer small {
+    display: block;
+    margin-top: 7px;
+    color: var(--intel-muted);
+    font-size: .6rem;
+    line-height: 1.35;
+}
+
+.intel-main {
+    min-width: 0;
+}
+
+.intel-topbar.header {
+    position: sticky;
+    top: 0;
+    z-index: 1300;
+    min-height: var(--intel-topbar);
+    border-bottom: 1px solid var(--intel-line);
+    background: color-mix(in srgb, var(--intel-surface) 89%, transparent);
+    box-shadow: 0 12px 34px rgba(0,0,0,.16);
+    backdrop-filter: blur(18px) saturate(140%);
+}
+
+.intel-topbar .header-row {
+    width: 100%;
+    min-height: var(--intel-topbar);
+    display: flex;
+    gap: 12px;
+    padding: 10px 16px;
+}
+
+.intel-topbar-legacy-brand {
+    display: none !important;
+}
+
+.intel-topbar-context {
+    min-width: 176px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.intel-topbar-context span,
+.intel-topbar-context strong {
+    display: block;
+}
+
+.intel-topbar-context span {
+    color: var(--intel-muted);
+    font-family: var(--intel-font-data);
+    font-size: .55rem;
+    font-weight: 800;
+    letter-spacing: .16em;
+}
+
+.intel-topbar-context strong {
+    margin-top: 3px;
+    color: var(--intel-text);
+    font-size: .86rem;
+    line-height: 1;
+}
+
+.intel-mobile-menu {
+    display: none;
+}
+
+.intel-global-search {
+    width: min(460px, 38vw);
+    min-height: 40px;
+    display: grid;
+    grid-template-columns: 25px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+    margin-right: auto;
+    padding: 0 10px;
+    border: 1px solid var(--intel-line);
+    border-radius: 8px;
+    color: var(--intel-muted);
+    background: color-mix(in srgb, var(--intel-shell) 58%, var(--intel-surface-2));
+    text-align: left;
+    cursor: pointer;
+}
+
+.intel-global-search:hover {
+    color: var(--text-secondary);
+    border-color: color-mix(in srgb, var(--intel-accent) 44%, var(--intel-line));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--intel-accent) 8%, transparent);
+}
+
+.intel-global-search > span {
+    color: var(--intel-accent);
+    font-family: var(--intel-font-data);
+    font-size: 1.15rem;
+}
+
+.intel-global-search strong {
+    overflow: hidden;
+    font-size: .72rem;
+    font-weight: 540;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.intel-global-search kbd {
+    padding: 3px 6px;
+    border: 1px solid var(--intel-line);
+    border-radius: 4px;
+    color: var(--intel-muted);
+    background: var(--intel-surface-2);
+    font-family: var(--intel-font-data);
+    font-size: .58rem;
+}
+
+.intel-topbar .header-meta {
+    margin: 0;
+}
+
+.intel-topbar .status-indicator,
+.intel-topbar .clock-chip {
+    min-height: 34px;
+    border-radius: 6px;
+    font-size: .62rem;
+}
+
+.intel-topbar-quick {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.intel-alert-button {
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 10px;
+    border: 1px solid color-mix(in srgb, var(--severity-critical) 35%, var(--intel-line));
+    border-radius: 7px;
+    color: color-mix(in srgb, var(--severity-critical) 80%, var(--intel-text));
+    background: color-mix(in srgb, var(--severity-critical) 8%, var(--intel-surface-2));
+    font-size: .65rem;
+    cursor: pointer;
+}
+
+.intel-alert-button span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--severity-critical);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--severity-critical) 70%, transparent);
+}
+
+.intel-alert-button strong {
+    font-family: var(--intel-font-data);
+}
+
+.intel-legacy-actions.header-actions {
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.intel-mission-strip {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0;
+    border-bottom: 1px solid var(--intel-line);
+    background: var(--intel-line-soft);
+}
+
+.intel-metric {
+    position: relative;
+    min-height: 74px;
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--intel-surface) 94%, transparent);
+}
+
+.intel-metric::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 50%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--intel-accent) 38%, transparent));
+}
+
+.intel-metric-icon {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--intel-line);
+    border-radius: 7px;
+    color: var(--intel-accent);
+    background: color-mix(in srgb, var(--intel-accent) 8%, var(--intel-surface-2));
+    font-family: var(--intel-font-data);
+    font-weight: 800;
+}
+
+.intel-metric small,
+.intel-metric strong,
+.intel-metric em {
+    display: block;
+}
+
+.intel-metric small {
+    color: var(--intel-muted);
+    font-size: .59rem;
+    font-weight: 620;
+}
+
+.intel-metric strong {
+    margin-top: 2px;
+    color: var(--intel-text);
+    font-family: var(--intel-font-data);
+    font-size: 1.08rem;
+    letter-spacing: .02em;
+}
+
+.intel-metric em {
+    grid-column: 1 / -1;
+    position: absolute;
+    right: 10px;
+    bottom: 6px;
+    color: color-mix(in srgb, var(--intel-muted) 72%, transparent);
+    font-family: var(--intel-font-data);
+    font-size: .48rem;
+    font-style: normal;
+    font-weight: 800;
+    letter-spacing: .13em;
+}
+
+.intel-metric-priority .intel-metric-icon,
+.intel-metric-priority strong {
+    color: var(--severity-critical);
+}
+
+.intel-workspace {
+    width: min(100%, 1920px);
+    margin: 0 auto;
+    padding: 15px 16px 22px;
+}
+
+.intel-workspace-heading.workspace-heading {
+    width: 100%;
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin: 0 0 12px;
+    padding: 0 2px;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.intel-workspace-heading .workspace-kicker {
+    color: var(--intel-accent);
+    font-family: var(--intel-font-data);
+    font-size: .52rem;
+    font-weight: 800;
+    letter-spacing: .18em;
+}
+
+.intel-workspace-heading h2 {
+    margin-top: 3px;
+    color: var(--intel-text);
+    font-family: var(--intel-font-ui);
+    font-size: 1.22rem;
+    letter-spacing: -.02em;
+}
+
+.intel-workspace-controls {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-left: auto;
+}
+
+.intel-segmented {
+    display: inline-flex;
+    padding: 3px;
+    border: 1px solid var(--intel-line);
+    border-radius: 7px;
+    background: var(--intel-surface);
+}
+
+.intel-segmented button,
+.intel-control-button {
+    min-height: 31px;
+    padding: 0 10px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    color: var(--intel-muted);
+    background: transparent;
+    font-size: .66rem;
+    font-weight: 680;
+    cursor: pointer;
+}
+
+.intel-segmented button:hover,
+.intel-segmented button.active {
+    color: var(--intel-text);
+    background: var(--intel-surface-3);
+    box-shadow: 0 3px 10px rgba(0,0,0,.15);
+}
+
+.intel-control-button {
+    border-color: var(--intel-line);
+    background: color-mix(in srgb, var(--intel-surface-2) 84%, transparent);
+}
+
+.intel-control-button:hover,
+.intel-control-button.active {
+    color: var(--intel-accent);
+    border-color: color-mix(in srgb, var(--intel-accent) 50%, var(--intel-line));
+}
+
+.intel-control-primary {
+    color: color-mix(in srgb, var(--intel-shell) 88%, black);
+    border-color: var(--intel-accent);
+    background: var(--intel-accent);
+}
+
+.intel-control-primary:hover {
+    color: color-mix(in srgb, var(--intel-shell) 88%, black);
+    filter: brightness(1.08);
+}
+
+.intel-dashboard-frame {
+    position: relative;
+}
+

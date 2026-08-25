@@ -12,6 +12,12 @@ class Settings(BaseSettings):
     app_name: str = "Intel Terminal 1000"
     debug: bool = False
     secret_key: str = "change-this-in-production-please"
+
+    # Admin key required (via X-Admin-Key header) for every write endpoint
+    # (add/edit/delete sources, dashboards, categories, keywords, settings,
+    # etc). Unset/empty means every gated route stays locked - there is no
+    # "forgot to configure it" fallback to open.
+    admin_api_key: Optional[str] = None
     
     # Database
     database_url: str = "sqlite+aiosqlite:///./intel1000.db"

@@ -1,0 +1,94 @@
+/* Intel Terminal 3000 — small command-center integrations */
+.intel-dashboard-switcher {
+    min-width: 155px;
+    display: grid;
+    gap: 3px;
+}
+
+.intel-dashboard-switcher > span {
+    color: var(--intel-muted);
+    font-family: var(--intel-font-data);
+    font-size: .48rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+body.intel-v2 .intel-dashboard-switcher #dashboardSelector {
+    width: 100%;
+    min-height: 30px;
+    padding: 0 25px 0 8px;
+    border: 1px solid var(--intel-line);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    background: var(--intel-surface-2);
+    font-size: .61rem;
+}
+
+.intel-user-button {
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 9px 0 5px;
+    border: 1px solid var(--intel-line);
+    border-radius: 7px;
+    color: var(--text-secondary);
+    background: var(--intel-surface-2);
+    cursor: pointer;
+}
+
+.intel-user-button span {
+    width: 25px;
+    height: 25px;
+    display: grid;
+    place-items: center;
+    border-radius: 5px;
+    color: var(--intel-shell);
+    background: var(--intel-accent);
+    font-family: var(--intel-font-data);
+    font-size: .45rem;
+    font-weight: 900;
+}
+
+.intel-user-button strong {
+    font-size: .61rem;
+}
+
+.intel-user-button.active {
+    color: var(--intel-accent);
+    border-color: var(--intel-accent);
+}
+
+body.intel-v2 .panel-title {
+    cursor: pointer !important;
+}
+
+body[data-intel-theme="analyst"] .leaflet-tile-pane {
+    filter: saturate(.55) brightness(1.28) contrast(.78);
+}
+
+body[data-intel-theme="matrix"] .leaflet-tile-pane {
+    filter: grayscale(1) sepia(1) hue-rotate(70deg) saturate(2.2) brightness(.74);
+}
+
+body[data-intel-theme="synthwave"] .leaflet-tile-pane,
+body[data-intel-theme="cyber"] .leaflet-tile-pane {
+    filter: hue-rotate(22deg) saturate(1.35) brightness(.83);
+}
+
+body[data-intel-theme="lcars"] .intel-side-mark,
+body[data-intel-theme="lcars"] .intel-control-button,
+body[data-intel-theme="lcars"] .intel-side-nav .page-btn.active {
+    border-radius: 16px 5px 5px 16px;
+}
+
+@media (max-width: 1180px) {
+    .intel-dashboard-switcher { display: none; }
+}
+
+@media (max-width: 760px) {
+    .intel-user-button strong,
+    .intel-topbar-quick > .intel-icon-button { display: none; }
+    .intel-user-button { padding-right: 5px; }
+}

@@ -22,6 +22,8 @@ from .geolocation import GeoService
 from .triage import TriageService, seed_default_keywords
 from .trending import TrendingDetector
 from .config import get_settings
+from .auth import require_admin
+from .seed import seed_sources
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -188,6 +190,11 @@ async def lifespan(app: FastAPI):
     # Seed default keywords
     async with AsyncSessionLocal() as session:
         await seed_default_keywords(session)
+
+    # Seed any sources added to default_sources.json since the last deploy.
+    # Insert-only-if-missing-by-name, so this is safe to run against a live
+    # DB on every startup - existing sources/config are never touched.
+    await seed_sources()
     
     # Start background scheduler
     scheduler.add_job(
@@ -330,6 +337,7 @@ async def update_article(
     article_id: int,
     updates: Dict[str, Any],
     db: AsyncSession = Depends(get_db),
+    _admin: None = Depends(require_admin),
 ):
     """Update article (severity, starred, read, etc.)"""
     result = await db.execute(select(Article).where(Article.id == article_id))
@@ -360,7 +368,7 @@ async def get_sources(db: AsyncSession = Depends(get_db)):
 
 
 @app.post("/api/sources")
-async def create_source(source_data: Dict[str, Any], db: AsyncSession = Depends(get_db)):
+async def create_source(source_data: Dict[str, Any], db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Create a new data source"""
     source = Source(
         name=source_data["name"],
@@ -400,7 +408,7 @@ async def get_categories(db: AsyncSession = Depends(get_db)):
 
 
 @app.post("/api/categories")
-async def create_category(category_data: Dict[str, Any], db: AsyncSession = Depends(get_db)):
+async def create_category(category_data: Dict[str, Any], db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Create category by upserting a synthetic source category bucket"""
     name = (category_data.get("name") or "").strip()
     if not name:
@@ -424,7 +432,7 @@ async def create_category(category_data: Dict[str, Any], db: AsyncSession = Depe
 
 
 @app.delete("/api/categories/{category_name}")
-async def delete_category(category_name: str, db: AsyncSession = Depends(get_db)):
+async def delete_category(category_name: str, db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Delete category by clearing it from sources and articles"""
     if not category_name.strip():
         raise HTTPException(status_code=400, detail="Category name is required")
@@ -452,7 +460,7 @@ async def delete_category(category_name: str, db: AsyncSession = Depends(get_db)
 
 
 @app.delete("/api/sources/{source_id}")
-async def delete_source(source_id: int, db: AsyncSession = Depends(get_db)):
+async def delete_source(source_id: int, db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Delete a source"""
     result = await db.execute(select(Source).where(Source.id == source_id))
     source = result.scalar_one_or_none()
@@ -464,7 +472,7 @@ async def delete_source(source_id: int, db: AsyncSession = Depends(get_db)):
 
 
 @app.post("/api/sources/{source_id}/fetch")
-async def fetch_source_now(source_id: int, db: AsyncSession = Depends(get_db)):
+async def fetch_source_now(source_id: int, db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Manually trigger fetch for a source"""
     result = await db.execute(select(Source).where(Source.id == source_id))
     source = result.scalar_one_or_none()
@@ -493,7 +501,7 @@ async def get_dashboards(db: AsyncSession = Depends(get_db)):
 
 
 @app.post("/api/dashboards")
-async def create_dashboard(dashboard_data: Dict[str, Any], db: AsyncSession = Depends(get_db)):
+async def create_dashboard(dashboard_data: Dict[str, Any], db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Create a new dashboard"""
     dashboard = Dashboard(
         name=dashboard_data["name"],
@@ -513,6 +521,7 @@ async def update_dashboard(
     dashboard_id: int,
     dashboard_data: Dict[str, Any],
     db: AsyncSession = Depends(get_db),
+    _admin: None = Depends(require_admin),
 ):
     """Update a dashboard"""
     result = await db.execute(select(Dashboard).where(Dashboard.id == dashboard_id))
@@ -530,7 +539,7 @@ async def update_dashboard(
 
 
 @app.delete("/api/dashboards/{dashboard_id}")
-async def delete_dashboard(dashboard_id: int, db: AsyncSession = Depends(get_db)):
+async def delete_dashboard(dashboard_id: int, db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Delete a dashboard"""
     result = await db.execute(select(Dashboard).where(Dashboard.id == dashboard_id))
     dashboard = result.scalar_one_or_none()
@@ -722,7 +731,7 @@ async def get_alerts(db: AsyncSession = Depends(get_db)):
 
 
 @app.post("/api/alerts")
-async def create_alert(alert_data: Dict[str, Any], db: AsyncSession = Depends(get_db)):
+async def create_alert(alert_data: Dict[str, Any], db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Create an alert rule"""
     alert = Alert(
         name=alert_data["name"],
@@ -765,7 +774,7 @@ async def get_trending_alerts(db: AsyncSession = Depends(get_db)):
 
 
 @app.post("/api/trending/{alert_id}/acknowledge")
-async def acknowledge_trending_alert(alert_id: int, db: AsyncSession = Depends(get_db)):
+async def acknowledge_trending_alert(alert_id: int, db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Acknowledge a trending alert"""
     detector = TrendingDetector(db)
     await detector.acknowledge_alert(alert_id)
@@ -773,7 +782,7 @@ async def acknowledge_trending_alert(alert_id: int, db: AsyncSession = Depends(g
 
 
 @app.post("/api/trending/detect")
-async def trigger_trending_detection(db: AsyncSession = Depends(get_db)):
+async def trigger_trending_detection(db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Manually trigger trending detection"""
     detector = TrendingDetector(db)
     alerts = await detector.run_all_detections()
@@ -802,7 +811,7 @@ async def get_keywords(db: AsyncSession = Depends(get_db)):
 
 
 @app.post("/api/keywords")
-async def create_keyword(keyword_data: Dict[str, Any], db: AsyncSession = Depends(get_db)):
+async def create_keyword(keyword_data: Dict[str, Any], db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Create a new triage keyword"""
     keyword = TriageKeyword(
         keyword=keyword_data["keyword"],
@@ -820,7 +829,7 @@ async def create_keyword(keyword_data: Dict[str, Any], db: AsyncSession = Depend
 
 
 @app.put("/api/keywords/{keyword_id}")
-async def update_keyword(keyword_id: int, keyword_data: Dict[str, Any], db: AsyncSession = Depends(get_db)):
+async def update_keyword(keyword_id: int, keyword_data: Dict[str, Any], db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Update a triage keyword"""
     result = await db.execute(select(TriageKeyword).where(TriageKeyword.id == keyword_id))
     keyword = result.scalar_one_or_none()
@@ -836,7 +845,7 @@ async def update_keyword(keyword_id: int, keyword_data: Dict[str, Any], db: Asyn
 
 
 @app.delete("/api/keywords/{keyword_id}")
-async def delete_keyword(keyword_id: int, db: AsyncSession = Depends(get_db)):
+async def delete_keyword(keyword_id: int, db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Delete a triage keyword"""
     result = await db.execute(select(TriageKeyword).where(TriageKeyword.id == keyword_id))
     keyword = result.scalar_one_or_none()
@@ -850,7 +859,7 @@ async def delete_keyword(keyword_id: int, db: AsyncSession = Depends(get_db)):
 # ========== CUSTOM SOURCES ENDPOINTS ==========
 
 @app.post("/api/sources/custom")
-async def create_custom_source(source_data: Dict[str, Any], db: AsyncSession = Depends(get_db)):
+async def create_custom_source(source_data: Dict[str, Any], db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Create a custom RSS source with keyword filtering"""
     source = Source(
         name=source_data["name"],
@@ -895,7 +904,7 @@ async def get_custom_sources(db: AsyncSession = Depends(get_db)):
 
 
 @app.put("/api/sources/custom/{source_id}")
-async def update_custom_source(source_id: int, source_data: Dict[str, Any], db: AsyncSession = Depends(get_db)):
+async def update_custom_source(source_id: int, source_data: Dict[str, Any], db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Update a custom source"""
     result = await db.execute(select(Source).where(Source.id == source_id))
     source = result.scalar_one_or_none()
@@ -928,7 +937,7 @@ async def update_custom_source(source_id: int, source_data: Dict[str, Any], db: 
 
 
 @app.delete("/api/sources/custom/{source_id}")
-async def delete_custom_source(source_id: int, db: AsyncSession = Depends(get_db)):
+async def delete_custom_source(source_id: int, db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Delete a custom source"""
     result = await db.execute(select(Source).where(Source.id == source_id))
     source = result.scalar_one_or_none()
@@ -1083,7 +1092,8 @@ async def search_aircraft(
 @app.post("/api/aircraft/watch")
 async def watch_aircraft(
     request: Request,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    _admin: None = Depends(require_admin),
 ):
     """Register aircraft to monitor (by callsign or squawk) - stores in database"""
     try:
@@ -1411,7 +1421,8 @@ async def get_dashboard_template(template_id: str):
 @app.post("/api/dashboards/from-template")
 async def create_dashboard_from_template(
     data: Dict[str, Any],
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    _admin: None = Depends(require_admin),
 ):
     """Create a dashboard from a template"""
     template_id = data.get("template_id")
@@ -1496,8 +1507,15 @@ async def health_check():
     return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
 
 
+@app.get("/api/admin/check")
+async def check_admin_key(_admin: None = Depends(require_admin)):
+    """Side-effect-free way for the frontend to verify a candidate admin key
+    (200 if valid, 403 if not) without touching the database."""
+    return {"status": "ok"}
+
+
 @app.post("/api/fetch-now")
-async def trigger_fetch():
+async def trigger_fetch(_admin: None = Depends(require_admin)):
     """Manually trigger fetch for all sources"""
     asyncio.create_task(fetch_all_sources())
     return {"status": "fetch triggered"}
@@ -1550,7 +1568,7 @@ async def get_settings_endpoint(db: AsyncSession = Depends(get_db)):
 
 
 @app.post("/api/settings")
-async def update_settings(updates: Dict[str, Any], db: AsyncSession = Depends(get_db)):
+async def update_settings(updates: Dict[str, Any], db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Update user settings"""
     from .models import UserSettings
     result = await db.execute(select(UserSettings).limit(1))
@@ -1578,7 +1596,7 @@ async def update_settings(updates: Dict[str, Any], db: AsyncSession = Depends(ge
 
 
 @app.post("/api/settings/sources/{source_id}")
-async def toggle_source(source_id: int, enabled: bool = Query(...), db: AsyncSession = Depends(get_db)):
+async def toggle_source(source_id: int, enabled: bool = Query(...), db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Enable/disable a specific source"""
     from .models import UserSettings
     result = await db.execute(select(UserSettings).limit(1))
@@ -1599,7 +1617,7 @@ async def toggle_source(source_id: int, enabled: bool = Query(...), db: AsyncSes
 
 
 @app.post("/api/settings/categories/{category}")
-async def toggle_category(category: str, enabled: bool = Query(...), db: AsyncSession = Depends(get_db)):
+async def toggle_category(category: str, enabled: bool = Query(...), db: AsyncSession = Depends(get_db), _admin: None = Depends(require_admin)):
     """Enable/disable a specific category"""
     from .models import UserSettings
     result = await db.execute(select(UserSettings).limit(1))

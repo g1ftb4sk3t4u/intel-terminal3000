@@ -1,0 +1,71 @@
+name: Static smoke checks
+
+on:
+  pull_request:
+    paths:
+      - "intel-terminal3000/frontend/**"
+      - "intel-terminal3000/backend/app/**"
+      - ".github/workflows/frontend-smoke.yml"
+  push:
+    branches: [main]
+    paths:
+      - "intel-terminal3000/frontend/**"
+      - "intel-terminal3000/backend/app/**"
+      - ".github/workflows/frontend-smoke.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          find intel-terminal3000/frontend -maxdepth 1 -type f -name '*.js' -print0 \
+            | sort -z \
+            | xargs -0 -n1 node --check
+
+      - name: Validate frontend asset wiring
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          root = Path("intel-terminal3000/frontend")
+          errors = []
+
+          styles = (root / "styles.css").read_text(encoding="utf-8")
+          css_targets = re.findall(r'@import\s+url\("([^"]+)"\)', styles)
+          for target in css_targets:
+              if not (root / target).is_file():
+                  errors.append(f"Missing CSS import: {target}")
+
+          scripts = (root / "app.js").read_text(encoding="utf-8")
+          js_targets = re.findall(r'<script\s+src="([^"]+\.js)"', scripts)
+          for target in js_targets:
+              if not (root / target).is_file():
+                  errors.append(f"Missing JavaScript asset: {target}")
+
+          if not css_targets:
+              errors.append("No CSS imports detected in styles.css")
+          if not js_targets:
+              errors.append("No JavaScript assets detected in app.js")
+
+          if errors:
+              raise SystemExit("\n".join(errors))
+
+          print(f"Validated {len(css_targets)} CSS imports and {len(js_targets)} JavaScript assets.")
+
+      - name: Validate Python syntax
+        run: python -m compileall -q intel-terminal3000/backend/app
