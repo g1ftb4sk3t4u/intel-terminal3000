@@ -146,9 +146,9 @@
         "category": "cyber"
     },
     {
-        "name": "Reuters - World",
+        "name": "The Guardian - World",
         "source_type": "rss",
-        "url": "https://www.reutersagency.com/feed/?best-topics=world",
+        "url": "https://www.theguardian.com/world/rss",
         "category": "geopolitical"
     },
     {
@@ -164,9 +164,9 @@
         "category": "geopolitical"
     },
     {
-        "name": "AP News - World",
+        "name": "NYT - World",
         "source_type": "rss",
-        "url": "https://rsshub.app/apnews/topics/world-news",
+        "url": "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
         "category": "geopolitical"
     },
     {
@@ -200,21 +200,9 @@
         "category": "geopolitical"
     },
     {
-        "name": "Stratfor Worldview",
+        "name": "CEPA",
         "source_type": "rss",
-        "url": "https://worldview.stratfor.com/rss.xml",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Council on Foreign Relations",
-        "source_type": "rss",
-        "url": "https://www.cfr.org/rss.xml",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Carnegie Endowment",
-        "source_type": "rss",
-        "url": "https://carnegieendowment.org/rss/solr/?fa=rss",
+        "url": "https://cepa.org/feed",
         "category": "geopolitical"
     },
     {
@@ -230,9 +218,9 @@
         "category": "geopolitical"
     },
     {
-        "name": "Ars Technica - Security",
+        "name": "The Record",
         "source_type": "rss",
-        "url": "https://feeds.arstechnica.com/arstechnica/security",
+        "url": "https://therecord.media/feed/",
         "category": "cyber"
     },
     {
@@ -254,15 +242,15 @@
         "category": "cyber"
     },
     {
-        "name": "Sophos News",
+        "name": "ESET WeLiveSecurity",
         "source_type": "rss",
-        "url": "https://news.sophos.com/en-us/feed/",
+        "url": "https://feeds.feedburner.com/eset/blog",
         "category": "cyber"
     },
     {
-        "name": "Trend Micro",
+        "name": "CIS Blog",
         "source_type": "rss",
-        "url": "https://www.trendmicro.com/en_us/rss/newsroom.html",
+        "url": "https://www.cisecurity.org/feed",
         "category": "cyber"
     },
     {
@@ -272,1283 +260,345 @@
         "category": "cyber"
     },
     {
-        "name": "ADS-B USA/CONUS",
-        "source_type": "adsb",
-        "category": "aviation",
-        "region": "North America",
-        "config": {
-            "bounds": {"lat_min": 24, "lat_max": 50, "lon_min": -125, "lon_max": -66}
-        }
-    },
-    {
-        "name": "ADS-B Europe",
-        "source_type": "adsb",
-        "category": "aviation",
-        "region": "Europe",
-        "config": {
-            "bounds": {"lat_min": 35, "lat_max": 72, "lon_min": -10, "lon_max": 40}
-        }
-    },
-    {
-        "name": "ADS-B Middle East",
-        "source_type": "adsb",
-        "category": "aviation",
-        "region": "Middle East",
-        "config": {
-            "bounds": {"lat_min": 12, "lat_max": 42, "lon_min": 30, "lon_max": 65}
-        }
-    },
-    {
-        "name": "ADS-B Asia Pacific",
-        "source_type": "adsb",
-        "category": "aviation",
-        "region": "Asia",
-        "config": {
-            "bounds": {"lat_min": -10, "lat_max": 55, "lon_min": 90, "lon_max": 160}
-        }
-    },
-    {
-        "name": "ACARS - Aircraft Messages",
-        "source_type": "acars",
-        "category": "aviation",
-        "config": {
-            "filter_types": ["EMERGENCY", "DIVERT", "MEDICAL", "FUEL", "MAINT"]
-        }
-    },
-    {
-        "name": "Aviation Week",
+        "name": "SpaceNews",
         "source_type": "rss",
-        "url": "https://aviationweek.com/rss.xml",
-        "category": "aviation"
-    },
-    {
-        "name": "The Drive - War Zone",
-        "source_type": "rss",
-        "url": "https://www.thedrive.com/the-war-zone/feed",
-        "category": "military"
-    },
-    {
-        "name": "FlightGlobal",
-        "source_type": "rss",
-        "url": "https://www.flightglobal.com/rss",
-        "category": "aviation"
-    },
-    {
-        "name": "Simple Flying",
-        "source_type": "rss",
-        "url": "https://simpleflying.com/feed/",
-        "category": "aviation"
-    },
-    {
-        "name": "AeroTime News",
-        "source_type": "rss",
-        "url": "https://www.aerotime.aero/feed",
-        "category": "aviation"
-    },
-    {
-        "name": "Aviationist",
-        "source_type": "rss",
-        "url": "https://theaviationist.com/feed/",
-        "category": "military"
-    },
-    {
-        "name": "Alert5 Military Aviation",
-        "source_type": "rss",
-        "url": "https://alert5.com/feed/",
-        "category": "military"
-    },
-    {
-        "name": "Aviation Safety Network",
-        "source_type": "rss",
-        "url": "https://news.aviation-safety.net/feed/",
-        "category": "aviation"
-    },
-    {
-        "name": "Reddit - Aviation",
-        "source_type": "reddit",
-        "category": "aviation",
-        "config": {
-            "subreddit": "aviation"
-        }
-    },
-    {
-        "name": "Reddit - Planes Spotting",
-        "source_type": "reddit",
-        "category": "aviation",
-        "config": {
-            "subreddit": "Planespotting"
-        }
-    },
-    {
-        "name": "Reddit - Military Aviation",
-        "source_type": "reddit",
-        "category": "military",
-        "config": {
-            "subreddit": "MilitaryAviation"
-        }
-    },
-    {
-        "name": "Bluesky - Aviation News",
-        "source_type": "bluesky",
-        "category": "aviation",
-        "config": {
-            "query": "aviation OR aircraft OR flight"
-        }
-    },
-    {
-        "name": "Maritime Executive",
-        "source_type": "rss",
-        "url": "https://www.maritime-executive.com/rss/news",
-        "category": "marine"
-    },
-    {
-        "name": "Vessel Finder News",
-        "source_type": "rss",
-        "url": "https://www.vesselfinder.com/news/rss",
-        "category": "marine"
-    },
-    {
-        "name": "Shipping Herald",
-        "source_type": "rss",
-        "url": "https://shippingherald.com/feed/",
-        "category": "marine"
-    },
-    {
-        "name": "Marine Link",
-        "source_type": "rss",
-        "url": "https://www.marinelink.com/feed",
-        "category": "marine"
-    },
-    {
-        "name": "World Maritime News",
-        "source_type": "rss",
-        "url": "https://worldmaritimetoday.com/feed/",
-        "category": "marine"
-    },
-    {
-        "name": "Naval News",
-        "source_type": "rss",
-        "url": "https://www.navalnews.com/feed/",
-        "category": "military"
-    },
-    {
-        "name": "USNI News",
-        "source_type": "rss",
-        "url": "https://news.usni.org/feed",
-        "category": "military"
-    },
-    {
-        "name": "Reddit - Maritime",
-        "source_type": "reddit",
-        "category": "marine",
-        "config": {
-            "subreddit": "maritime"
-        }
-    },
-    {
-        "name": "Reddit - Shipping",
-        "source_type": "reddit",
-        "category": "marine",
-        "config": {
-            "subreddit": "Shipping"
-        }
-    },
-    {
-        "name": "Reddit - Navy",
-        "source_type": "reddit",
-        "category": "military",
-        "config": {
-            "subreddit": "navy"
-        }
-    },
-    {
-        "name": "Bluesky - Maritime",
-        "source_type": "bluesky",
-        "category": "marine",
-        "config": {
-            "query": "ship OR maritime OR vessel OR shipping"
-        }
-    },
-    {
-        "name": "FlightGlobal News",
-        "source_type": "rss",
-        "url": "https://www.flightglobal.com/feed/content/",
-        "category": "aviation"
-    },
-    {
-        "name": "AeroTime News",
-        "source_type": "rss",
-        "url": "https://www.aerotime.aero/feed",
-        "category": "aviation"
-    },
-    {
-        "name": "Aviation Safety Network News",
-        "source_type": "rss",
-        "url": "https://news.aviation-safety.net/feed/",
-        "category": "aviation"
-    },
-    {
-        "name": "Reddit - Military Aviation",
-        "source_type": "reddit",
-        "category": "aviation",
-        "config": {
-            "subreddit": "militaryaviation"
-        }
-    },
-    {
-        "name": "Reddit - Planespotting",
-        "source_type": "reddit",
-        "category": "aviation",
-        "config": {
-            "subreddit": "planespotting"
-        }
-    },
-    {
-        "name": "Reddit - Aviation",
-        "source_type": "reddit",
-        "category": "aviation",
-        "config": {
-            "subreddit": "aviation"
-        }
-    },
-    {
-        "name": "The War Zone - Military Aviation",
-        "source_type": "rss",
-        "url": "https://www.thedrive.com/feeds/thewarzone",
-        "category": "military"
-    },
-    {
-        "name": "FighterSweep Military Aviation",
-        "source_type": "rss",
-        "url": "https://fighterjetsworld.com/feed/",
-        "category": "military"
-    },
-    {
-        "name": "Secret Projects Forum - AltNews",
-        "source_type": "rss",
-        "url": "https://www.secretprojects.co.uk/rss.xml",
-        "category": "military"
-    },
-    {
-        "name": "X/Twitter - @DefenseNews",
-        "source_type": "twitter",
-        "category": "military",
-        "config": {
-            "account": "DefenseNews",
-            "keywords": "military aircraft OR jet OR fighter"
-        }
-    },
-    {
-        "name": "X/Twitter - @AircraftSpots",
-        "source_type": "twitter",
-        "category": "aviation",
-        "config": {
-            "account": "AircraftSpots",
-            "keywords": "aircraft OR flight OR aviation"
-        }
-    },
-    {
-        "name": "X/Twitter - @militaryaviation",
-        "source_type": "twitter",
-        "category": "military",
-        "config": {
-            "keywords": "#militaryaviation OR #military #aircraft OR #fighter"
-        }
-    },
-    {
-        "name": "Maritime Authority - Vessel Tracking",
-        "source_type": "rss",
-        "url": "https://www.imo.org/rss/en/events",
-        "category": "marine"
-    },
-    {
-        "name": "Naval Technology",
-        "source_type": "rss",
-        "url": "https://www.naval-technology.com/rss.xml",
-        "category": "military"
-    },
-    {
-        "name": "Jane's Defence Weekly RSS",
-        "source_type": "rss",
-        "url": "https://www.janes.com/defence-rss",
-        "category": "military"
-    },
-    {
-        "name": "Scramble Magazine - Military Aviation",
-        "source_type": "rss",
-        "url": "https://www.scramble.nl/rss",
-        "category": "military"
-    },
-    {
-        "name": "X/Twitter - @ShippingNews",
-        "source_type": "twitter",
-        "category": "marine",
-        "config": {
-            "keywords": "#shipping OR #maritime OR vessel OR ship"
-        }
-    },
-    {
-        "name": "ADS-B ACARS Network",
-        "source_type": "acars",
-        "category": "aviation",
-        "config": {
-            "region": "global",
-            "message_types": ["all"],
-            "enable_dekoder": true
-        }
-    },
-    {
-        "name": "Twitter - OSINTdefender",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/OSINTdefender",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - AuroraIntel",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/AuroraIntel",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - IntelCrab",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/IntelCrab",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - GeoConfirmed",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/GeoConfirmed",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - OSINTtechnical",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/OSINTtechnical",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - CalibreObscura",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/CalibreObscura",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - ELINTNews",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/ELINTNews",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - sentdefender",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/sentdefender",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - OSINT_Tactical",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/OSINT_Tactical",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - OSINT_Analyst",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/OSINT_Analyst",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - OSINT_Insider",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/OSINT_Insider",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - OSINTCurious",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/OSINTCurious",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - OSINTtechniques",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/OSINTtechniques",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - cyb_detective",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/cyb_detective",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - Sector035",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/Sector035",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - dutch_osintguy",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/dutch_osintguy",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - OSINTcombine",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/OSINTcombine",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - OSINTDojo",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/OSINTDojo",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - OSINTteamblog",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/OSINTteamblog",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - OSINTGeek",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/OSINTGeek",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - OSINT613",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/OSINT613",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - Bellingcat",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/Bellingcat",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - Liveuamap",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/Liveuamap",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - War_Mapper",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/War_Mapper",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - AndrewPerpetua",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/AndrewPerpetua",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - UAWeapons",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/UAWeapons",
-        "category": "military"
-    },
-    {
-        "name": "Twitter - DefMon3",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/DefMon3",
-        "category": "military"
-    },
-    {
-        "name": "Twitter - Archer83Able",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/Archer83Able",
-        "category": "military"
-    },
-    {
-        "name": "Twitter - NOELreports",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/NOELreports",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - ConflictNews",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/ConflictNews",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - IntelDoge",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/IntelDoge",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - Militarylandnet",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/Militarylandnet",
-        "category": "military"
-    },
-    {
-        "name": "Twitter - GeoIntelWatcher",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/GeoIntelWatcher",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - ELINTSystems",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/ELINTSystems",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - campuscodi",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/campuscodi",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - GossiTheDog",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/GossiTheDog",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - briankrebs",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/briankrebs",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - SwiftOnSecurity",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/SwiftOnSecurity",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - malwaretechblog",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/malwaretechblog",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - taviso",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/taviso",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - patrickwardle",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/patrickwardle",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - cyb3rops",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/cyb3rops",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - hacks4pancakes",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/hacks4pancakes",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - vxunderground",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/vxunderground",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - BushidoToken",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/BushidoToken",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - TheDFIRReport",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/TheDFIRReport",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - sans_isc",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/sans_isc",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - BleepinComputer",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/BleepinComputer",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - DailyDarkWeb",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/DailyDarkWeb",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - maddiestone",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/maddiestone",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - troyhunt",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/troyhunt",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - DanielMiessler",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/DanielMiessler",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - MarcusJCarey",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/MarcusJCarey",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - KatieMoussouris",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/KatieMoussouris",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - EugeneKaspersky",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/EugeneKaspersky",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - LesleyCarhart",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/LesleyCarhart",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - MagdaChelly",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/MagdaChelly",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - alexstamos",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/alexstamos",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - JeffMoss",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/JeffMoss",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - malwareunicorn",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/malwareunicorn",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - 0xAmit",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/0xAmit",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - Cyb3rWard0g",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/Cyb3rWard0g",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - KevinBeaumont",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/KevinBeaumont",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - johnlatwc",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/johnlatwc",
-        "category": "cyber"
-    },
-    {
-        "name": "Twitter - thenewarea51",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/thenewarea51",
-        "category": "aviation"
-    },
-    {
-        "name": "Twitter - Aviation_Intel",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/Aviation_Intel",
-        "category": "aviation"
-    },
-    {
-        "name": "Twitter - AircraftSpots",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/AircraftSpots",
-        "category": "aviation"
-    },
-    {
-        "name": "Twitter - CivMilAir",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/CivMilAir",
-        "category": "aviation"
-    },
-    {
-        "name": "Twitter - CombatAir",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/CombatAir",
-        "category": "aviation"
-    },
-    {
-        "name": "Twitter - TheAviationist",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/TheAviationist",
-        "category": "aviation"
-    },
-    {
-        "name": "Twitter - aviationbrk",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/aviationbrk",
-        "category": "aviation"
-    },
-    {
-        "name": "Twitter - ADS_B_Exchange",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/ADS_B_Exchange",
-        "category": "aviation"
-    },
-    {
-        "name": "Twitter - flightradar24",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/flightradar24",
-        "category": "aviation"
-    },
-    {
-        "name": "Twitter - RadarBox24",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/RadarBox24",
-        "category": "aviation"
-    },
-    {
-        "name": "Twitter - FlightAware",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/FlightAware",
-        "category": "aviation"
-    },
-    {
-        "name": "Twitter - AirlineFlyer",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/AirlineFlyer",
-        "category": "aviation"
-    },
-    {
-        "name": "Twitter - MilitaryAviation",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/MilitaryAviation",
-        "category": "aviation"
-    },
-    {
-        "name": "Twitter - Scramble_NL",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/Scramble_NL",
-        "category": "aviation"
-    },
-    {
-        "name": "Twitter - AirForceTimes",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/AirForceTimes",
-        "category": "aviation"
-    },
-    {
-        "name": "Twitter - MarineTraffic",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/MarineTraffic",
-        "category": "marine"
-    },
-    {
-        "name": "Twitter - VesselFinder",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/VesselFinder",
-        "category": "marine"
-    },
-    {
-        "name": "Twitter - FleetMon",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/FleetMon",
-        "category": "marine"
-    },
-    {
-        "name": "Twitter - NavyLookout",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/NavyLookout",
-        "category": "marine"
-    },
-    {
-        "name": "Twitter - MaritimeOptima",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/MaritimeOptima",
-        "category": "marine"
-    },
-    {
-        "name": "Twitter - gCaptain",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/gCaptain",
-        "category": "marine"
-    },
-    {
-        "name": "Twitter - PortNews",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/PortNews",
-        "category": "marine"
-    },
-    {
-        "name": "Twitter - ShippingWatch",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/ShippingWatch",
-        "category": "marine"
-    },
-    {
-        "name": "Twitter - ShipTracker",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/ShipTracker",
-        "category": "marine"
-    },
-    {
-        "name": "Twitter - LloydsList",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/LloydsList",
-        "category": "marine"
-    },
-    {
-        "name": "Twitter - DryadGlobal",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/DryadGlobal",
-        "category": "marine"
-    },
-    {
-        "name": "Twitter - WindwardAI",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/WindwardAI",
-        "category": "marine"
-    },
-    {
-        "name": "Twitter - MaritimeSecurity",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/MaritimeSecurity",
-        "category": "marine"
-    },
-    {
-        "name": "Twitter - SeaIntel",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/SeaIntel",
-        "category": "marine"
-    },
-    {
-        "name": "Twitter - NavalNews",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/NavalNews",
-        "category": "marine"
-    },
-    {
-        "name": "Twitter - RALee85",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/RALee85",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - RobLee",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/RobLee",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - MichaelKofman",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/MichaelKofman",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - MarkGaleotti",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/MarkGaleotti",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - SamuelRamani2",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/SamuelRamani2",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - IanBremmer",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/IanBremmer",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - DAlperovitch",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/DAlperovitch",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - VelinaTchakarova",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/VelinaTchakarova",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - TomNichols",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/TomNichols",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - anneapplebaum",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/anneapplebaum",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - maxseddon",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/maxseddon",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - christogrozev",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/christogrozev",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - OAlexanderDK",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/OAlexanderDK",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - JackDetsch",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/JackDetsch",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - WarintheFuture",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/WarintheFuture",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - KofmanMichael",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/KofmanMichael",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - CNASdc",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/CNASdc",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - CSIS",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/CSIS",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - AtlanticCouncil",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/AtlanticCouncil",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - WarOnTheRocks",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/WarOnTheRocks",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - ISWInstitute",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/ISWInstitute",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - DefenseAnalyst",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/DefenseAnalyst",
-        "category": "military"
-    },
-    {
-        "name": "Twitter - ModernWarInst",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/ModernWarInst",
-        "category": "military"
-    },
-    {
-        "name": "Twitter - LawfareBlog",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/LawfareBlog",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - ForeignPolicy",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/ForeignPolicy",
-        "category": "geopolitical"
-    },
-    {
-        "name": "Twitter - planetlabs",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/planetlabs",
+        "url": "https://spacenews.com/feed/",
         "category": "space"
     },
     {
-        "name": "Twitter - Maxar",
+        "name": "NASASpaceflight.com",
         "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/Maxar",
+        "url": "https://www.nasaspaceflight.com/feed/",
         "category": "space"
     },
     {
-        "name": "Twitter - NASASpaceflight",
+        "name": "gCaptain",
         "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/NASASpaceflight",
+        "url": "https://gcaptain.com/feed/",
+        "category": "marine"
+    },
+    {
+        "name": "Offshore Energy",
+        "source_type": "rss",
+        "url": "https://www.offshore-energy.biz/feed/",
+        "category": "marine"
+    },
+    {
+        "name": "Federal Reserve - Press Releases",
+        "source_type": "rss",
+        "url": "https://www.federalreserve.gov/feeds/press_all.xml",
+        "category": "economic"
+    },
+    {
+        "name": "GDACS - Disaster Alerts",
+        "source_type": "rss",
+        "url": "https://www.gdacs.org/xml/rss.xml",
+        "category": "disaster"
+    },
+    {
+        "name": "NOAA/PTWC - Tsunami Bulletins",
+        "source_type": "rss",
+        "url": "https://tsunami.gov/events/xml/PAAQAtom.xml",
+        "category": "weather"
+    },
+    {
+        "name": "WHO - Disease Outbreak News",
+        "source_type": "rss",
+        "url": "https://www.who.int/rss-feeds/news-english.xml",
+        "category": "health"
+    },
+    {
+        "name": "MIT Technology Review",
+        "source_type": "rss",
+        "url": "https://www.technologyreview.com/feed/",
+        "category": "technology"
+    },
+    {
+        "name": "EFF Updates",
+        "source_type": "rss",
+        "url": "https://www.eff.org/rss/updates.xml",
+        "category": "technology"
+    },
+    {
+        "name": "Science News (AAAS)",
+        "source_type": "rss",
+        "url": "https://www.sciencenews.org/feed",
+        "category": "science"
+    },
+    {
+        "name": "IEEE Spectrum",
+        "source_type": "rss",
+        "url": "https://spectrum.ieee.org/feeds/feed.rss",
+        "category": "science"
+    },
+    {
+        "name": "Quanta Magazine",
+        "source_type": "rss",
+        "url": "https://www.quantamagazine.org/feed/",
+        "category": "science"
+    },
+    {
+        "name": "OpenAI News",
+        "source_type": "rss",
+        "url": "https://openai.com/news/rss.xml",
+        "category": "ai_research"
+    },
+    {
+        "name": "Google DeepMind Blog",
+        "source_type": "rss",
+        "url": "https://deepmind.google/blog/rss.xml",
+        "category": "ai_research"
+    },
+    {
+        "name": "Google Research Blog",
+        "source_type": "rss",
+        "url": "https://research.google/blog/rss/",
+        "category": "ai_research"
+    },
+    {
+        "name": "NVIDIA Blog",
+        "source_type": "rss",
+        "url": "https://blogs.nvidia.com/feed/",
+        "category": "ai_research"
+    },
+    {
+        "name": "Hugging Face Blog",
+        "source_type": "rss",
+        "url": "https://huggingface.co/blog/feed.xml",
+        "category": "ai_research"
+    },
+    {
+        "name": "arXiv - AI",
+        "source_type": "rss",
+        "url": "http://export.arxiv.org/rss/cs.AI",
+        "category": "ai_research"
+    },
+    {
+        "name": "IEEE Spectrum - Robotics",
+        "source_type": "rss",
+        "url": "https://spectrum.ieee.org/feeds/topic/robotics.rss",
+        "category": "robotics"
+    },
+    {
+        "name": "The Robot Report",
+        "source_type": "rss",
+        "url": "https://www.therobotreport.com/feed/",
+        "category": "robotics"
+    },
+    {
+        "name": "arXiv - Robotics",
+        "source_type": "rss",
+        "url": "http://export.arxiv.org/rss/cs.RO",
+        "category": "robotics"
+    },
+    {
+        "name": "ROS Discourse",
+        "source_type": "rss",
+        "url": "https://discourse.ros.org/latest.rss",
+        "category": "robotics"
+    },
+    {
+        "name": "FDA Press Announcements",
+        "source_type": "rss",
+        "url": "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/press-releases/rss.xml",
+        "category": "biotech"
+    },
+    {
+        "name": "Nature Medicine",
+        "source_type": "rss",
+        "url": "https://www.nature.com/nm.rss",
+        "category": "biotech"
+    },
+    {
+        "name": "NEJM",
+        "source_type": "rss",
+        "url": "https://www.nejm.org/action/showFeed?type=etoc&feed=rss&jc=nejm",
+        "category": "biotech"
+    },
+    {
+        "name": "The Lancet",
+        "source_type": "rss",
+        "url": "https://www.thelancet.com/rssfeed/lancet_current.xml",
+        "category": "biotech"
+    },
+    {
+        "name": "STAT News",
+        "source_type": "rss",
+        "url": "https://www.statnews.com/feed/",
+        "category": "biotech"
+    },
+    {
+        "name": "Endpoints News",
+        "source_type": "rss",
+        "url": "https://endpts.com/feed/",
+        "category": "biotech"
+    },
+    {
+        "name": "bioRxiv",
+        "source_type": "rss",
+        "url": "https://connect.biorxiv.org/biorxiv_xml.php?subject=all",
+        "category": "biotech"
+    },
+    {
+        "name": "medRxiv",
+        "source_type": "rss",
+        "url": "https://connect.medrxiv.org/medrxiv_xml.php?subject=all",
+        "category": "biotech"
+    },
+    {
+        "name": "arXiv - Quantum Physics",
+        "source_type": "rss",
+        "url": "http://export.arxiv.org/rss/quant-ph",
+        "category": "quantum"
+    },
+    {
+        "name": "Nature Physics",
+        "source_type": "rss",
+        "url": "https://www.nature.com/nphys.rss",
+        "category": "quantum"
+    },
+    {
+        "name": "Physics World",
+        "source_type": "rss",
+        "url": "https://physicsworld.com/feed/",
+        "category": "quantum"
+    },
+    {
+        "name": "Fermilab News",
+        "source_type": "rss",
+        "url": "https://news.fnal.gov/feed/",
+        "category": "quantum"
+    },
+    {
+        "name": "The Quantum Insider",
+        "source_type": "rss",
+        "url": "https://thequantuminsider.com/feed/",
+        "category": "quantum"
+    },
+    {
+        "name": "Quantum Computing Report",
+        "source_type": "rss",
+        "url": "https://quantumcomputingreport.com/feed/",
+        "category": "quantum"
+    },
+    {
+        "name": "NASA News",
+        "source_type": "rss",
+        "url": "https://www.nasa.gov/news-release/feed/",
         "category": "space"
     },
     {
-        "name": "Twitter - sentinel_hub",
+        "name": "ESA News",
         "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/sentinel_hub",
+        "url": "https://www.esa.int/rssfeed/Our_Activities/Space_News",
         "category": "space"
     },
     {
-        "name": "Twitter - EO_Space",
+        "name": "Spaceflight Now",
         "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/EO_Space",
+        "url": "https://spaceflightnow.com/feed/",
         "category": "space"
     },
     {
-        "name": "Twitter - satellitedude",
+        "name": "The Planetary Society",
         "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/satellitedude",
+        "url": "https://www.planetary.org/rss/articles",
         "category": "space"
     },
     {
-        "name": "Twitter - SkyfiApp",
+        "name": "International Crisis Group",
         "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/SkyfiApp",
-        "category": "space"
+        "url": "https://www.crisisgroup.org/rss",
+        "category": "geopolitical"
     },
     {
-        "name": "Twitter - BlackSky_Inc",
+        "name": "Microsoft Security Blog",
         "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/BlackSky_Inc",
-        "category": "space"
+        "url": "https://www.microsoft.com/en-us/security/blog/feed/",
+        "category": "cyber"
     },
     {
-        "name": "Twitter - ICEYE_global",
+        "name": "Unit 42 (Palo Alto)",
         "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/ICEYE_global",
-        "category": "space"
+        "url": "https://unit42.paloaltonetworks.com/feed/",
+        "category": "cyber"
     },
     {
-        "name": "Twitter - satellogic",
+        "name": "Cisco Talos",
         "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/satellogic",
-        "category": "space"
+        "url": "https://blog.talosintelligence.com/rss/",
+        "category": "cyber"
     },
     {
-        "name": "Twitter - NWS",
+        "name": "GreyNoise Blog",
         "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/NWS",
-        "category": "weather"
+        "url": "https://www.greynoise.io/blog/rss.xml",
+        "category": "cyber"
     },
     {
-        "name": "Twitter - NHC_Atlantic",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/NHC_Atlantic",
-        "category": "weather"
+        "name": "CISA KEV - Known Exploited Vulnerabilities",
+        "source_type": "cisa_kev",
+        "category": "cyber",
+        "config": {"max_records": 50}
     },
     {
-        "name": "Twitter - TropicalTidbits",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/TropicalTidbits",
-        "category": "weather"
+        "name": "abuse.ch - URLhaus",
+        "source_type": "abuse_ch",
+        "category": "cyber",
+        "config": {"feed": "urlhaus"}
     },
     {
-        "name": "Twitter - StormHour",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/StormHour",
-        "category": "weather"
+        "name": "abuse.ch - ThreatFox",
+        "source_type": "abuse_ch",
+        "category": "cyber",
+        "config": {"feed": "threatfox"}
     },
     {
-        "name": "Twitter - severewx",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/severewx",
-        "category": "weather"
+        "name": "PubMed - CRISPR",
+        "source_type": "pubmed",
+        "category": "biotech",
+        "config": {"query": "CRISPR", "max_records": 20}
     },
     {
-        "name": "Twitter - USGS",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/USGS",
-        "category": "weather"
+        "name": "PubMed - Gene Therapy",
+        "source_type": "pubmed",
+        "category": "biotech",
+        "config": {"query": "gene therapy", "max_records": 20}
     },
     {
-        "name": "Twitter - NOAA",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/NOAA",
-        "category": "weather"
+        "name": "PubMed - Longevity and Aging",
+        "source_type": "pubmed",
+        "category": "biotech",
+        "config": {"query": "longevity OR aging biomarkers OR cellular senescence", "max_records": 20}
     },
     {
-        "name": "Twitter - SpaceWeatherLive",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/SpaceWeatherLive",
-        "category": "weather"
+        "name": "PubMed - Cancer Vaccines",
+        "source_type": "pubmed",
+        "category": "biotech",
+        "config": {"query": "personalized cancer vaccine OR neoantigen vaccine", "max_records": 20}
     },
     {
-        "name": "Twitter - EarthUncutTV",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/EarthUncutTV",
-        "category": "weather"
+        "name": "PubMed - AI Drug Discovery",
+        "source_type": "pubmed",
+        "category": "biotech",
+        "config": {"query": "artificial intelligence drug discovery OR virtual cell model", "max_records": 20}
     },
     {
-        "name": "Twitter - WeatherNation",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/WeatherNation",
-        "category": "weather"
+        "name": "ClinicalTrials.gov - CRISPR Therapies",
+        "source_type": "clinicaltrials",
+        "category": "biotech",
+        "config": {"query": "CRISPR", "max_records": 20}
     },
     {
-        "name": "Twitter - MacroAlf",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/MacroAlf",
-        "category": "economic"
+        "name": "ClinicalTrials.gov - Gene Therapy",
+        "source_type": "clinicaltrials",
+        "category": "biotech",
+        "config": {"query": "gene therapy", "max_records": 20}
     },
     {
-        "name": "Twitter - RaoulGMI",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/RaoulGMI",
-        "category": "economic"
-    },
-    {
-        "name": "Twitter - unusual_whales",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/unusual_whales",
-        "category": "economic"
-    },
-    {
-        "name": "Twitter - tracyalloway",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/tracyalloway",
-        "category": "economic"
-    },
-    {
-        "name": "Twitter - JavierBlas",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/JavierBlas",
-        "category": "economic"
-    },
-    {
-        "name": "Twitter - DavidInglesTV",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/DavidInglesTV",
-        "category": "economic"
-    },
-    {
-        "name": "Twitter - JosephPolitano",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/JosephPolitano",
-        "category": "economic"
-    },
-    {
-        "name": "Twitter - LizAnnSonders",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/LizAnnSonders",
-        "category": "economic"
-    },
-    {
-        "name": "Twitter - EconomyApp",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/EconomyApp",
-        "category": "economic"
-    },
-    {
-        "name": "Twitter - zerohedge",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/zerohedge",
-        "category": "economic"
-    },
-    {
-        "name": "Twitter - LittleMoiz",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/LittleMoiz",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - IntelFrog",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/IntelFrog",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - GeoObserver",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/GeoObserver",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - SatelliteIntel",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/SatelliteIntel",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - WarMonitor3",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/WarMonitor3",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - OpenSourceIntel",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/OpenSourceIntel",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - IntelArchive",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/IntelArchive",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - CrisisIntel",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/CrisisIntel",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - SignalIntel",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/SignalIntel",
-        "category": "osint"
-    },
-    {
-        "name": "Twitter - OpenSourceAlert",
-        "source_type": "rss",
-        "url": "https://rsshub.app/twitter/user/OpenSourceAlert",
-        "category": "osint"
+        "name": "ClinicalTrials.gov - Cancer Vaccines",
+        "source_type": "clinicaltrials",
+        "category": "biotech",
+        "config": {"query": "personalized cancer vaccine", "max_records": 20}
     }
 ]
