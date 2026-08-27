@@ -583,143 +583,17 @@ function renderDashboard() {
     
     container.innerHTML = panelsHTML;
 
-    // Add source management UI
-    if (!document.getElementById('sourceManagementBar')) {
-        const bar = document.createElement('div');
-        bar.id = 'sourceManagementBar';
-        bar.style.position = 'fixed';
-        bar.style.bottom = '24px';
-        bar.style.right = '24px';
-        bar.style.background = 'var(--bg-panel)';
-        bar.style.color = 'var(--text-primary)';
-        bar.style.padding = '12px 24px';
-        bar.style.borderRadius = '8px';
-        bar.style.boxShadow = '0 2px 16px rgba(0,0,0,0.4)';
-        bar.style.zIndex = 1000;
-        bar.innerHTML = `<button onclick="openSourceModal('add')" style="margin-right:12px;padding:8px 16px;background:var(--accent-primary);color:#fff;border:none;border-radius:6px;cursor:pointer;">Add Source</button><button onclick="openSourceModal('delete')" style="margin-right:12px;padding:8px 16px;background:#ef4444;color:#fff;border:none;border-radius:6px;cursor:pointer;">Delete Source</button><button onclick="addCategoryPrompt()" style="margin-right:12px;padding:8px 16px;background:#0ea5e9;color:#fff;border:none;border-radius:6px;cursor:pointer;">Add Category</button><button onclick="deleteCategoryPrompt()" style="padding:8px 16px;background:#f59e0b;color:#fff;border:none;border-radius:6px;cursor:pointer;">Delete Category</button>`;
-        document.body.appendChild(bar);
-    }
-
     // Initialize each panel
     dashboard.panels.forEach(panel => {
         initializePanel(panel);
     });
 }
 
-window.openSourceModal = (mode) => {
-    let modal = document.getElementById('sourceModal');
-    if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'sourceModal';
-        modal.style.position = 'fixed';
-        modal.style.top = '50%';
-        modal.style.left = '50%';
-        modal.style.transform = 'translate(-50%, -50%)';
-        modal.style.background = 'var(--bg-panel)';
-        modal.style.color = 'var(--text-primary)';
-        modal.style.padding = '32px 40px';
-        modal.style.borderRadius = '12px';
-        modal.style.boxShadow = '0 4px 32px rgba(0,0,0,0.7)';
-        modal.style.zIndex = 10000;
-        modal.style.minWidth = '320px';
-        document.body.appendChild(modal);
-    }
-    if (mode === 'add') {
-        modal.innerHTML = `<div style="font-size:1.2rem;font-weight:600;margin-bottom:12px;">Add Source</div>
-            <input id='sourceName' placeholder='Name' style='width:100%;margin-bottom:8px;padding:8px;border-radius:6px;border:1px solid var(--border-color);'/>
-            <input id='sourceUrl' placeholder='URL or API Endpoint' style='width:100%;margin-bottom:8px;padding:8px;border-radius:6px;border:1px solid var(--border-color);'/>
-            <select id='sourceType' style='width:100%;margin-bottom:8px;padding:8px;border-radius:6px;border:1px solid var(--border-color);'>
-                <option value='rss'>RSS</option>
-                <option value='reddit'>Reddit</option>
-                <option value='bluesky'>Bluesky</option>
-                <option value='telegram'>Telegram</option>
-                <option value='gdelt'>GDELT</option>
-                <option value='api'>API</option>
-            </select>
-            <input id='sourceCategory' placeholder='Category (e.g. marine, aircraft, science, ai)' style='width:100%;margin-bottom:8px;padding:8px;border-radius:6px;border:1px solid var(--border-color);'/>
-            <button onclick="addSource()" style="padding:8px 18px;font-size:1rem;background:var(--accent-primary);color:#fff;border:none;border-radius:6px;cursor:pointer;margin-right:8px;">Add</button>
-            <button onclick="document.getElementById('sourceModal').remove()" style="padding:8px 18px;font-size:1rem;background:#444;color:#fff;border:none;border-radius:6px;cursor:pointer;">Cancel</button>`;
-    } else {
-        modal.innerHTML = `<div style="font-size:1.2rem;font-weight:600;margin-bottom:12px;">Delete Source</div><input id='deleteSourceId' placeholder='Source ID' style='width:100%;margin-bottom:8px;padding:8px;border-radius:6px;border:1px solid var(--border-color);'/><button onclick="deleteSourceById()" style="padding:8px 18px;font-size:1rem;background:#ef4444;color:#fff;border:none;border-radius:6px;cursor:pointer;margin-right:8px;">Delete</button><button onclick="document.getElementById('sourceModal').remove()" style="padding:8px 18px;font-size:1rem;background:#444;color:#fff;border:none;border-radius:6px;cursor:pointer;">Cancel</button>`;
-    }
-    modal.style.display = 'block';
-};
-
-window.addSource = async () => {
-    const name = document.getElementById('sourceName').value;
-    const url = document.getElementById('sourceUrl').value;
-    const source_type = document.getElementById('sourceType').value;
-    const category = document.getElementById('sourceCategory').value;
-    if (!name || !url || !source_type) {
-        alert('Name, URL, and Type are required.');
-        return;
-    }
-    try {
-        await api('/sources', {
-            method: 'POST',
-            body: JSON.stringify({
-                name,
-                url,
-                source_type,
-                category: category || undefined,
-            }),
-            headers: { 'Content-Type': 'application/json' },
-        });
-        alert('Source added!');
-        document.getElementById('sourceModal').remove();
-    } catch (e) {
-        alert('Failed to add source.');
-    }
-};
-
-window.deleteSourceById = async () => {
-    const id = document.getElementById('deleteSourceId').value;
-    if (!id) {
-        alert('Source ID required.');
-        return;
-    }
-    try {
-        await api(`/sources/${id}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-        });
-        alert('Source deleted!');
-        document.getElementById('sourceModal').remove();
-    } catch (e) {
-        alert('Failed to delete source.');
-    }
-}
-
-window.addCategoryPrompt = async () => {
-    const name = window.prompt('New category name:');
-    if (!name || !name.trim()) return;
-    try {
-        await api('/categories', {
-            method: 'POST',
-            body: JSON.stringify({ name: name.trim() }),
-            headers: { 'Content-Type': 'application/json' },
-        });
-        await fetchCategories();
-        renderDashboard();
-        alert(`Category added: ${name.trim()}`);
-    } catch (e) {
-        alert('Failed to add category.');
-    }
-};
-
-window.deleteCategoryPrompt = async () => {
-    const name = window.prompt('Delete category name:');
-    if (!name || !name.trim()) return;
-    try {
-        await api(`/categories/${encodeURIComponent(name.trim())}`, { method: 'DELETE' });
-        CATEGORIES = [{ value: '', label: 'All Categories' }];
-        await fetchCategories();
-        renderDashboard();
-        alert(`Category deleted: ${name.trim()}`);
-    } catch (e) {
-        alert('Failed to delete category.');
-    }
-};
+// Source/category add-delete controls used to render here unconditionally,
+// with no admin gate at all - anyone visiting the dashboard could see and
+// use them. Removed rather than gated: the properly-gated equivalents
+// already exist in the admin-only settings sidebar and the polish-v3
+// source library drawer.
 
 function renderPanel(config) {
     const module = MODULES[config.module];

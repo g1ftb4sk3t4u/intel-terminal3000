@@ -600,5 +600,53 @@
         "source_type": "clinicaltrials",
         "category": "biotech",
         "config": {"query": "personalized cancer vaccine", "max_records": 20}
+    },
+    {
+        "name": "GDELT - Natural Disaster Watch",
+        "source_type": "gdelt",
+        "category": "disaster",
+        "config": {"query": "earthquake OR tsunami OR volcano OR wildfire OR flooding OR hurricane OR tornado", "max_records": 50}
+    },
+    {
+        "name": "GDELT - Critical Infrastructure",
+        "source_type": "gdelt",
+        "category": "infrastructure",
+        "config": {"query": "power outage OR grid failure OR telecom outage OR pipeline incident OR port closure OR infrastructure attack", "max_records": 50}
+    },
+    {
+        "name": "GDELT - Space and Launch Watch",
+        "source_type": "gdelt",
+        "category": "space",
+        "config": {"query": "rocket launch OR satellite OR space weather OR solar flare OR spacecraft anomaly OR reentry", "max_records": 40}
+    },
+    {
+        "name": "GDELT - Public Health Watch",
+        "source_type": "gdelt",
+        "category": "health",
+        "config": {"query": "disease outbreak OR contamination OR public health emergency OR product recall OR hospital capacity", "max_records": 40}
+    },
+    {
+        "name": "GDELT - Maritime Chokepoints",
+        "source_type": "gdelt",
+        "category": "marine",
+        "config": {"query": "shipping disruption OR maritime security OR piracy OR port closure OR canal blockage OR strait tension", "max_records": 50}
+    },
+    {
+        "name": "GDELT - Elections and Civil Unrest",
+        "source_type": "gdelt",
+        "category": "civil",
+        "config": {"query": "election security OR mass protest OR civil unrest OR curfew OR coup OR political violence", "max_records": 50}
+    },
+    {
+        "name": "GDELT - Supply Chain Watch",
+        "source_type": "gdelt",
+        "category": "economic",
+        "config": {"query": "supply chain disruption OR factory shutdown OR logistics crisis OR commodity shortage OR export restriction", "max_records": 45}
+    },
+    {
+        "name": "GDELT - AI and Emerging Technology",
+        "source_type": "gdelt",
+        "category": "technology",
+        "config": {"query": "artificial intelligence OR frontier model OR AI regulation OR robotics OR quantum computing OR autonomous system", "max_records": 45}
     }
 ]
