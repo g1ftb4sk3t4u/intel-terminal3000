@@ -71,17 +71,45 @@ async def fetch_all_sources():
                 select(Source).where(Source.enabled == True)
             )
             sources = result.scalars().all()
-            
-            for source in sources:
-                try:
+
+            # Fetching is pure network I/O and no collector touches the DB
+            # session during fetch() (only save_articles() does, which this
+            # loop doesn't call), so it's safe to run many fetches at once
+            # instead of one at a time. With ~190 sources configured, a
+            # strictly sequential sweep was taking over two hours end to
+            # end - some sources going stale for hours before their turn
+            # came up - instead of the 5-minute interval this job runs on.
+            # Collectors with their own rate limits (GDELT, PubMed, Reddit's
+            # OAuth token) serialize themselves internally via shared locks,
+            # so raising this doesn't break those.
+            semaphore = asyncio.Semaphore(15)
+
+            async def fetch_one(source):
+                async with semaphore:
                     collector = get_collector(source.source_type, session)
-                    articles_data = await collector.fetch(source)
-                    
+                    try:
+                        articles_data = await collector.fetch(source)
+                        return source, articles_data, None
+                    except Exception as e:
+                        return source, None, e
+                    finally:
+                        await collector.close()
+
+            results = await asyncio.gather(*(fetch_one(source) for source in sources))
+
+            for source, articles_data, fetch_error in results:
+                if fetch_error is not None:
+                    logger.error(f"Error fetching {source.name}: {fetch_error}")
+                    source.error_count += 1
+                    await session.commit()
+                    continue
+
+                try:
                     if articles_data:
                         # Process each article
                         geo_service = GeoService(session)
                         triage_service = TriageService()
-                        
+
                         for article_data in articles_data:
                             # Check duplicate
                             existing = await session.execute(
@@ -89,7 +117,7 @@ async def fetch_all_sources():
                             )
                             if existing.scalar_one_or_none():
                                 continue
-                            
+
                             # Create article
                             article = Article(
                                 title=article_data.get("title", "Untitled")[:500],
@@ -106,20 +134,20 @@ async def fetch_all_sources():
                                 latitude=article_data.get("latitude"),
                                 longitude=article_data.get("longitude"),
                             )
-                            
+
                             # Triage
                             triage_result = await triage_service.triage(
                                 article.title,
                                 article.summary or ""
                             )
                             article.severity = triage_result["severity"]
-                            
+
                             # Geolocation (if not already set)
                             if not article.latitude:
                                 article = await geo_service.process_article(article)
-                            
+
                             session.add(article)
-                            
+
                             # Notify WebSocket clients
                             await manager.broadcast({
                                 "type": "new_article",
@@ -131,23 +159,21 @@ async def fetch_all_sources():
                                     "category": article.category,
                                 },
                             })
-                        
+
                         await session.commit()
                         await geo_service.close()
                         await triage_service.close()
-                    
+
                     # Update last fetched
                     source.last_fetched = datetime.utcnow()
                     source.error_count = 0
                     await session.commit()
-                    
-                    await collector.close()
-                    
+
                 except Exception as e:
-                    logger.error(f"Error fetching {source.name}: {e}")
+                    logger.error(f"Error saving articles for {source.name}: {e}")
                     source.error_count += 1
                     await session.commit()
-                    
+
         except Exception as e:
             logger.error(f"Fetch all sources error: {e}")
 
