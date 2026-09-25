@@ -68,13 +68,18 @@ body[data-intel-theme="analyst"] .leaflet-tile-pane {
     filter: saturate(.55) brightness(1.28) contrast(.78);
 }
 
+body[data-intel-theme="command"] .leaflet-tile-pane,
+body:not([data-intel-theme]) .leaflet-tile-pane {
+    filter: invert(.88) hue-rotate(180deg) brightness(.62) contrast(1.16) saturate(.72);
+}
+
 body[data-intel-theme="matrix"] .leaflet-tile-pane {
-    filter: grayscale(1) sepia(1) hue-rotate(70deg) saturate(2.2) brightness(.74);
+    filter: invert(.88) grayscale(1) sepia(1) hue-rotate(70deg) saturate(2.2) brightness(.64) contrast(1.18);
 }
 
 body[data-intel-theme="synthwave"] .leaflet-tile-pane,
 body[data-intel-theme="cyber"] .leaflet-tile-pane {
-    filter: hue-rotate(22deg) saturate(1.35) brightness(.83);
+    filter: invert(.86) hue-rotate(202deg) saturate(1.2) brightness(.66) contrast(1.12);
 }
 
 body[data-intel-theme="lcars"] .intel-side-mark,
