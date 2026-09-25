@@ -875,10 +875,10 @@ async function initMarineMapPanel(config) {
         minZoom: 1,
         maxZoom: 10,
     });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '©OpenStreetMap, ©CartoDB',
-        subdomains: 'abcd',
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
         maxZoom: 19,
+        crossOrigin: true,
     }).addTo(map);
     // Fetch and display maritime articles as vessel location hints
     try {
@@ -1222,10 +1222,10 @@ async function initMapPanel(config) {
     });
     
     // Dark tile layer
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '©OpenStreetMap, ©CartoDB',
-        subdomains: 'abcd',
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
         maxZoom: 19,
+        crossOrigin: true,
     }).addTo(map);
     
     // Store map reference
