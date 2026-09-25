@@ -156,6 +156,9 @@ let state = {
     heatLayer: null,
     aircraftLayer: null,
     aircraftRefreshInterval: null,
+    aircraftMap: null,
+    aircraftMapLayer: null,
+    aircraftMapRefreshInterval: null,
 };
 
 // Module definitions for panels
@@ -839,17 +842,111 @@ async function initializePanel(config) {
 // Aircraft-only map panel
 async function initAircraftMapPanel(config) {
     const content = document.getElementById(`${config.id}-content`);
-    // Embed ADSBexchange website directly
+
+    if (state.aircraftMapRefreshInterval) {
+        clearInterval(state.aircraftMapRefreshInterval);
+        state.aircraftMapRefreshInterval = null;
+    }
+    if (state.aircraftMap) {
+        try { state.aircraftMap.remove(); } catch (_) {}
+        state.aircraftMap = null;
+        state.aircraftMapLayer = null;
+    }
+
     content.innerHTML = `
-        <div class="aircraft-map-container" style="width:100%; height:100%; border: none;">
-            <iframe 
-                src="https://www.adsbexchange.com/" 
-                style="width:100%; height:100%; border:none; border-radius: 4px;"
-                allow="geolocation"
-                sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
-            ></iframe>
+        <div class="aircraft-map-container" style="width:100%; height:100%; min-height:320px; position:relative;">
+            <div id="${config.id}-aircraft-map" class="map-container" style="width:100%; height:100%; min-height:320px;"></div>
+            <div class="aircraft-map-status" id="${config.id}-aircraft-status"
+                 style="position:absolute;left:10px;bottom:10px;z-index:500;padding:5px 8px;border-radius:4px;
+                        background:rgba(3,10,18,.82);color:var(--text-secondary);font-size:11px;
+                        border:1px solid var(--border-color);pointer-events:none;">
+                Loading aircraft…
+            </div>
         </div>
     `;
+
+    const mapElement = document.getElementById(`${config.id}-aircraft-map`);
+    const map = L.map(mapElement, {
+        center: [39.5, -98.35],
+        zoom: 4,
+        minZoom: 2,
+        maxZoom: 10,
+        worldCopyJump: true,
+    });
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19,
+        crossOrigin: true,
+    }).addTo(map);
+
+    state.aircraftMap = map;
+    state.aircraftMapLayer = L.layerGroup().addTo(map);
+
+    async function refreshNativeAircraftMap() {
+        const status = document.getElementById(`${config.id}-aircraft-status`);
+        if (!state.aircraftMap || !document.getElementById(`${config.id}-aircraft-map`)) return;
+
+        try {
+            const aircraft = await api(`/aircraft/interesting?region=${currentAircraftRegion}`);
+            const items = Array.isArray(aircraft) ? aircraft : [];
+
+            state.aircraftMapLayer.clearLayers();
+            const bounds = [];
+
+            items.forEach(a => {
+                const lat = Number(a.latitude);
+                const lon = Number(a.longitude);
+                if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
+
+                const isEmergency = a.aircraft_category === 'emergency' || ['7500', '7600', '7700'].includes(String(a.squawk || ''));
+                const isMilitary = a.aircraft_category === 'military';
+                const markerClass = isEmergency ? 'emergency' : (isMilitary ? 'military' : 'standard');
+
+                const icon = L.divIcon({
+                    className: `aircraft-marker native-aircraft-marker ${markerClass}`,
+                    html: `<div class="aircraft-icon ${isEmergency ? 'emergency' : ''}" style="transform:rotate(${Number(a.heading) || 0}deg);">✈</div>`,
+                    iconSize: [24, 24],
+                    iconAnchor: [12, 12],
+                });
+
+                const marker = L.marker([lat, lon], { icon });
+                marker.bindPopup(`
+                    <div class="map-popup aircraft-popup">
+                        <div class="map-popup-title">${escapeHtml(a.callsign || 'Unknown')}</div>
+                        <div class="aircraft-popup-details">
+                            <div>ICAO: ${escapeHtml(a.icao24 || 'N/A')}</div>
+                            <div>Country: ${escapeHtml(a.origin_country || 'Unknown')}</div>
+                            <div>Alt: ${a.altitude ? Number(a.altitude).toLocaleString() + ' ft' : 'N/A'}</div>
+                            <div>Speed: ${a.velocity ? escapeHtml(String(a.velocity)) + ' kts' : 'N/A'}</div>
+                            ${a.squawk ? `<div class="squawk">Squawk: ${escapeHtml(String(a.squawk))}</div>` : ''}
+                        </div>
+                    </div>
+                `, { maxWidth: 250, className: 'dark-popup' });
+
+                marker.addTo(state.aircraftMapLayer);
+                bounds.push([lat, lon]);
+            });
+
+            if (bounds.length && !map._intelInitialFitDone) {
+                map.fitBounds(bounds, { padding: [24, 24], maxZoom: 6 });
+                map._intelInitialFitDone = true;
+            }
+
+            if (status) {
+                status.textContent = items.length
+                    ? `${items.length} tracked • native ADS-B view • refreshes every 30s`
+                    : 'No interesting aircraft currently reported';
+            }
+        } catch (error) {
+            console.error('Failed to load native aircraft map:', error);
+            if (status) status.textContent = 'Aircraft feed temporarily unavailable';
+        }
+    }
+
+    await refreshNativeAircraftMap();
+    setTimeout(() => map.invalidateSize(), 100);
+    state.aircraftMapRefreshInterval = setInterval(refreshNativeAircraftMap, 30000);
 }
 
 // Marine-only map panel - displays maritime traffic data
