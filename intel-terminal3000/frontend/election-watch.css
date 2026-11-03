@@ -1,0 +1,55 @@
+/* Election Watch: scoped patriotic operations theme */
+body[data-intel-page="elections"] .intel-workspace{background:linear-gradient(160deg,#08162a,#0b1c34 56%,#111f34);color:#eaf0fa}
+body[data-intel-page="elections"] .intel-dashboard-frame{background:transparent;border:0;padding:0}
+body[data-intel-page="elections"] .intel-workspace-heading .intel-workspace-controls{display:none}
+.election-workspace{display:block!important;width:100%;min-width:0}
+.election-app{--e-navy:#0c213d;--e-red:#c74451;--e-blue:#537fab;--e-gold:#dbb76b;color:#edf2f9;max-width:1800px;margin:auto;display:grid;gap:16px;font-family:inherit}
+.election-app *{box-sizing:border-box}
+.election-hero{display:flex;justify-content:space-between;align-items:center;gap:20px;background:linear-gradient(115deg,rgba(12,35,67,.98),rgba(34,55,85,.94)),repeating-linear-gradient(90deg,transparent 0 40px,rgba(255,255,255,.02) 40px 42px);border:1px solid rgba(138,164,193,.35);border-left:5px solid var(--e-red);padding:24px;border-radius:12px}
+.election-eyebrow,.election-panel header small{font-size:10px;letter-spacing:2px;color:#c5b68e;font-weight:800}
+.election-hero h2{font-size:clamp(25px,3vw,38px);letter-spacing:2px;margin:8px 0 4px;line-height:1.2;color:#fff}
+.election-hero h2 span{color:#d5b96f}
+.election-hero p{margin:0;color:#c5d3e6}
+.election-hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+.election-hero-actions span{font-size:12px;color:#d2dfef}
+.election-hero-actions button,.election-tabs button{cursor:pointer;color:#f4f6fb;background:#233c59;border:1px solid #526e8c;border-radius:6px;padding:10px 14px;font-weight:700}
+.election-hero-actions button:hover,.election-tabs button:hover{background:#355574}
+.election-tabs{display:flex;flex-wrap:wrap;gap:8px}
+.election-tabs button{font-size:12px;background:#152b48}
+.election-tabs button.active{border-color:#dcb86b;background:#374c64;color:#ffe5a7}
+.election-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.election-metrics article,.election-panel{background:#102642;border:1px solid #35516d;border-radius:10px;min-width:0}
+.election-metrics article{padding:17px;display:flex;flex-direction:column;gap:6px}
+.election-metrics small{font-size:11px;color:#b4c7dc;text-transform:uppercase;letter-spacing:1px}
+.election-metrics strong{font-size:clamp(21px,2.5vw,30px);color:#f7f8fc;line-height:1.1}
+.election-metrics span{font-size:11px;color:#a8bad0}
+.election-main-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr);gap:14px}
+.election-panel{overflow:hidden}
+.election-panel header{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid #36516f}
+.election-panel h3{font-size:17px;color:#f4f6f9;margin:4px 0 0}
+.election-panel a{color:#e7c680}
+.election-panel select{background:#1e3959;color:#fff;border:1px solid #71859a;padding:9px;border-radius:5px}
+#electionMap{min-height:455px;height:clamp(455px,52vw,600px);background:#dce5ed}
+.election-map-caption{padding:12px 16px;color:#bdcce0;font-size:12px;line-height:1.6}
+.election-race-list{overflow-y:auto;max-height:600px;padding:10px 14px}
+.election-race{border-bottom:1px solid #2f4762;padding:13px 5px}
+.election-race:last-child{border-bottom:0}
+.election-race-head{display:flex;justify-content:space-between;gap:8px;margin-bottom:10px}
+.election-race-head strong{color:#f4d68d}
+.election-race-head span,.election-race small,.election-mini{color:#aebfd5;font-size:11px}
+.election-candidate{display:grid;grid-template-columns:35px minmax(0,1fr) auto 54px;align-items:center;gap:7px;padding:5px 0;font-size:12px}
+.election-candidate>span:nth-child(2){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.election-candidate>strong,.election-candidate>span:last-child{text-align:right}
+.election-party{font-size:10px;border:1px solid #9ea9b7;border-radius:4px;padding:4px;text-align:center;color:#edf1f6}
+.election-party.dem{border-color:#4988be;color:#b3d8f7}.election-party.rep{border-color:#c65b62;color:#f5b4b8}
+.election-news-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:14px}
+.election-news-item{background:#1a3553;border:1px solid #385875;border-radius:8px;padding:14px;min-width:0}
+.election-news-item small{color:#a5bbd3;display:block;margin-bottom:9px;line-height:1.5}
+.election-news-item a{color:#f2f5fb;font-weight:650;text-decoration:none;line-height:1.45}
+.election-news-item a:hover{text-decoration:underline}
+.election-news-links{display:flex;gap:16px;flex-wrap:wrap;padding:0 16px 16px}
+.election-footnote{color:#aebfd6;font-size:12px;line-height:1.65;padding:8px}
+.election-footnote a{color:#e7c680}
+.election-empty{color:#b5c8dd;line-height:1.7;padding:22px;font-size:13px}
+@media(max-width:1080px){.election-main-grid{grid-template-columns:1fr}.election-metrics{grid-template-columns:repeat(2,1fr)}.election-news-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.election-hero{align-items:flex-start;flex-direction:column}.election-hero-actions{justify-content:flex-start}.election-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.election-news-grid{grid-template-columns:1fr}#electionMap{height:390px;min-height:390px}.election-candidate{grid-template-columns:30px minmax(0,1fr) auto 45px}.election-panel header{flex-wrap:wrap}}
